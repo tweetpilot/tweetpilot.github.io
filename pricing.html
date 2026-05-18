@@ -118,9 +118,60 @@
     }
     .contact-box-title { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #A78BFA; margin-bottom: 12px; }
     .contact-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--color-text-muted); margin-bottom: 8px; }
-    .contact-item a { color: var(--color-text-muted); text-decoration: none; transition: color 200ms; }
-    .contact-item a:hover { color: #A78BFA; }
     .contact-item:last-child { margin-bottom: 0; }
+
+    /* Copy email button */
+    .copy-email-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25);
+      color: #C4B5FD; font-size: 13px; font-weight: 500;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer;
+      transition: all 200ms ease; white-space: nowrap;
+    }
+    .copy-email-btn:hover { background: rgba(124,58,237,0.22); border-color: rgba(124,58,237,0.45); color: #A78BFA; }
+    .copy-email-btn.copied { background: rgba(52,211,153,0.12); border-color: rgba(52,211,153,0.3); color: #34D399; }
+
+    /* Feishu QR thumbnail */
+    .feishu-thumb {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 10px; padding: 8px 12px;
+      cursor: pointer; transition: all 200ms ease; width: 100%;
+    }
+    .feishu-thumb:hover { background: rgba(124,58,237,0.16); border-color: rgba(124,58,237,0.4); }
+    .feishu-thumb-img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(124,58,237,0.2); }
+    .feishu-thumb-text { display: flex; flex-direction: column; gap: 2px; }
+    .feishu-thumb-label { font-size: 13px; font-weight: 500; color: #C4B5FD; }
+    .feishu-thumb-hint { font-size: 11px; color: var(--color-text-dim); }
+    .feishu-thumb-arrow { margin-left: auto; color: var(--color-text-dim); flex-shrink: 0; }
+
+    /* QR Modal */
+    .qr-modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 250ms ease;
+    }
+    .qr-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .qr-modal {
+      background: #0E1A2D; border: 1px solid rgba(124,58,237,0.35);
+      border-radius: 20px; padding: 32px 28px; text-align: center;
+      max-width: 320px; width: 90%;
+      transform: scale(0.92) translateY(12px); transition: transform 250ms ease;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 60px rgba(124,58,237,0.12);
+    }
+    .qr-modal-overlay.open .qr-modal { transform: scale(1) translateY(0); }
+    .qr-modal-title { font-size: 16px; font-weight: 700; color: var(--color-text); margin-bottom: 4px; }
+    .qr-modal-sub { font-size: 13px; color: var(--color-text-muted); margin-bottom: 20px; }
+    .qr-modal-img { width: 200px; height: 200px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(124,58,237,0.25); display: block; margin: 0 auto 20px; }
+    .qr-modal-close {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--color-border);
+      color: var(--color-text-muted); font-size: 13px; font-weight: 500;
+      padding: 8px 20px; border-radius: 8px; cursor: pointer;
+      transition: all 200ms ease;
+    }
+    .qr-modal-close:hover { background: rgba(255,255,255,0.1); color: var(--color-text); }
 
     /* FAQ */
     .faq { margin-top: 96px; }
@@ -309,16 +360,24 @@
       </a>
       <div class="contact-box">
         <div class="contact-box-title">Get in Touch</div>
+        <!-- Email copy -->
         <div class="contact-item">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a>
+          <button class="copy-email-btn" id="copyEmailBtn" onclick="copyEmail()" type="button">
+            <svg id="copyIcon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <span id="copyEmailText">Copy Email Address</span>
+          </button>
         </div>
-        <div class="contact-item" style="flex-direction:column;align-items:flex-start;gap:10px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-            <span>Feishu / Lark — scan QR code to contact</span>
-          </div>
-          <img src="feishu.png" alt="Feishu QR Code" style="width:130px;height:130px;border-radius:10px;object-fit:cover;display:block;border:1px solid rgba(124,58,237,0.2);" />
+        <!-- Feishu QR thumbnail -->
+        <div class="contact-item" style="display:block;">
+          <button class="feishu-thumb" onclick="openQrModal()" type="button">
+            <img class="feishu-thumb-img" src="feishu.png" alt="Feishu QR preview" />
+            <div class="feishu-thumb-text">
+              <span class="feishu-thumb-label">Feishu / Lark</span>
+              <span class="feishu-thumb-hint">Click to view QR code</span>
+            </div>
+            <svg class="feishu-thumb-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -356,6 +415,19 @@
   </div>
 </div>
 
+<!-- Feishu QR Modal -->
+<div class="qr-modal-overlay" id="qrModalOverlay" onclick="handleOverlayClick(event)">
+  <div class="qr-modal">
+    <div class="qr-modal-title">Feishu / Lark</div>
+    <div class="qr-modal-sub">Scan with Feishu to contact us</div>
+    <img class="qr-modal-img" src="feishu.png" alt="Feishu QR Code" />
+    <button class="qr-modal-close" onclick="closeQrModal()" type="button">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Close
+    </button>
+  </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
@@ -375,5 +447,41 @@
     </div>
   </div>
 </footer>
+
+<script>
+  // Copy email
+  function copyEmail() {
+    const email = 'ribencong@gmail.com';
+    navigator.clipboard.writeText(email).then(function() {
+      const btn = document.getElementById('copyEmailBtn');
+      const text = document.getElementById('copyEmailText');
+      const icon = document.getElementById('copyIcon');
+      btn.classList.add('copied');
+      text.textContent = 'Copied!';
+      icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        text.textContent = 'Copy Email Address';
+        icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>';
+      }, 2000);
+    });
+  }
+
+  // QR Modal
+  function openQrModal() {
+    document.getElementById('qrModalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeQrModal() {
+    document.getElementById('qrModalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('qrModalOverlay')) closeQrModal();
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeQrModal();
+  });
+</script>
 </body>
 </html>
