@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — TweetPilot</title>
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-primary: #0891B2; --color-secondary: #22D3EE; --color-cta: #059669; --color-cta-hover: #047857;
+      --color-bg: #060B14; --color-bg-2: #0A1220; --color-bg-3: #0E1A2D;
+      --color-surface: rgba(255,255,255,0.04); --color-border: rgba(255,255,255,0.08);
+      --color-border-bright: rgba(34,211,238,0.25);
+      --color-text: #E2F4F9; --color-text-muted: #7EA8B8; --color-text-dim: #4A7A8A;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--color-bg); } ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+    .grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(8,145,178,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,145,178,0.04) 1px, transparent 1px);
+      background-size: 64px 64px; }
+    .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(8,145,178,0.06) 0%, transparent 70%); }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px; background: rgba(6,11,20,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-border); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--color-text); text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--color-text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 200ms; }
+    .nav-links a:hover { color: var(--color-secondary); }
+    .nav-cta { background: var(--color-cta); color: white; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 8px; text-decoration: none; transition: all 200ms; }
+    .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .page { position: relative; z-index: 1; padding: 120px 40px 100px; max-width: 800px; margin: 0 auto; }
+    .page-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 12px; display: block; }
+    .page-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 12px; }
+    .page-date { font-size: 13px; color: var(--color-text-dim); margin-bottom: 56px; font-family: monospace; }
+    .highlight-box { background: rgba(8,145,178,0.06); border: 1px solid rgba(8,145,178,0.2); border-radius: 12px; padding: 20px 24px; margin-bottom: 48px; }
+    .highlight-box p { font-size: 15px; color: var(--color-text-muted); line-height: 1.7; }
+    .highlight-box strong { color: var(--color-secondary); }
+    .doc-section { margin-bottom: 48px; }
+    .doc-section h2 { font-size: 18px; font-weight: 700; color: var(--color-text); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 10px; }
+    .doc-section h2::before { content: attr(data-n); font-size: 11px; font-weight: 800; color: var(--color-secondary); background: rgba(8,145,178,0.12); border-radius: 5px; padding: 3px 8px; }
+    .doc-section p { font-size: 15px; color: var(--color-text-muted); line-height: 1.8; margin-bottom: 14px; }
+    .doc-section p:last-child { margin-bottom: 0; }
+    .doc-section ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+    .doc-section ul li { font-size: 15px; color: var(--color-text-muted); line-height: 1.7; padding-left: 20px; position: relative; }
+    .doc-section ul li::before { content: '–'; position: absolute; left: 0; color: var(--color-secondary); font-weight: 700; }
+    .doc-section a { color: var(--color-secondary); text-decoration: none; }
+    .doc-section a:hover { text-decoration: underline; }
+    strong { color: var(--color-text); font-weight: 600; }
+    footer { border-top: 1px solid var(--color-border); padding: 40px; position: relative; z-index: 1; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 15px; }
+    .footer-copy { font-size: 13px; color: var(--color-text-dim); margin-left: 8px; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--color-text-dim); text-decoration: none; transition: color 200ms; }
+    .footer-links a:hover { color: var(--color-secondary); }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; } .nav-links { display: none; }
+      .page { padding: 100px 20px 60px; }
+      footer { padding: 32px 20px; } .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" width="32" height="32" alt="TweetPilot" style="border-radius:8px;" />
+    TweetPilot
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#features">Features</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+    <li><a href="/#download">Download</a></li>
+  </ul>
+  <a class="nav-cta" href="/#download">Download Free</a>
+</nav>
+
+<div class="page">
+  <span class="page-label">Legal</span>
+  <h1 class="page-title">Privacy Policy</h1>
+  <div class="page-date">Effective date: May 18, 2026 &nbsp;·&nbsp; Last updated: May 18, 2026</div>
+
+  <div class="highlight-box">
+    <p><strong>TweetPilot is a local-first application.</strong> Your credentials, scripts, workspaces, and Twitter data are stored exclusively on your own device. We do not sell, share, or monetize your personal data in any way.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="1">What We Collect</h2>
+    <p>We collect the minimum information necessary to operate the service:</p>
+    <ul>
+      <li><strong>License validation data</strong> — your license key and a device fingerprint (hardware ID), used solely to verify your subscription status. This data is transmitted to our license server over HTTPS and is not shared with third parties.</li>
+      <li><strong>Email address</strong> — collected only at the time of purchase, used to deliver your license key and send renewal reminders. We do not send marketing emails without your consent.</li>
+      <li><strong>Crash reports</strong> — if you opt in, anonymous diagnostic information may be sent when the app crashes. No personally identifiable information is included.</li>
+    </ul>
+    <p>We do <strong>not</strong> collect:</p>
+    <ul>
+      <li>Your Twitter/X credentials or OAuth tokens</li>
+      <li>The content of your tweets, messages, or DMs</li>
+      <li>Your Python scripts or workspace data</li>
+      <li>Your AI provider API keys</li>
+      <li>Any browsing activity or usage analytics</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="2">How We Use Data</h2>
+    <p>Data we collect is used exclusively for:</p>
+    <ul>
+      <li>Verifying your license entitlement and enforcing device limits</li>
+      <li>Delivering your license key via email after purchase</li>
+      <li>Responding to support inquiries you initiate</li>
+      <li>Diagnosing crashes and improving software stability (opt-in only)</li>
+    </ul>
+    <p>We never use your data for advertising, profiling, or sale to third parties.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="3">Local Data Storage</h2>
+    <p>All operational data — including account credentials, workspace files, task scripts, Data Blocks, AI provider configurations, and Feishu tokens — is stored locally in your macOS application data directory (<code style="font-family:monospace;font-size:13px;color:var(--color-secondary);">~/Library/Application Support/TweetPilot/</code>).</p>
+    <p>This data never leaves your device unless you explicitly export it. Uninstalling TweetPilot removes the application but does not automatically delete this directory; you may delete it manually at any time.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="4">Third-Party Services</h2>
+    <p>TweetPilot integrates with the following third-party services at your direction:</p>
+    <ul>
+      <li><strong>Twitter / X API</strong> — governed by X's own <a href="https://twitter.com/en/privacy" target="_blank" rel="noopener">Privacy Policy</a>. Your credentials are stored locally and sent directly to X's servers.</li>
+      <li><strong>TweetClaw Chrome Extension</strong> — communicates locally via WebSocket. No data is sent to external servers by the extension bridge.</li>
+      <li><strong>AI Providers (Anthropic, OpenAI, Ollama, etc.)</strong> — when you use the AI chat feature, your prompts are sent to the provider you have configured. Review each provider's privacy policy for details.</li>
+      <li><strong>Feishu / Lark</strong> — messages and reports you configure TweetPilot to send are transmitted to Feishu's servers under your account.</li>
+      <li><strong>Stripe</strong> — payment processing for annual licenses. We do not store your card details. Stripe's <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> applies to payment data.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="5">Data Retention</h2>
+    <p>License purchase records and associated email addresses are retained for a minimum of 3 years for accounting and legal compliance purposes. You may request deletion of your email address after your license has expired by contacting us at <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a>.</p>
+    <p>Device fingerprint records linked to license keys are deleted 90 days after license expiry.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="6">Your Rights</h2>
+    <p>Depending on your jurisdiction, you may have the right to:</p>
+    <ul>
+      <li>Access the personal data we hold about you</li>
+      <li>Request correction of inaccurate data</li>
+      <li>Request deletion of your data (subject to legal retention requirements)</li>
+      <li>Object to processing of your data</li>
+    </ul>
+    <p>To exercise any of these rights, contact us at <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a>. We will respond within 30 days.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="7">Children's Privacy</h2>
+    <p>TweetPilot is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us and we will delete it promptly.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="8">Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. We will post the updated version on this page with a revised effective date. For material changes, we will provide notice via the TweetPilot website or in-app notification.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="9">Contact</h2>
+    <p>For privacy-related questions or requests:</p>
+    <ul>
+      <li>Email: <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a></li>
+      <li>Feishu / Lark: search <strong>ribencong</strong></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <a class="footer-logo" href="/"><img src="logo.png" width="24" height="24" alt="TweetPilot" style="border-radius:6px;" /> TweetPilot</a>
+      <span class="footer-copy">© 2026 TweetPilot. All rights reserved.</span>
+    </div>
+    <div class="footer-links">
+      <a href="/pricing.html">Pricing</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/refund.html">Refund Policy</a>
+      <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:ribencong@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — TweetPilot</title>
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-primary: #0891B2; --color-secondary: #22D3EE; --color-cta: #059669; --color-cta-hover: #047857;
+      --color-bg: #060B14; --color-bg-2: #0A1220; --color-bg-3: #0E1A2D;
+      --color-surface: rgba(255,255,255,0.04); --color-surface-hover: rgba(255,255,255,0.07);
+      --color-border: rgba(255,255,255,0.08); --color-border-bright: rgba(34,211,238,0.25);
+      --color-text: #E2F4F9; --color-text-muted: #7EA8B8; --color-text-dim: #4A7A8A;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--color-bg); } ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+    .grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(8,145,178,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,145,178,0.04) 1px, transparent 1px);
+      background-size: 64px 64px; }
+    .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(8,145,178,0.06) 0%, transparent 70%); }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px; background: rgba(6,11,20,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-border); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--color-text); text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--color-text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 200ms; }
+    .nav-links a:hover { color: var(--color-secondary); }
+    .nav-cta { background: var(--color-cta); color: white; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 8px; text-decoration: none; transition: all 200ms; }
+    .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+
+    .page { position: relative; z-index: 1; padding: 120px 40px 100px; max-width: 800px; margin: 0 auto; }
+    .page-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 12px; display: block; }
+    .page-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 12px; }
+    .page-date { font-size: 13px; color: var(--color-text-dim); margin-bottom: 56px; font-family: monospace; }
+
+    .doc-section { margin-bottom: 48px; }
+    .doc-section h2 { font-size: 18px; font-weight: 700; color: var(--color-text); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 10px; }
+    .doc-section h2::before { content: attr(data-n); font-size: 11px; font-weight: 800; color: var(--color-secondary); background: rgba(8,145,178,0.12); border-radius: 5px; padding: 3px 8px; }
+    .doc-section p { font-size: 15px; color: var(--color-text-muted); line-height: 1.8; margin-bottom: 14px; }
+    .doc-section p:last-child { margin-bottom: 0; }
+    .doc-section ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+    .doc-section ul li { font-size: 15px; color: var(--color-text-muted); line-height: 1.7; padding-left: 20px; position: relative; }
+    .doc-section ul li::before { content: '–'; position: absolute; left: 0; color: var(--color-secondary); font-weight: 700; }
+    .doc-section a { color: var(--color-secondary); text-decoration: none; }
+    .doc-section a:hover { text-decoration: underline; }
+    strong { color: var(--color-text); font-weight: 600; }
+
+    footer { border-top: 1px solid var(--color-border); padding: 40px; position: relative; z-index: 1; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 15px; }
+    .footer-copy { font-size: 13px; color: var(--color-text-dim); margin-left: 8px; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--color-text-dim); text-decoration: none; transition: color 200ms; }
+    .footer-links a:hover { color: var(--color-secondary); }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; } .nav-links { display: none; }
+      .page { padding: 100px 20px 60px; }
+      footer { padding: 32px 20px; } .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" width="32" height="32" alt="TweetPilot" style="border-radius:8px;" />
+    TweetPilot
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#features">Features</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+    <li><a href="/#download">Download</a></li>
+  </ul>
+  <a class="nav-cta" href="/#download">Download Free</a>
+</nav>
+
+<div class="page">
+  <span class="page-label">Legal</span>
+  <h1 class="page-title">Terms of Service</h1>
+  <div class="page-date">Effective date: May 18, 2026 &nbsp;·&nbsp; Last updated: May 18, 2026</div>
+
+  <div class="doc-section">
+    <h2 data-n="1">Acceptance of Terms</h2>
+    <p>By downloading, installing, or using TweetPilot ("the Software"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Software.</p>
+    <p>These Terms apply to all users of TweetPilot, including users on the free plan and users holding a paid license.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="2">Description of Service</h2>
+    <p>TweetPilot is a macOS desktop application that enables users to automate Twitter/X workflows using AI agents, scheduled Python scripts, multi-account management, and integration with third-party services including the TweetClaw Chrome extension and the official X API.</p>
+    <p>The Software runs locally on your device. We do not process or store your Twitter credentials or content on our servers, except where explicitly stated (e.g., license validation).</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="3">License Plans</h2>
+    <p><strong>Free Plan:</strong> You may use TweetPilot at no cost with the limitations described on the <a href="/pricing.html">Pricing page</a>. Scheduled tasks and the AI remote conversation agent are not available on the free plan.</p>
+    <p><strong>Professional License ($300/year):</strong> Upon purchase of a valid license key, you are granted a non-exclusive, non-transferable right to use the full feature set of TweetPilot on up to 2 devices for a period of 12 months from the date of activation.</p>
+    <p><strong>Enterprise Lifetime License:</strong> Available via offline agreement and signed contract only. Terms are negotiated individually. Contact <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a> for details.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="4">Acceptable Use</h2>
+    <p>You agree to use TweetPilot only in compliance with:</p>
+    <ul>
+      <li>Twitter/X's Terms of Service and Developer Agreement</li>
+      <li>All applicable local, national, and international laws and regulations</li>
+      <li>These Terms of Service</li>
+    </ul>
+    <p>You may <strong>not</strong> use TweetPilot to:</p>
+    <ul>
+      <li>Send spam, unsolicited messages, or harass other users</li>
+      <li>Artificially inflate engagement metrics in violation of platform rules</li>
+      <li>Scrape or collect personal data without consent</li>
+      <li>Reverse engineer, decompile, or modify the Software</li>
+      <li>Resell, sublicense, or redistribute the Software or any license key</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="5">License Restrictions</h2>
+    <p>One license key may be activated on a maximum of <strong>2 devices</strong>. Sharing license keys with third parties is strictly prohibited and may result in immediate revocation without refund.</p>
+    <p>Upon expiry of an annual license, access to paid features is suspended until the license is renewed.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="6">Intellectual Property</h2>
+    <p>TweetPilot and all associated materials, including but not limited to the software, logo, documentation, and website content, are the exclusive intellectual property of TweetPilot and its developers. All rights reserved.</p>
+    <p>Python scripts you write and data you create within TweetPilot remain your own property.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="7">Disclaimer of Warranties</h2>
+    <p>THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
+    <p>We do not guarantee uninterrupted access to Twitter/X or any third-party service. Changes to the Twitter/X platform or API may impact Software functionality.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="8">Limitation of Liability</h2>
+    <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, TWEETPILOT SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, OR BUSINESS OPPORTUNITIES, ARISING FROM YOUR USE OF THE SOFTWARE.</p>
+    <p>Our total liability to you for any claim shall not exceed the amount you paid for your current license period.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="9">Termination</h2>
+    <p>We reserve the right to revoke your license and terminate your access to paid features at any time if you violate these Terms. Upon termination, you must cease all use of paid features and any license keys issued to you become void.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="10">Changes to Terms</h2>
+    <p>We may update these Terms from time to time. Continued use of TweetPilot after changes are posted constitutes your acceptance of the revised Terms. Material changes will be communicated via the website or in-app notification.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="11">Contact</h2>
+    <p>For questions about these Terms, contact us at:</p>
+    <ul>
+      <li>Email: <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a></li>
+      <li>Feishu / Lark: search <strong>ribencong</strong></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <a class="footer-logo" href="/"><img src="logo.png" width="24" height="24" alt="TweetPilot" style="border-radius:6px;" /> TweetPilot</a>
+      <span class="footer-copy">© 2026 TweetPilot. All rights reserved.</span>
+    </div>
+    <div class="footer-links">
+      <a href="/pricing.html">Pricing</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/refund.html">Refund Policy</a>
+      <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:ribencong@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

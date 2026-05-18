@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refund Policy — TweetPilot</title>
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-primary: #0891B2; --color-secondary: #22D3EE; --color-cta: #059669; --color-cta-hover: #047857;
+      --color-bg: #060B14; --color-bg-2: #0A1220; --color-bg-3: #0E1A2D;
+      --color-surface: rgba(255,255,255,0.04); --color-border: rgba(255,255,255,0.08);
+      --color-border-bright: rgba(34,211,238,0.25);
+      --color-text: #E2F4F9; --color-text-muted: #7EA8B8; --color-text-dim: #4A7A8A;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--color-bg); } ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+    .grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(8,145,178,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,145,178,0.04) 1px, transparent 1px);
+      background-size: 64px 64px; }
+    .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(8,145,178,0.06) 0%, transparent 70%); }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px; background: rgba(6,11,20,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-border); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--color-text); text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--color-text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 200ms; }
+    .nav-links a:hover { color: var(--color-secondary); }
+    .nav-cta { background: var(--color-cta); color: white; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 8px; text-decoration: none; transition: all 200ms; }
+    .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+
+    .page { position: relative; z-index: 1; padding: 120px 40px 100px; max-width: 800px; margin: 0 auto; }
+    .page-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 12px; display: block; }
+    .page-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 12px; }
+    .page-date { font-size: 13px; color: var(--color-text-dim); margin-bottom: 56px; font-family: monospace; }
+
+    .highlight-box { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.2); border-radius: 12px; padding: 20px 24px; margin-bottom: 48px; display: flex; gap: 16px; align-items: flex-start; }
+    .highlight-box-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(5,150,105,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #34D399; }
+    .highlight-box p { font-size: 15px; color: var(--color-text-muted); line-height: 1.7; }
+    .highlight-box strong { color: #34D399; }
+
+    .doc-section { margin-bottom: 48px; }
+    .doc-section h2 { font-size: 18px; font-weight: 700; color: var(--color-text); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; gap: 10px; }
+    .doc-section h2::before { content: attr(data-n); font-size: 11px; font-weight: 800; color: var(--color-secondary); background: rgba(8,145,178,0.12); border-radius: 5px; padding: 3px 8px; }
+    .doc-section p { font-size: 15px; color: var(--color-text-muted); line-height: 1.8; margin-bottom: 14px; }
+    .doc-section p:last-child { margin-bottom: 0; }
+    .doc-section ul { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+    .doc-section ul li { font-size: 15px; color: var(--color-text-muted); line-height: 1.7; padding-left: 20px; position: relative; }
+    .doc-section ul li::before { content: '–'; position: absolute; left: 0; color: var(--color-secondary); font-weight: 700; }
+    .doc-section a { color: var(--color-secondary); text-decoration: none; }
+    .doc-section a:hover { text-decoration: underline; }
+    strong { color: var(--color-text); font-weight: 600; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+    .step { display: flex; gap: 16px; align-items: flex-start; }
+    .step-num { width: 32px; height: 32px; border-radius: 8px; background: rgba(8,145,178,0.12); border: 1px solid rgba(8,145,178,0.25); color: var(--color-secondary); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .step-body { padding-top: 6px; }
+    .step-title { font-size: 14px; font-weight: 600; color: var(--color-text); margin-bottom: 4px; }
+    .step-desc { font-size: 14px; color: var(--color-text-muted); line-height: 1.6; }
+    .step-desc a { color: var(--color-secondary); text-decoration: none; }
+
+    /* Contact card */
+    .contact-card { background: var(--color-bg-3); border: 1px solid var(--color-border-bright); border-radius: 14px; padding: 28px 32px; margin-top: 20px; }
+    .contact-card-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 16px; }
+    .contact-row { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--color-text-muted); margin-bottom: 12px; }
+    .contact-row:last-child { margin-bottom: 0; }
+    .contact-row a { color: var(--color-text-muted); text-decoration: none; transition: color 200ms; }
+    .contact-row a:hover { color: var(--color-secondary); }
+    .contact-icon { width: 32px; height: 32px; border-radius: 7px; background: rgba(8,145,178,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--color-secondary); }
+
+    footer { border-top: 1px solid var(--color-border); padding: 40px; position: relative; z-index: 1; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 15px; }
+    .footer-copy { font-size: 13px; color: var(--color-text-dim); margin-left: 8px; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--color-text-dim); text-decoration: none; transition: color 200ms; }
+    .footer-links a:hover { color: var(--color-secondary); }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; } .nav-links { display: none; }
+      .page { padding: 100px 20px 60px; }
+      footer { padding: 32px 20px; } .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" width="32" height="32" alt="TweetPilot" style="border-radius:8px;" />
+    TweetPilot
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#features">Features</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+    <li><a href="/#download">Download</a></li>
+  </ul>
+  <a class="nav-cta" href="/#download">Download Free</a>
+</nav>
+
+<div class="page">
+  <span class="page-label">Legal</span>
+  <h1 class="page-title">Refund Policy</h1>
+  <div class="page-date">Effective date: May 18, 2026 &nbsp;·&nbsp; Last updated: May 18, 2026</div>
+
+  <div class="highlight-box">
+    <div class="highlight-box-icon">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <p><strong>7-day money-back guarantee</strong> on annual Professional licenses. If you are not satisfied within 7 days of purchase, we will issue a full refund — no questions asked.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="1">Annual License Refunds</h2>
+    <p>We offer a <strong>full refund within 7 days</strong> of the original purchase date for the Professional Annual License ($300/year), provided that:</p>
+    <ul>
+      <li>The refund request is submitted within 7 calendar days of purchase</li>
+      <li>The license key has not been shared with third parties</li>
+      <li>The request is made by the original purchaser using the email address used at checkout</li>
+    </ul>
+    <p>Upon approval, the refund will be issued to the original payment method. Processing time is typically 5–10 business days depending on your card issuer or payment provider.</p>
+    <p>After the 7-day window has passed, refunds are not available. If you are experiencing a technical issue, please contact us first — we will do our best to resolve it.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="2">Enterprise Lifetime License</h2>
+    <p>The Enterprise Lifetime License is negotiated and fulfilled offline via a signed service contract. Refund terms for enterprise agreements are governed by the individual contract between TweetPilot and the customer.</p>
+    <p>Please review your service contract for specific refund conditions. For disputes, contact us at <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a>.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="3">Non-Refundable Situations</h2>
+    <p>Refunds will <strong>not</strong> be issued in the following situations:</p>
+    <ul>
+      <li>The 7-day refund window has expired</li>
+      <li>The license key was revoked due to a violation of our <a href="/terms.html">Terms of Service</a> (e.g., key sharing)</li>
+      <li>The purchase was made more than once intentionally (duplicate purchases may be reviewed case-by-case)</li>
+      <li>Refusal to try available troubleshooting steps for technical issues</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="4">How to Request a Refund</h2>
+    <p>To request a refund, follow these steps:</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Email us within 7 days of purchase</div>
+          <div class="step-desc">Send a message to <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a> with the subject line: <strong>"TweetPilot Refund Request"</strong></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Include your purchase details</div>
+          <div class="step-desc">Provide your order confirmation number (from Stripe), the email address used at checkout, and a brief reason for the refund (optional but appreciated).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">We'll confirm and process</div>
+          <div class="step-desc">We aim to respond within 1 business day. Once approved, your refund will be processed via Stripe and should appear within 5–10 business days.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="5">License Revocation After Refund</h2>
+    <p>Upon issuing a refund, your license key will be immediately revoked. TweetPilot will revert to the free plan on all associated devices. You will lose access to scheduled tasks and the AI remote conversation agent.</p>
+    <p>Your local data (workspaces, scripts, Data Blocks) will remain on your device and will not be deleted.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 data-n="6">Contact Us</h2>
+    <p>If you have questions about this policy or need help with a refund request:</p>
+    <div class="contact-card">
+      <div class="contact-card-title">Get Support</div>
+      <div class="contact-row">
+        <div class="contact-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <span>Email: <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a> &nbsp;—&nbsp; typically replies within 1 business day</span>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <span>Feishu / Lark: search <strong>ribencong</strong> for real-time support</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <a class="footer-logo" href="/"><img src="logo.png" width="24" height="24" alt="TweetPilot" style="border-radius:6px;" /> TweetPilot</a>
+      <span class="footer-copy">© 2026 TweetPilot. All rights reserved.</span>
+    </div>
+    <div class="footer-links">
+      <a href="/pricing.html">Pricing</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/refund.html">Refund Policy</a>
+      <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:ribencong@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
