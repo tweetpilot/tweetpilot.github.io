@@ -120,6 +120,16 @@
     .contact-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--color-text-muted); margin-bottom: 8px; }
     .contact-item:last-child { margin-bottom: 0; }
 
+    /* Send email button */
+    .send-email-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(124,58,237,0.18); border: 1px solid rgba(124,58,237,0.35);
+      color: #C4B5FD; font-size: 13px; font-weight: 500;
+      padding: 6px 12px; border-radius: 8px; cursor: pointer;
+      text-decoration: none; transition: all 200ms ease; white-space: nowrap;
+    }
+    .send-email-btn:hover { background: rgba(124,58,237,0.3); border-color: rgba(124,58,237,0.55); color: #A78BFA; }
+
     /* Copy email button */
     .copy-email-btn {
       display: inline-flex; align-items: center; gap: 6px;
@@ -313,14 +323,15 @@
           License valid for 12 months
         </li>
       </ul>
-      <a class="plan-btn pro-btn" href="https://buy.stripe.com/tweetpilot" target="_blank" rel="noopener">
+      <!-- TODO: Replace with FastSpring checkout URL -->
+      <a class="plan-btn pro-btn" href="#" onclick="return false;" style="opacity:0.7;cursor:not-allowed;" title="Checkout coming soon">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         Buy License — $300/yr
       </a>
     </div>
 
     <!-- Enterprise -->
-    <div class="plan-card">
+    <div class="plan-card" id="contact">
       <span class="plan-badge enterprise">Enterprise</span>
       <div class="plan-name">Lifetime &amp; Custom</div>
       <div class="plan-price">
@@ -360,12 +371,16 @@
       </a>
       <div class="contact-box">
         <div class="contact-box-title">Get in Touch</div>
-        <!-- Email copy -->
-        <div class="contact-item">
+        <!-- Email actions -->
+        <div class="contact-item" style="gap:8px;flex-wrap:wrap;">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a class="send-email-btn" href="mailto:ribencong@gmail.com">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send Email
+          </a>
           <button class="copy-email-btn" id="copyEmailBtn" onclick="copyEmail()" type="button">
             <svg id="copyIcon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            <span id="copyEmailText">Copy Email Address</span>
+            <span id="copyEmailText">Copy Address</span>
           </button>
         </div>
         <!-- Feishu QR thumbnail -->
@@ -443,6 +458,7 @@
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/refund.html">Refund Policy</a>
       <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">TweetClaw</a>
       <a href="mailto:ribencong@gmail.com">Contact</a>
     </div>
   </div>

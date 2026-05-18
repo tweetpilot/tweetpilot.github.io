@@ -73,6 +73,48 @@
     .contact-row a:hover { color: var(--color-secondary); }
     .contact-icon { width: 32px; height: 32px; border-radius: 7px; background: rgba(8,145,178,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--color-secondary); }
 
+    /* Feishu QR thumbnail */
+    .feishu-thumb {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(8,145,178,0.06); border: 1px solid rgba(8,145,178,0.2);
+      border-radius: 10px; padding: 8px 12px;
+      cursor: pointer; transition: all 200ms ease; width: 100%;
+    }
+    .feishu-thumb:hover { background: rgba(8,145,178,0.12); border-color: rgba(8,145,178,0.35); }
+    .feishu-thumb-img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(8,145,178,0.2); }
+    .feishu-thumb-text { display: flex; flex-direction: column; gap: 2px; }
+    .feishu-thumb-label { font-size: 13px; font-weight: 500; color: var(--color-text); }
+    .feishu-thumb-hint { font-size: 11px; color: var(--color-text-dim); }
+    .feishu-thumb-arrow { margin-left: auto; color: var(--color-text-dim); flex-shrink: 0; }
+
+    /* QR Modal */
+    .qr-modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 250ms ease;
+    }
+    .qr-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .qr-modal {
+      background: #0E1A2D; border: 1px solid rgba(8,145,178,0.35);
+      border-radius: 20px; padding: 32px 28px; text-align: center;
+      max-width: 320px; width: 90%;
+      transform: scale(0.92) translateY(12px); transition: transform 250ms ease;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 60px rgba(8,145,178,0.12);
+    }
+    .qr-modal-overlay.open .qr-modal { transform: scale(1) translateY(0); }
+    .qr-modal-title { font-size: 16px; font-weight: 700; color: var(--color-text); margin-bottom: 4px; }
+    .qr-modal-sub { font-size: 13px; color: var(--color-text-muted); margin-bottom: 20px; }
+    .qr-modal-img { width: 200px; height: 200px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(8,145,178,0.25); display: block; margin: 0 auto 20px; }
+    .qr-modal-close {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--color-border);
+      color: var(--color-text-muted); font-size: 13px; font-weight: 500;
+      padding: 8px 20px; border-radius: 8px; cursor: pointer;
+      transition: all 200ms ease;
+    }
+    .qr-modal-close:hover { background: rgba(255,255,255,0.1); color: var(--color-text); }
+
     footer { border-top: 1px solid var(--color-border); padding: 40px; position: relative; z-index: 1; }
     .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
     .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 15px; }
@@ -97,6 +139,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="/#features">Features</a></li>
+    <li><a href="/#how-it-works">How It Works</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
     <li><a href="/#download">Download</a></li>
   </ul>
@@ -189,16 +232,30 @@
         </div>
         <span>Email: <a href="mailto:ribencong@gmail.com">ribencong@gmail.com</a> &nbsp;—&nbsp; typically replies within 1 business day</span>
       </div>
-      <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:10px;">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div class="contact-icon">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <div class="contact-row" style="display:block;">
+        <button class="feishu-thumb" onclick="openQrModal()" type="button">
+          <img class="feishu-thumb-img" src="feishu.png" alt="Feishu QR preview" />
+          <div class="feishu-thumb-text">
+            <span class="feishu-thumb-label">Feishu / Lark</span>
+            <span class="feishu-thumb-hint">Click to view QR code</span>
           </div>
-          <span>Feishu / Lark — scan QR code for real-time support</span>
-        </div>
-        <img src="feishu.png" alt="Feishu QR Code" style="width:130px;height:130px;border-radius:10px;object-fit:cover;border:1px solid rgba(8,145,178,0.2);margin-left:44px;" />
+          <svg class="feishu-thumb-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Feishu QR Modal -->
+<div class="qr-modal-overlay" id="qrModalOverlay" onclick="handleOverlayClick(event)">
+  <div class="qr-modal">
+    <div class="qr-modal-title">Feishu / Lark</div>
+    <div class="qr-modal-sub">Scan with Feishu for real-time support</div>
+    <img class="qr-modal-img" src="feishu.png" alt="Feishu QR Code" />
+    <button class="qr-modal-close" onclick="closeQrModal()" type="button">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Close
+    </button>
   </div>
 </div>
 
@@ -214,9 +271,27 @@
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/refund.html">Refund Policy</a>
       <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">TweetClaw</a>
       <a href="mailto:ribencong@gmail.com">Contact</a>
     </div>
   </div>
 </footer>
+
+<script>
+  function openQrModal() {
+    document.getElementById('qrModalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeQrModal() {
+    document.getElementById('qrModalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('qrModalOverlay')) closeQrModal();
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeQrModal();
+  });
+</script>
 </body>
 </html>
