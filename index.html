@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TweetPilot — AI-Powered Twitter Automation</title>
+  <meta name="description" content="TweetPilot is a macOS desktop app that automates your Twitter/X workflow with AI. Multi-account management, scheduled tasks, Python scripting, and intelligent content generation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-primary: #0891B2;
+      --color-secondary: #22D3EE;
+      --color-cta: #059669;
+      --color-cta-hover: #047857;
+      --color-bg: #060B14;
+      --color-bg-2: #0A1220;
+      --color-bg-3: #0E1A2D;
+      --color-surface: rgba(255,255,255,0.04);
+      --color-surface-hover: rgba(255,255,255,0.07);
+      --color-border: rgba(255,255,255,0.08);
+      --color-border-bright: rgba(34,211,238,0.25);
+      --color-text: #E2F4F9;
+      --color-text-muted: #7EA8B8;
+      --color-text-dim: #4A7A8A;
+      --shadow-glow: 0 0 40px rgba(8,145,178,0.15);
+      --shadow-glow-strong: 0 0 80px rgba(8,145,178,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--color-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+
+    /* ── Grid Background ── */
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(8,145,178,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,145,178,0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+    .grid-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(8,145,178,0.08) 0%, transparent 70%);
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(6,11,20,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 18px; font-weight: 700; color: var(--color-text);
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--color-text-muted); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: color 200ms ease;
+    }
+    .nav-links a:hover { color: var(--color-secondary); }
+    .nav-cta {
+      background: var(--color-cta);
+      color: white; font-size: 14px; font-weight: 600;
+      padding: 8px 20px; border-radius: 8px;
+      text-decoration: none; cursor: pointer;
+      transition: all 200ms ease;
+      border: none;
+    }
+    .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .nav-mobile-menu { display: none; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 160px 40px 100px;
+      text-align: center;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(8,145,178,0.12); border: 1px solid rgba(8,145,178,0.3);
+      color: var(--color-secondary); font-size: 13px; font-weight: 500;
+      padding: 6px 16px; border-radius: 100px; margin-bottom: 28px;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--color-secondary);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 76px);
+      font-weight: 900; line-height: 1.1; letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 50%, #7C3AED 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--color-text-muted); line-height: 1.7;
+      max-width: 600px; margin: 0 auto 40px;
+    }
+    .hero-actions {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 64px;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--color-cta); color: white;
+      font-size: 16px; font-weight: 600;
+      padding: 14px 28px; border-radius: 10px;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 200ms ease;
+      box-shadow: 0 4px 24px rgba(5,150,105,0.35);
+    }
+    .btn-primary:hover { background: var(--color-cta-hover); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(5,150,105,0.45); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--color-surface); color: var(--color-text);
+      font-size: 16px; font-weight: 500;
+      padding: 14px 28px; border-radius: 10px;
+      text-decoration: none; cursor: pointer;
+      border: 1px solid var(--color-border);
+      transition: all 200ms ease;
+    }
+    .btn-secondary:hover { background: var(--color-surface-hover); border-color: var(--color-border-bright); transform: translateY(-1px); }
+    .hero-meta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 24px; color: var(--color-text-dim); font-size: 13px;
+    }
+    .hero-meta-item { display: flex; align-items: center; gap: 6px; }
+    .hero-meta-sep { width: 1px; height: 16px; background: var(--color-border); }
+
+    /* ── App Window Mockup ── */
+    .mockup-wrap {
+      position: relative; z-index: 1;
+      max-width: 980px; margin: 0 auto;
+      padding: 0 40px 100px;
+    }
+    .mockup-glow {
+      position: absolute; top: 10%; left: 50%;
+      transform: translateX(-50%);
+      width: 80%; height: 60%;
+      background: radial-gradient(ellipse, rgba(8,145,178,0.2) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    .app-window {
+      position: relative; z-index: 1;
+      background: var(--color-bg-3);
+      border: 1px solid var(--color-border-bright);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 60px rgba(8,145,178,0.12);
+    }
+    .window-titlebar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .window-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .window-dot.red { background: #FF5F57; }
+    .window-dot.yellow { background: #FFBD2E; }
+    .window-dot.green { background: #28C840; }
+    .window-title {
+      flex: 1; text-align: center;
+      font-size: 13px; font-weight: 500; color: var(--color-text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .window-body {
+      display: grid; grid-template-columns: 56px 240px 1fr;
+      min-height: 480px;
+    }
+    /* Activity Bar */
+    .w-activity {
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid var(--color-border);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 16px 0; gap: 8px;
+    }
+    .w-act-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 150ms ease;
+      color: var(--color-text-dim);
+    }
+    .w-act-icon.active { background: rgba(8,145,178,0.2); color: var(--color-secondary); }
+    .w-act-icon:hover { background: var(--color-surface-hover); color: var(--color-text); }
+    /* Sidebar */
+    .w-sidebar {
+      background: rgba(255,255,255,0.015);
+      border-right: 1px solid var(--color-border);
+      padding: 16px 12px;
+    }
+    .w-sidebar-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--color-text-dim); text-transform: uppercase;
+      padding: 0 8px; margin-bottom: 8px;
+    }
+    .w-sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px; border-radius: 6px;
+      font-size: 13px; color: var(--color-text-muted);
+      cursor: pointer; transition: all 150ms ease;
+      margin-bottom: 2px;
+    }
+    .w-sidebar-item.active { background: rgba(8,145,178,0.15); color: var(--color-secondary); }
+    .w-sidebar-item:hover:not(.active) { background: var(--color-surface-hover); color: var(--color-text); }
+    .w-sidebar-item svg { flex-shrink: 0; width: 15px; height: 15px; }
+    .w-sidebar-dot { width: 6px; height: 6px; border-radius: 50%; background: #28C840; margin-left: auto; }
+    /* Main content */
+    .w-main {
+      padding: 20px 24px; overflow: hidden;
+    }
+    .w-main-header {
+      font-size: 16px; font-weight: 700; color: var(--color-text);
+      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .w-task-list { display: flex; flex-direction: column; gap: 8px; }
+    .w-task-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 10px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      transition: all 150ms ease;
+    }
+    .w-task-card:hover { border-color: var(--color-border-bright); background: var(--color-surface-hover); }
+    .w-task-status {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .w-task-status.running { background: #22D3EE; animation: pulse-run 1.5s ease-in-out infinite; }
+    .w-task-status.done { background: #28C840; }
+    .w-task-status.waiting { background: #FFBD2E; }
+    @keyframes pulse-run {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,211,238,0.4); }
+      50% { box-shadow: 0 0 0 4px rgba(34,211,238,0); }
+    }
+    .w-task-info { flex: 1; min-width: 0; }
+    .w-task-name { font-size: 13px; font-weight: 600; color: var(--color-text); margin-bottom: 2px; }
+    .w-task-meta { font-size: 11px; color: var(--color-text-dim); font-family: 'JetBrains Mono', monospace; }
+    .w-task-badge {
+      font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 4px;
+      white-space: nowrap;
+    }
+    .w-task-badge.ai { background: rgba(8,145,178,0.15); color: var(--color-secondary); }
+    .w-task-badge.sched { background: rgba(5,150,105,0.15); color: #34D399; }
+    .w-chat-preview {
+      margin-top: 14px;
+      background: rgba(8,145,178,0.05);
+      border: 1px solid rgba(8,145,178,0.15);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .w-chat-msg {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 12px; color: var(--color-text-muted); line-height: 1.5;
+    }
+    .w-chat-avatar {
+      width: 24px; height: 24px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--color-primary), #7C3AED);
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: white;
+    }
+    .typing-indicator {
+      display: flex; gap: 4px; align-items: center; padding-top: 2px;
+    }
+    .typing-indicator span {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--color-secondary); opacity: 0.7;
+      animation: typing 1.4s ease-in-out infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* ── Section Common ── */
+    section { position: relative; z-index: 1; }
+    .section-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 40px;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--color-secondary);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 800;
+      line-height: 1.15; letter-spacing: -0.025em;
+      color: var(--color-text); margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 17px; color: var(--color-text-muted);
+      line-height: 1.7; max-width: 580px;
+    }
+
+    /* ── Stats Strip ── */
+    .stats {
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: 48px 40px;
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: 40px; font-weight: 900; letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+    }
+    .stat-label {
+      font-size: 14px; color: var(--color-text-muted); margin-top: 6px; font-weight: 500;
+    }
+
+    /* ── Features ── */
+    .features { padding: 100px 0; }
+    .features-header { margin-bottom: 64px; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--color-border);
+      border: 1px solid var(--color-border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .feature-cell {
+      background: var(--color-bg);
+      padding: 36px 32px;
+      transition: all 250ms ease;
+      cursor: default;
+    }
+    .feature-cell:hover { background: var(--color-bg-2); }
+    .feature-cell.featured {
+      background: linear-gradient(135deg, rgba(8,145,178,0.08) 0%, rgba(124,58,237,0.06) 100%);
+      border: none;
+    }
+    .feature-cell.featured:hover {
+      background: linear-gradient(135deg, rgba(8,145,178,0.12) 0%, rgba(124,58,237,0.10) 100%);
+    }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(8,145,178,0.12);
+      border: 1px solid rgba(8,145,178,0.2);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; color: var(--color-secondary);
+    }
+    .feature-icon.purple { background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.2); color: #A78BFA; }
+    .feature-icon.green { background: rgba(5,150,105,0.12); border-color: rgba(5,150,105,0.2); color: #34D399; }
+    .feature-icon.orange { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.2); color: #FCD34D; }
+    .feature-icon.pink { background: rgba(236,72,153,0.12); border-color: rgba(236,72,153,0.2); color: #F472B6; }
+    .feature-icon.red { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.2); color: #F87171; }
+    .feature-title { font-size: 17px; font-weight: 700; color: var(--color-text); margin-bottom: 10px; }
+    .feature-desc { font-size: 14px; color: var(--color-text-muted); line-height: 1.65; }
+
+    /* ── How It Works ── */
+    .how-it-works { padding: 100px 0; background: var(--color-bg-2); }
+    .hiw-header { margin-bottom: 72px; }
+    .hiw-modes {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+    }
+    .hiw-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 16px; padding: 40px;
+      transition: all 250ms ease;
+    }
+    .hiw-card:hover { border-color: var(--color-border-bright); box-shadow: var(--shadow-glow); }
+    .hiw-card-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 100px; margin-bottom: 24px;
+    }
+    .hiw-card-badge.ext { background: rgba(8,145,178,0.12); border: 1px solid rgba(8,145,178,0.25); color: var(--color-secondary); }
+    .hiw-card-badge.api { background: rgba(5,150,105,0.12); border: 1px solid rgba(5,150,105,0.25); color: #34D399; }
+    .hiw-card h3 { font-size: 24px; font-weight: 800; color: var(--color-text); margin-bottom: 12px; }
+    .hiw-card p { font-size: 15px; color: var(--color-text-muted); line-height: 1.65; margin-bottom: 28px; }
+    .hiw-steps { display: flex; flex-direction: column; gap: 14px; }
+    .hiw-step {
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .hiw-step-num {
+      width: 26px; height: 26px; border-radius: 6px;
+      background: rgba(8,145,178,0.15); border: 1px solid rgba(8,145,178,0.25);
+      font-size: 12px; font-weight: 700; color: var(--color-secondary);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .hiw-card-badge.api ~ .hiw-steps .hiw-step-num,
+    .hiw-step.api .hiw-step-num {
+      background: rgba(5,150,105,0.15); border-color: rgba(5,150,105,0.25); color: #34D399;
+    }
+    .hiw-step-text { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; padding-top: 4px; }
+    .hiw-step-text strong { color: var(--color-text); font-weight: 600; }
+    .hiw-ext-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: var(--color-secondary);
+      text-decoration: none; margin-top: 20px;
+      padding: 8px 14px; border-radius: 8px;
+      background: rgba(8,145,178,0.08); border: 1px solid rgba(8,145,178,0.2);
+      transition: all 200ms ease;
+    }
+    .hiw-ext-link:hover { background: rgba(8,145,178,0.15); transform: translateY(-1px); }
+
+    /* ── AI Engine ── */
+    .ai-engine { padding: 100px 0; }
+    .ai-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center;
+    }
+    .ai-providers {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      margin-top: 32px;
+    }
+    .ai-provider {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 10px; padding: 14px 16px;
+      transition: all 200ms ease;
+    }
+    .ai-provider:hover { border-color: var(--color-border-bright); background: var(--color-surface-hover); }
+    .ai-provider-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; flex-shrink: 0;
+    }
+    .ai-provider-name { font-size: 13px; font-weight: 600; color: var(--color-text); }
+    .ai-provider-desc { font-size: 11px; color: var(--color-text-dim); margin-top: 1px; }
+    .ai-chat-demo {
+      background: var(--color-bg-3);
+      border: 1px solid var(--color-border-bright);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(8,145,178,0.08);
+    }
+    .ai-chat-header {
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--color-border);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .ai-chat-header-dot { width: 8px; height: 8px; border-radius: 50%; background: #28C840; }
+    .ai-chat-header-title { font-size: 13px; font-weight: 600; color: var(--color-text); }
+    .ai-chat-header-model {
+      margin-left: auto; font-size: 11px; color: var(--color-text-dim);
+      background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .ai-chat-messages { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+    .chat-bubble {
+      max-width: 85%; font-size: 13px; line-height: 1.55; border-radius: 12px;
+    }
+    .chat-bubble.user {
+      align-self: flex-end;
+      background: rgba(8,145,178,0.15); border: 1px solid rgba(8,145,178,0.25);
+      color: var(--color-text); padding: 12px 16px; border-radius: 12px 12px 4px 12px;
+    }
+    .chat-bubble.ai {
+      align-self: flex-start;
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      color: var(--color-text-muted); padding: 12px 16px; border-radius: 12px 12px 12px 4px;
+    }
+    .chat-bubble.ai .ai-prefix {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--color-secondary); text-transform: uppercase; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tool-call {
+      background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 8px; padding: 10px 14px; margin-top: 10px;
+      font-size: 12px; font-family: 'JetBrains Mono', monospace;
+    }
+    .tool-call-label { font-size: 10px; color: #A78BFA; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .tool-call-code { color: #C4B5FD; }
+
+    /* ── Integrations ── */
+    .integrations { padding: 80px 0; background: var(--color-bg-2); }
+    .int-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      margin-top: 48px;
+    }
+    .int-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 12px; padding: 28px 24px;
+      text-align: center; transition: all 250ms ease;
+    }
+    .int-card:hover { border-color: var(--color-border-bright); transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+    .int-card-icon {
+      width: 48px; height: 48px; border-radius: 12px; margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .int-card-name { font-size: 15px; font-weight: 700; color: var(--color-text); margin-bottom: 6px; }
+    .int-card-desc { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; }
+
+    /* ── Download ── */
+    .download {
+      padding: 120px 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(8,145,178,0.05) 50%, transparent 100%);
+    }
+    .download-inner { text-align: center; }
+    .download-inner .section-title { margin-bottom: 16px; }
+    .download-inner .section-desc { margin: 0 auto 48px; }
+    .download-card {
+      display: inline-flex; flex-direction: column; align-items: center;
+      background: var(--color-bg-3);
+      border: 1px solid var(--color-border-bright);
+      border-radius: 20px; padding: 48px 56px;
+      box-shadow: 0 0 60px rgba(8,145,178,0.1);
+      min-width: 360px;
+    }
+    .download-app-icon {
+      width: 80px; height: 80px; border-radius: 20px; margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, #7C3AED 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 32px rgba(8,145,178,0.35);
+    }
+    .download-app-name { font-size: 24px; font-weight: 800; color: var(--color-text); margin-bottom: 4px; }
+    .download-version { font-size: 13px; color: var(--color-text-dim); margin-bottom: 32px; font-family: 'JetBrains Mono', monospace; }
+    .download-btn {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--color-cta); color: white;
+      font-size: 16px; font-weight: 700;
+      padding: 16px 36px; border-radius: 12px;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 200ms ease; width: 100%; justify-content: center;
+      box-shadow: 0 4px 24px rgba(5,150,105,0.4);
+    }
+    .download-btn:hover { background: var(--color-cta-hover); transform: translateY(-2px); box-shadow: 0 8px 40px rgba(5,150,105,0.5); }
+    .download-req {
+      margin-top: 20px; font-size: 13px; color: var(--color-text-dim);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .download-ext-link {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 500; color: var(--color-text-muted);
+      text-decoration: none; margin-top: 12px;
+      padding: 10px 20px; border-radius: 10px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface); width: 100%; justify-content: center;
+      transition: all 200ms ease;
+    }
+    .download-ext-link:hover { border-color: var(--color-border-bright); background: var(--color-surface-hover); color: var(--color-text); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: 48px 40px;
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-left { display: flex; align-items: center; gap: 12px; }
+    .footer-logo {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--color-text);
+      font-weight: 700; font-size: 15px;
+    }
+    .footer-copy { font-size: 13px; color: var(--color-text-dim); margin-left: 4px; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 13px; color: var(--color-text-dim); text-decoration: none;
+      transition: color 200ms ease;
+    }
+    .footer-links a:hover { color: var(--color-secondary); }
+
+    /* ── Divider ── */
+    .divider {
+      max-width: 1100px; margin: 0 auto; padding: 0 40px;
+      height: 1px; background: var(--color-border);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .hiw-modes { grid-template-columns: 1fr; }
+      .ai-layout { grid-template-columns: 1fr; gap: 48px; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .int-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .nav-mobile-menu { display: block; }
+      .hero { padding: 120px 20px 60px; }
+      .section-inner { padding: 0 20px; }
+      .mockup-wrap { padding: 0 20px 60px; }
+      .features { padding: 60px 0; }
+      .features-grid { grid-template-columns: 1fr; }
+      .how-it-works { padding: 60px 0; }
+      .ai-engine { padding: 60px 0; }
+      .integrations { padding: 60px 0; }
+      .int-grid { grid-template-columns: repeat(2, 1fr); }
+      .download { padding: 80px 0; }
+      .download-card { min-width: unset; padding: 36px 24px; width: 100%; max-width: 380px; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .window-body { grid-template-columns: 44px 1fr; }
+      .w-sidebar { display: none; }
+      footer { padding: 32px 20px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 36px; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn-primary, .btn-secondary { justify-content: center; }
+      .int-grid { grid-template-columns: 1fr 1fr; }
+      .ai-providers { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+        </svg>
+      </div>
+      TweetPilot
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#ai">AI Engine</a></li>
+      <li><a href="#download">Download</a></li>
+    </ul>
+    <a class="nav-cta" href="#download">Download Free</a>
+    <button class="nav-mobile-menu" aria-label="Menu" style="background:none;border:none;color:var(--color-text);cursor:pointer;">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Hero -->
+  <section>
+    <div class="hero">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        AI-Powered Twitter Automation · macOS
+      </div>
+      <h1>
+        Your Twitter Workflow,<br />
+        <span class="gradient-text">Fully Automated</span>
+      </h1>
+      <p class="hero-sub">
+        TweetPilot is a macOS desktop app that lets AI agents manage your Twitter/X presence — scheduling posts, analyzing accounts, running Python scripts, all from one intelligent workspace.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#download">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download for macOS
+        </a>
+        <a class="btn-secondary" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>
+            <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+            <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+          </svg>
+          Get TweetClaw Extension
+        </a>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Runs locally on macOS
+        </div>
+        <div class="hero-meta-sep"></div>
+        <div class="hero-meta-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Scheduled automation
+        </div>
+        <div class="hero-meta-sep"></div>
+        <div class="hero-meta-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+          Multi-account support
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Mockup -->
+  <div class="mockup-wrap">
+    <div class="mockup-glow"></div>
+    <div class="app-window">
+      <div class="window-titlebar">
+        <div class="window-dot red"></div>
+        <div class="window-dot yellow"></div>
+        <div class="window-dot green"></div>
+        <div class="window-title">TweetPilot — Workspace · @myaccount</div>
+      </div>
+      <div class="window-body">
+        <!-- Activity Bar -->
+        <div class="w-activity">
+          <div class="w-act-icon active" title="Tasks">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+          <div class="w-act-icon" title="AI Chat">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+          </div>
+          <div class="w-act-icon" title="Accounts">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <div class="w-act-icon" title="Settings" style="margin-top:auto;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Sidebar -->
+        <div class="w-sidebar">
+          <div class="w-sidebar-label">Workspaces</div>
+          <div class="w-sidebar-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Main Workspace
+            <div class="w-sidebar-dot"></div>
+          </div>
+          <div class="w-sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+            Growth Campaign
+          </div>
+          <div class="w-sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+            Content Schedule
+          </div>
+          <div class="w-sidebar-label" style="margin-top:16px;">Accounts</div>
+          <div class="w-sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            @myaccount
+            <div class="w-sidebar-dot"></div>
+          </div>
+          <div class="w-sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            @brandaccount
+          </div>
+        </div>
+        <!-- Main -->
+        <div class="w-main">
+          <div class="w-main-header">
+            <svg width="16" height="16" fill="none" stroke="var(--color-secondary)" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            Active Tasks
+          </div>
+          <div class="w-task-list">
+            <div class="w-task-card">
+              <div class="w-task-status running"></div>
+              <div class="w-task-info">
+                <div class="w-task-name">Auto Reply to Mentions</div>
+                <div class="w-task-meta">mention_reply.py · runs every 15min</div>
+              </div>
+              <span class="w-task-badge ai">AI</span>
+            </div>
+            <div class="w-task-card">
+              <div class="w-task-status done"></div>
+              <div class="w-task-info">
+                <div class="w-task-name">Daily Growth Report</div>
+                <div class="w-task-meta">growth_report.py · cron 09:00 daily</div>
+              </div>
+              <span class="w-task-badge sched">Scheduled</span>
+            </div>
+            <div class="w-task-card">
+              <div class="w-task-status waiting"></div>
+              <div class="w-task-info">
+                <div class="w-task-name">Trend Search &amp; Post</div>
+                <div class="w-task-meta">trend_post.py · runs every 2hr</div>
+              </div>
+              <span class="w-task-badge ai">AI</span>
+            </div>
+          </div>
+          <div class="w-chat-preview">
+            <div class="w-chat-msg">
+              <div class="w-chat-avatar">AI</div>
+              <div>
+                <div style="font-size:11px;color:var(--color-secondary);font-weight:600;margin-bottom:5px;">TweetPilot Agent</div>
+                Found 3 trending topics. Drafting reply thread for @user's mention...
+                <div class="typing-indicator" style="margin-top:8px;">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="features">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">AI Providers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2</div>
+        <div class="stat-label">X Access Modes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Scheduled Tasks</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Local & Private</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="section-inner">
+      <div class="features-header">
+        <div class="section-label">Capabilities</div>
+        <h2 class="section-title">Everything you need to<br />dominate Twitter/X</h2>
+        <p class="section-desc">A full-featured desktop workspace with AI at the core — built for power users who want total control.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-cell featured">
+          <div class="feature-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+          </div>
+          <div class="feature-title">AI-Powered Chat Interface</div>
+          <div class="feature-desc">Talk to your AI agent directly. Ask it to search tweets, analyze accounts, draft content, or execute any Twitter action — all through natural conversation.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon purple">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="feature-title">Task Scheduling</div>
+          <div class="feature-desc">Set up recurring tasks with flexible interval or cron schedules. Run Python scripts automatically — post at peak times, monitor keywords, send reports.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon green">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <div class="feature-title">Multi-Account Management</div>
+          <div class="feature-desc">Manage multiple Twitter/X accounts in one place. Switch contexts instantly. Each account runs in its own isolated workspace with dedicated credentials.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon orange">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <div class="feature-title">Python Script Execution</div>
+          <div class="feature-desc">Write and run Python scripts that interact with Twitter. Full access to the TweetPilot SDK — search, post, retweet, follow, and analyze data programmatically.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon pink">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+          </div>
+          <div class="feature-title">Data Blocks</div>
+          <div class="feature-desc">Build structured knowledge bases that feed directly into your AI sessions. Store personas, templates, target audiences, and brand guidelines for consistent outputs.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon red">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
+              <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <div class="feature-title">Feishu / Lark Integration</div>
+          <div class="feature-desc">Connect TweetPilot to Feishu (Lark) bots. Receive automated reports, alerts, and summaries directly in your enterprise messaging channels.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-inner">
+      <div class="hiw-header">
+        <div class="section-label">Architecture</div>
+        <h2 class="section-title">Two ways to reach X</h2>
+        <p class="section-desc">TweetPilot supports both browser-based automation via TweetClaw and direct API access — pick the mode that fits your setup.</p>
+      </div>
+      <div class="hiw-modes">
+        <!-- TweetClaw Mode -->
+        <div class="hiw-card">
+          <span class="hiw-card-badge ext">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>
+              <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+            </svg>
+            Chrome Extension Mode
+          </span>
+          <h3>TweetClaw Bridge</h3>
+          <p>Use the TweetClaw Chrome extension as a local WebSocket bridge. TweetPilot connects directly to your logged-in browser session — no API keys needed, no rate limit headaches.</p>
+          <div class="hiw-steps">
+            <div class="hiw-step">
+              <div class="hiw-step-num">1</div>
+              <div class="hiw-step-text">Install the <strong>TweetClaw</strong> Chrome extension from the Web Store</div>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-num">2</div>
+              <div class="hiw-step-text">Open Twitter/X in Chrome — the extension starts a local <strong>WebSocket server</strong> on port 20086</div>
+            </div>
+            <div class="hiw-step">
+              <div class="hiw-step-num">3</div>
+              <div class="hiw-step-text">TweetPilot connects via LocalBridge and can <strong>read, post, search, and interact</strong> using your browser session</div>
+            </div>
+          </div>
+          <a class="hiw-ext-link" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Install TweetClaw from Chrome Web Store
+          </a>
+        </div>
+        <!-- X API Mode -->
+        <div class="hiw-card">
+          <span class="hiw-card-badge api">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+            Official X API Mode
+          </span>
+          <h3>X API Direct</h3>
+          <p>Connect with official X API credentials (OAuth 2.0 or API keys) for enterprise-grade reliability. Full access to all X API endpoints with your own developer app credentials.</p>
+          <div class="hiw-steps">
+            <div class="hiw-step api">
+              <div class="hiw-step-num" style="background:rgba(5,150,105,0.15);border-color:rgba(5,150,105,0.25);color:#34D399;">1</div>
+              <div class="hiw-step-text">Create an app at <strong>developer.twitter.com</strong> and obtain your API keys</div>
+            </div>
+            <div class="hiw-step api">
+              <div class="hiw-step-num" style="background:rgba(5,150,105,0.15);border-color:rgba(5,150,105,0.25);color:#34D399;">2</div>
+              <div class="hiw-step-text">Enter your <strong>Consumer Key, Secret, and OAuth tokens</strong> in TweetPilot Settings</div>
+            </div>
+            <div class="hiw-step api">
+              <div class="hiw-step-num" style="background:rgba(5,150,105,0.15);border-color:rgba(5,150,105,0.25);color:#34D399;">3</div>
+              <div class="hiw-step-text">TweetPilot calls X API directly — supports <strong>v1.1 and v2 endpoints</strong> with automatic credential management</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Engine -->
+  <section class="ai-engine" id="ai">
+    <div class="section-inner">
+      <div class="ai-layout">
+        <div>
+          <div class="section-label">AI Engine</div>
+          <h2 class="section-title">Bring your own AI model</h2>
+          <p class="section-desc">TweetPilot is model-agnostic. Connect to Claude, GPT-4, a local Ollama model, or any OpenAI-compatible API. Switch providers without changing your workflows.</p>
+          <div class="ai-providers">
+            <div class="ai-provider">
+              <div class="ai-provider-icon" style="background:linear-gradient(135deg,#C77B58,#8B4513);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <div>
+                <div class="ai-provider-name">Anthropic Claude</div>
+                <div class="ai-provider-desc">Claude 3 Opus / Sonnet</div>
+              </div>
+            </div>
+            <div class="ai-provider">
+              <div class="ai-provider-icon" style="background:linear-gradient(135deg,#10A37F,#0D8A6B);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" fill="none"/></svg>
+              </div>
+              <div>
+                <div class="ai-provider-name">OpenAI</div>
+                <div class="ai-provider-desc">GPT-4o / GPT-4 Turbo</div>
+              </div>
+            </div>
+            <div class="ai-provider">
+              <div class="ai-provider-icon" style="background:linear-gradient(135deg,#6366F1,#4F46E5);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16z"/></svg>
+              </div>
+              <div>
+                <div class="ai-provider-name">Ollama</div>
+                <div class="ai-provider-desc">Local models, 100% private</div>
+              </div>
+            </div>
+            <div class="ai-provider">
+              <div class="ai-provider-icon" style="background:linear-gradient(135deg,#64748B,#475569);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <div>
+                <div class="ai-provider-name">Custom API</div>
+                <div class="ai-provider-desc">Any OpenAI-compatible endpoint</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Chat Demo -->
+        <div class="ai-chat-demo">
+          <div class="ai-chat-header">
+            <div class="ai-chat-header-dot"></div>
+            <div class="ai-chat-header-title">AI Session · Main Workspace</div>
+            <div class="ai-chat-header-model">claude-3-5-sonnet</div>
+          </div>
+          <div class="ai-chat-messages">
+            <div class="chat-bubble user">Search for tweets about "AI automation" from the past 24h and like the top 5 most engaging ones</div>
+            <div class="chat-bubble ai">
+              <div class="ai-prefix">
+                <div style="width:6px;height:6px;border-radius:50%;background:var(--color-secondary);animation:pulse-dot 2s infinite;"></div>
+                TweetPilot Agent
+              </div>
+              Searching Twitter for "AI automation" tweets from the last 24 hours...
+              <div class="tool-call">
+                <div class="tool-call-label">▶ TOOL CALL · search_tweets</div>
+                <div class="tool-call-code">{ "query": "AI automation", "hours": 24, "sort": "engagement" }</div>
+              </div>
+            </div>
+            <div class="chat-bubble ai">
+              <div class="ai-prefix">
+                <div style="width:6px;height:6px;border-radius:50%;background:#34D399;"></div>
+                Result
+              </div>
+              Found 47 tweets. Identified top 5 by engagement score. Liking them now...
+              <div class="tool-call">
+                <div class="tool-call-label">▶ TOOL CALL · like_tweet ×5</div>
+                <div class="tool-call-code">✓ All 5 tweets liked successfully</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;padding:4px 8px;">
+              <div style="width:5px;height:5px;border-radius:50%;background:var(--color-secondary);animation:typing 1.4s infinite;"></div>
+              <div style="width:5px;height:5px;border-radius:50%;background:var(--color-secondary);animation:typing 1.4s 0.2s infinite;"></div>
+              <div style="width:5px;height:5px;border-radius:50%;background:var(--color-secondary);animation:typing 1.4s 0.4s infinite;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integrations -->
+  <section class="integrations">
+    <div class="section-inner">
+      <div class="section-label">Integrations</div>
+      <h2 class="section-title">Connects to your stack</h2>
+      <div class="int-grid">
+        <div class="int-card">
+          <div class="int-card-icon" style="background:rgba(8,145,178,0.12);border:1px solid rgba(8,145,178,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" stroke-width="2">
+              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+            </svg>
+          </div>
+          <div class="int-card-name">Twitter / X</div>
+          <div class="int-card-desc">Full read/write access via TweetClaw or official X API</div>
+        </div>
+        <div class="int-card">
+          <div class="int-card-icon" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>
+              <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+            </svg>
+          </div>
+          <div class="int-card-name">TweetClaw</div>
+          <div class="int-card-desc">Chrome extension WebSocket bridge for browserless access</div>
+        </div>
+        <div class="int-card">
+          <div class="int-card-icon" style="background:rgba(16,163,127,0.12);border:1px solid rgba(16,163,127,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+          <div class="int-card-name">Feishu / Lark</div>
+          <div class="int-card-desc">Push reports and alerts to enterprise Feishu bots</div>
+        </div>
+        <div class="int-card">
+          <div class="int-card-icon" style="background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <div class="int-card-name">Python Scripts</div>
+          <div class="int-card-desc">Execute custom automation scripts with TweetPilot's local SDK</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section class="download" id="download">
+    <div class="section-inner">
+      <div class="download-inner">
+        <div class="section-label">Download</div>
+        <h2 class="section-title">Ready to automate?</h2>
+        <p class="section-desc">TweetPilot is a native macOS app. Download, install, and connect your accounts in minutes.</p>
+        <div style="display:flex;justify-content:center;">
+          <div class="download-card">
+            <div class="download-app-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+                <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+              </svg>
+            </div>
+            <div class="download-app-name">TweetPilot</div>
+            <div class="download-version">v0.5.16 · macOS 12+</div>
+            <a class="download-btn" href="#" onclick="alert('Download link will be configured here. Please contact the team for the latest DMG.');return false;">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M12 17l-5-5h3V3h4v9h3l-5 5z"/><path d="M20 21H4"/>
+              </svg>
+              Download .dmg for macOS
+            </a>
+            <a class="download-ext-link" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>
+                <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+                <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+              </svg>
+              Also install TweetClaw Chrome Extension
+            </a>
+            <div class="download-req">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              macOS 12 Monterey or later · Apple Silicon &amp; Intel
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <a class="footer-logo" href="#">
+          <div class="nav-logo-icon" style="width:24px;height:24px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+            </svg>
+          </div>
+          TweetPilot
+        </a>
+        <span class="footer-copy">© 2026 TweetPilot. All rights reserved.</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">TweetClaw</a>
+        <a href="mailto:support@tweetpilot.app">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
