@@ -608,6 +608,46 @@
     }
     .footer-links a:hover { color: var(--color-secondary); }
 
+    /* ── Pricing (homepage) ── */
+    .pricing-section { padding: 100px 0; }
+    .pricing-grid-home {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      margin-top: 56px; align-items: start;
+    }
+    .ph-card {
+      background: var(--color-bg-3); border: 1px solid var(--color-border);
+      border-radius: 20px; padding: 32px 28px;
+      transition: all 250ms ease; position: relative;
+    }
+    .ph-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(8,145,178,0.08); border-color: var(--color-border-bright); }
+    .ph-card.featured { border-color: rgba(8,145,178,0.4); background: linear-gradient(160deg, rgba(8,145,178,0.1) 0%, var(--color-bg-3) 60%); box-shadow: 0 0 50px rgba(8,145,178,0.1); }
+    .ph-card.featured:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 60px rgba(8,145,178,0.18); }
+    .ph-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 18px; }
+    .ph-badge.free { background: rgba(255,255,255,0.06); color: var(--color-text-muted); border: 1px solid var(--color-border); }
+    .ph-badge.pro { background: rgba(8,145,178,0.15); color: var(--color-secondary); border: 1px solid rgba(8,145,178,0.3); }
+    .ph-badge.ent { background: rgba(124,58,237,0.15); color: #A78BFA; border: 1px solid rgba(124,58,237,0.3); }
+    .ph-name { font-size: 20px; font-weight: 800; color: var(--color-text); margin-bottom: 10px; }
+    .ph-price { font-size: 46px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px; }
+    .ph-price.p-free { color: var(--color-text); font-size: 36px; }
+    .ph-price.p-pro { background: linear-gradient(135deg, var(--color-secondary), var(--color-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .ph-price.p-ent { color: #A78BFA; font-size: 26px; padding-top: 6px; }
+    .ph-period { font-size: 14px; color: var(--color-text-dim); margin-bottom: 24px; }
+    .ph-divider { height: 1px; background: var(--color-border); margin-bottom: 22px; }
+    .ph-features { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 28px; }
+    .ph-feat { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: var(--color-text-muted); line-height: 1.5; }
+    .ph-feat.off { opacity: 0.38; }
+    .ph-feat svg { flex-shrink: 0; margin-top: 1px; }
+    .ph-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 200ms ease; border: none; }
+    .ph-btn.b-free { background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); }
+    .ph-btn.b-free:hover { background: var(--color-surface-hover); border-color: var(--color-border-bright); }
+    .ph-btn.b-pro { background: var(--color-cta); color: white; box-shadow: 0 4px 20px rgba(5,150,105,0.3); }
+    .ph-btn.b-pro:hover { background: var(--color-cta-hover); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(5,150,105,0.4); }
+    .ph-btn.b-ent { background: rgba(124,58,237,0.15); color: #A78BFA; border: 1px solid rgba(124,58,237,0.3); }
+    .ph-btn.b-ent:hover { background: rgba(124,58,237,0.25); transform: translateY(-1px); }
+    .ph-more { display: block; text-align: center; margin-top: 36px; font-size: 14px; color: var(--color-text-muted); text-decoration: none; transition: color 200ms; }
+    .ph-more:hover { color: var(--color-secondary); }
+    .ph-more span { color: var(--color-secondary); }
+
     /* ── Divider ── */
     .divider {
       max-width: 1100px; margin: 0 auto; padding: 0 40px;
@@ -643,6 +683,14 @@
       .w-sidebar { display: none; }
       footer { padding: 32px 20px; }
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+
+    @media (max-width: 1024px) {
+      .pricing-grid-home { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid-home { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -1153,6 +1201,141 @@
           <div class="int-card-desc">Execute custom automation scripts with TweetPilot's local SDK</div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing-section" id="pricing">
+    <div class="section-inner">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-desc">Start for free. Upgrade when you need scheduled automation and AI-powered remote conversations.</p>
+
+      <div class="pricing-grid-home">
+
+        <!-- Free -->
+        <div class="ph-card">
+          <span class="ph-badge free">Free</span>
+          <div class="ph-name">Starter</div>
+          <div class="ph-price p-free">$0</div>
+          <div class="ph-period">Forever free · no credit card</div>
+          <div class="ph-divider"></div>
+          <ul class="ph-features">
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Multi-account management
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Manual task execution
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Python script runner
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              X API &amp; TweetClaw support
+            </li>
+            <li class="ph-feat off">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Scheduled tasks (cron / interval)
+            </li>
+            <li class="ph-feat off">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              AI remote conversation agent
+            </li>
+            <li class="ph-feat off">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Feishu / Lark integration
+            </li>
+          </ul>
+          <a class="ph-btn b-free" href="#download">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Free
+          </a>
+        </div>
+
+        <!-- Pro -->
+        <div class="ph-card featured">
+          <span class="ph-badge pro">Most Popular</span>
+          <div class="ph-name">Professional</div>
+          <div class="ph-price p-pro">$300</div>
+          <div class="ph-period">per year · 1 license · up to 2 devices</div>
+          <div class="ph-divider"></div>
+          <ul class="ph-features">
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Everything in Starter
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong style="color:var(--color-text);">Scheduled tasks</strong> — cron &amp; interval</span>
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong style="color:var(--color-text);">AI remote conversation</strong> agent</span>
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Feishu / Lark bot integration
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              2 devices per license
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              License valid for 12 months
+            </li>
+          </ul>
+          <a class="ph-btn b-pro" href="https://buy.paddle.com/tweetpilot" target="_blank" rel="noopener">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Buy License — $300/yr
+          </a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="ph-card">
+          <span class="ph-badge ent">Enterprise</span>
+          <div class="ph-name">Lifetime &amp; Custom</div>
+          <div class="ph-price p-ent">Custom pricing</div>
+          <div class="ph-period">Offline payment · signed contract</div>
+          <div class="ph-divider"></div>
+          <ul class="ph-features">
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Everything in Professional
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              <strong style="color:var(--color-text);">Lifetime license</strong> — no renewal
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              AI workflow training &amp; onboarding
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Custom AI scripts &amp; reports
+            </li>
+            <li class="ph-feat">
+              <svg width="15" height="15" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Priority support via Feishu
+            </li>
+          </ul>
+          <a class="ph-btn b-ent" href="mailto:ribencong@gmail.com">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email: ribencong@gmail.com
+          </a>
+          <div style="margin-top:16px;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.18);border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#A78BFA;margin-bottom:12px;">Scan to contact on Feishu</div>
+            <img src="feishu.png" alt="Feishu QR code" style="width:120px;height:120px;border-radius:8px;object-fit:cover;display:block;margin:0 auto;" />
+          </div>
+        </div>
+
+      </div>
+      <a class="ph-more" href="/pricing.html">View full pricing details &amp; FAQ <span>→</span></a>
     </div>
   </section>
 
