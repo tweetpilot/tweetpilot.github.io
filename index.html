@@ -715,6 +715,69 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
+    /* ── Contact Modal ── */
+    .contact-modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.78); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 250ms ease;
+      padding: 20px;
+    }
+    .contact-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .contact-modal {
+      position: relative;
+      background: #0E1A2D;
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 20px;
+      padding: 36px 32px 32px;
+      max-width: 400px; width: 100%;
+      transform: scale(0.94) translateY(14px); transition: transform 250ms ease;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 80px rgba(124,58,237,0.12);
+    }
+    .contact-modal-overlay.open .contact-modal { transform: scale(1) translateY(0); }
+    .contact-modal-x {
+      position: absolute; top: 14px; right: 14px;
+      width: 32px; height: 32px; border-radius: 8px;
+      background: transparent; border: 1px solid transparent;
+      color: var(--color-text-dim); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 180ms ease;
+    }
+    .contact-modal-x:hover { background: rgba(255,255,255,0.06); border-color: var(--color-border); color: var(--color-text); }
+    .contact-modal-title { font-size: 20px; font-weight: 800; color: var(--color-text); margin-bottom: 6px; }
+    .contact-modal-sub { font-size: 13px; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 24px; }
+    .cm-section { margin-bottom: 22px; }
+    .cm-section:last-child { margin-bottom: 0; }
+    .cm-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #A78BFA; margin-bottom: 10px; }
+    .cm-email-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: rgba(124,58,237,0.06); border: 1px solid rgba(124,58,237,0.18);
+      border-radius: 10px; padding: 10px 12px 10px 14px;
+      flex-wrap: wrap;
+    }
+    .cm-email-addr { font-size: 13px; color: var(--color-text); font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+    .cm-email-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .cm-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600;
+      padding: 6px 11px; border-radius: 7px;
+      cursor: pointer; text-decoration: none;
+      transition: all 180ms ease; white-space: nowrap; border: 1px solid transparent;
+    }
+    .cm-btn.primary { background: #7C3AED; color: white; }
+    .cm-btn.primary:hover { background: #6D28D9; transform: translateY(-1px); }
+    .cm-btn.ghost { background: rgba(124,58,237,0.12); color: #C4B5FD; border-color: rgba(124,58,237,0.25); }
+    .cm-btn.ghost:hover { background: rgba(124,58,237,0.22); color: #A78BFA; }
+    .cm-btn.ghost.copied { background: rgba(52,211,153,0.12); border-color: rgba(52,211,153,0.3); color: #34D399; }
+    .cm-qr {
+      display: block; margin: 0 auto;
+      width: 200px; height: 200px;
+      border-radius: 10px; object-fit: cover;
+      border: 1px solid rgba(124,58,237,0.2);
+      background: rgba(124,58,237,0.04);
+    }
+    .cm-qr-hint { text-align: center; font-size: 12px; color: var(--color-text-dim); margin-top: 10px; }
+
   </style>
 </head>
 <body>
@@ -1304,7 +1367,7 @@
               Custom scripts &amp; priority support
             </li>
           </ul>
-          <a class="pr-btn b-ent" href="/pricing.html#contact">
+          <a class="pr-btn b-ent" href="javascript:void(0)" onclick="openContactModal()">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             Contact Us
           </a>
@@ -1377,10 +1440,76 @@
         <a href="/refund.html">Refund Policy</a>
         <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
         <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">TweetClaw</a>
-        <a href="mailto:ribencong@gmail.com">Contact</a>
+        <a href="javascript:void(0)" onclick="openContactModal()">Contact</a>
       </div>
     </div>
   </footer>
+
+  <!-- Contact Modal -->
+  <div class="contact-modal-overlay" id="contactModalOverlay" onclick="handleContactOverlayClick(event)">
+    <div class="contact-modal">
+      <button class="contact-modal-x" onclick="closeContactModal()" type="button" aria-label="Close">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="contact-modal-title">Get in Touch</div>
+      <div class="contact-modal-sub">Reach us via email or scan the Feishu QR code below</div>
+
+      <div class="cm-section">
+        <div class="cm-section-label">Email</div>
+        <div class="cm-email-row">
+          <span class="cm-email-addr">ribencong@gmail.com</span>
+          <div class="cm-email-actions">
+            <a class="cm-btn primary" href="mailto:ribencong@gmail.com">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Send
+            </a>
+            <button class="cm-btn ghost" id="copyEmailBtn" onclick="copyEmail()" type="button">
+              <svg id="copyIcon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              <span id="copyEmailText">Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cm-section">
+        <div class="cm-section-label">Feishu / Lark</div>
+        <img class="cm-qr" src="feishu.png" alt="Feishu QR Code" />
+        <div class="cm-qr-hint">Scan with Feishu app to start a conversation</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyEmail() {
+      navigator.clipboard.writeText('ribencong@gmail.com').then(function() {
+        const btn = document.getElementById('copyEmailBtn');
+        const text = document.getElementById('copyEmailText');
+        const icon = document.getElementById('copyIcon');
+        btn.classList.add('copied');
+        text.textContent = 'Copied';
+        icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+        setTimeout(function() {
+          btn.classList.remove('copied');
+          text.textContent = 'Copy';
+          icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>';
+        }, 2000);
+      });
+    }
+    function openContactModal() {
+      document.getElementById('contactModalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeContactModal() {
+      document.getElementById('contactModalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function handleContactOverlayClick(e) {
+      if (e.target === document.getElementById('contactModalOverlay')) closeContactModal();
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeContactModal();
+    });
+  </script>
 
 </body>
 </html>
