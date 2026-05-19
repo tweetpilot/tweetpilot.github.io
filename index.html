@@ -609,51 +609,59 @@
     }
     .footer-links a:hover { color: var(--color-secondary); }
 
-    /* ── Pricing (homepage — compact preview) ── */
+    /* ── Pricing (homepage) ── */
     .pricing-section { padding: 100px 0; }
-    .pricing-row {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-      margin-top: 56px;
-      background: var(--color-border);
-      border: 1px solid var(--color-border);
-      border-radius: 20px; overflow: hidden;
+    .pricing-grid-home {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 56px; align-items: stretch;
     }
-    .pr-cell {
+    .plan-card-h {
       background: var(--color-bg-3);
-      padding: 36px 32px;
-      display: flex; flex-direction: column; gap: 0;
-      transition: background 200ms ease;
-      position: relative;
+      border: 1px solid var(--color-border);
+      border-radius: 20px; padding: 36px 32px;
+      transition: all 250ms ease;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
     }
-    .pr-cell:hover { background: #101f36; }
-    .pr-cell.featured {
-      background: linear-gradient(160deg, rgba(8,145,178,0.12) 0%, var(--color-bg-3) 60%);
-      border-left: 1px solid rgba(8,145,178,0.25);
-      border-right: 1px solid rgba(8,145,178,0.25);
+    .plan-card-h:hover { border-color: var(--color-border-bright); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(8,145,178,0.08); }
+    .plan-card-h.featured {
+      border-color: rgba(8,145,178,0.4);
+      background: linear-gradient(160deg, rgba(8,145,178,0.1) 0%, var(--color-bg-3) 50%);
+      box-shadow: 0 0 50px rgba(8,145,178,0.12);
     }
-    .pr-cell.featured:hover { background: linear-gradient(160deg, rgba(8,145,178,0.18) 0%, #101f36 60%); }
-    .pr-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 16px; align-self: flex-start; }
-    .pr-badge.free { background: rgba(255,255,255,0.06); color: var(--color-text-muted); border: 1px solid var(--color-border); }
-    .pr-badge.pro { background: rgba(8,145,178,0.15); color: var(--color-secondary); border: 1px solid rgba(8,145,178,0.3); }
-    .pr-badge.ent { background: rgba(124,58,237,0.15); color: #A78BFA; border: 1px solid rgba(124,58,237,0.3); }
-    .pr-name { font-size: 18px; font-weight: 800; color: var(--color-text); margin-bottom: 12px; }
-    .pr-price-wrap { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 6px; }
-    .pr-price { font-size: 48px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
-    .pr-price.free { color: var(--color-text); font-size: 38px; }
-    .pr-price.pro { background: linear-gradient(135deg, var(--color-secondary), var(--color-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .pr-price.ent { color: #A78BFA; font-size: 24px; line-height: 1.4; }
-    .pr-period { font-size: 13px; color: var(--color-text-dim); padding-bottom: 8px; }
-    .pr-tagline { font-size: 14px; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 24px; margin-top: 4px; }
-    .pr-highlights { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
-    .pr-hl { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-text-muted); }
-    .pr-hl svg { flex-shrink: 0; }
-    .pr-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 200ms ease; border: none; margin-top: auto; }
-    .pr-btn.b-free { background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); }
-    .pr-btn.b-free:hover { background: var(--color-surface-hover); border-color: var(--color-border-bright); }
-    .pr-btn.b-pro { background: var(--color-cta); color: white; box-shadow: 0 4px 20px rgba(5,150,105,0.3); }
-    .pr-btn.b-pro:hover { background: var(--color-cta-hover); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(5,150,105,0.4); }
-    .pr-btn.b-ent { background: rgba(124,58,237,0.15); color: #A78BFA; border: 1px solid rgba(124,58,237,0.3); }
-    .pr-btn.b-ent:hover { background: rgba(124,58,237,0.25); transform: translateY(-1px); }
+    .plan-card-h.featured:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 60px rgba(8,145,178,0.2); }
+    .plan-badge-h { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 20px; }
+    .plan-badge-h.free { background: rgba(255,255,255,0.06); color: var(--color-text-muted); border: 1px solid var(--color-border); }
+    .plan-badge-h.pro { background: rgba(8,145,178,0.15); color: var(--color-secondary); border: 1px solid rgba(8,145,178,0.3); }
+    .plan-badge-h.ent { background: rgba(124,58,237,0.15); color: #A78BFA; border: 1px solid rgba(124,58,237,0.3); }
+    .plan-name-h { font-size: 22px; font-weight: 800; color: var(--color-text); margin-bottom: 8px; }
+    .plan-price-h { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 6px; }
+    .plan-price-num-h { font-size: 52px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+    .plan-price-num-h.free-num { font-size: 40px; color: var(--color-text); }
+    .plan-price-num-h.pro-num { background: linear-gradient(135deg, var(--color-secondary), var(--color-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .plan-price-num-h.ent-num { color: #A78BFA; font-size: 28px; }
+    .plan-price-period-h { font-size: 14px; color: var(--color-text-muted); padding-bottom: 10px; }
+    .plan-price-sub-h { font-size: 12px; color: var(--color-text-dim); margin-bottom: 28px; min-height: 18px; }
+    .plan-divider-h { height: 1px; background: var(--color-border); margin-bottom: 24px; }
+    .plan-features-h { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; flex: 1; }
+    .plan-feature-h { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--color-text-muted); line-height: 1.5; }
+    .plan-feature-h.disabled { opacity: 0.4; }
+    .feat-icon-h { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+    .feat-icon-h.check { color: #34D399; }
+    .feat-icon-h.cross { color: var(--color-text-dim); }
+    .feat-icon-h.star { color: #A78BFA; }
+    .plan-btn-h {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px 24px; border-radius: 10px;
+      font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none;
+      transition: all 200ms ease; border: none; margin-top: auto;
+    }
+    .plan-btn-h.free-btn { background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); }
+    .plan-btn-h.free-btn:hover { background: var(--color-surface-hover); border-color: var(--color-border-bright); }
+    .plan-btn-h.pro-btn { background: var(--color-cta); color: white; box-shadow: 0 4px 20px rgba(5,150,105,0.3); }
+    .plan-btn-h.pro-btn:hover { background: var(--color-cta-hover); transform: translateY(-1px); box-shadow: 0 8px 30px rgba(5,150,105,0.4); }
+    .plan-btn-h.ent-btn { background: rgba(124,58,237,0.15); color: #A78BFA; border: 1px solid rgba(124,58,237,0.3); }
+    .plan-btn-h.ent-btn:hover { background: rgba(124,58,237,0.25); transform: translateY(-1px); }
     .pr-more { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 32px; font-size: 13px; color: var(--color-text-muted); text-decoration: none; transition: color 200ms; }
     .pr-more:hover { color: var(--color-secondary); }
     .pr-more svg { transition: transform 200ms; }
@@ -697,11 +705,11 @@
     }
 
     @media (max-width: 1024px) {
-      .pricing-row { grid-template-columns: 1fr; }
+      .pricing-grid-home { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-      .pricing-row { grid-template-columns: 1fr; }
+      .pricing-grid-home { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -1285,90 +1293,141 @@
       <h2 class="section-title">Simple, transparent pricing</h2>
       <p class="section-desc">Start for free. Upgrade when you need scheduled automation and AI-powered remote conversations.</p>
 
-      <div class="pricing-row">
+      <div class="pricing-grid-home">
 
         <!-- Free -->
-        <div class="pr-cell">
-          <span class="pr-badge free">Free</span>
-          <div class="pr-name">Starter</div>
-          <div class="pr-price-wrap">
-            <span class="pr-price free">$0</span>
+        <div class="plan-card-h">
+          <span class="plan-badge-h free">Free</span>
+          <div class="plan-name-h">Starter</div>
+          <div class="plan-price-h">
+            <span class="plan-price-num-h free-num">$0</span>
           </div>
-          <div class="pr-tagline">Forever free · no credit card required</div>
-          <ul class="pr-highlights">
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="plan-price-sub-h">Forever free, no credit card required</div>
+          <div class="plan-divider-h"></div>
+          <ul class="plan-features-h">
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               Multi-account management
             </li>
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Manual task execution
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               Python script runner
             </li>
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               X API &amp; TweetClaw support
             </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Workspace &amp; Data Blocks
+            </li>
+            <li class="plan-feature-h disabled">
+              <svg class="feat-icon-h cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Scheduled tasks (interval &amp; cron)
+            </li>
+            <li class="plan-feature-h disabled">
+              <svg class="feat-icon-h cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              AI remote conversation agent
+            </li>
+            <li class="plan-feature-h disabled">
+              <svg class="feat-icon-h cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Feishu / Lark integration
+            </li>
           </ul>
-          <a class="pr-btn b-free" href="#download">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <a class="plan-btn-h free-btn" href="#download">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download Free
           </a>
         </div>
 
         <!-- Pro -->
-        <div class="pr-cell featured">
-          <span class="pr-badge pro">Most Popular</span>
-          <div class="pr-name">Professional</div>
-          <div class="pr-price-wrap">
-            <span class="pr-price pro">$300</span>
-            <span class="pr-period">/ year</span>
+        <div class="plan-card-h featured">
+          <span class="plan-badge-h pro">Most Popular</span>
+          <div class="plan-name-h">Professional</div>
+          <div class="plan-price-h">
+            <span class="plan-price-num-h pro-num">$300</span>
+            <span class="plan-price-period-h">/ year</span>
           </div>
-          <div class="pr-tagline">Unlock scheduled automation &amp; AI agent · up to 2 devices</div>
-          <ul class="pr-highlights">
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              Scheduled tasks — cron &amp; interval
+          <div class="plan-price-sub-h">1 license · up to 2 devices · 1 year</div>
+          <div class="plan-divider-h"></div>
+          <ul class="plan-features-h">
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Everything in Starter
             </li>
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              AI remote conversation agent
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong style="color:var(--color-text);">Scheduled tasks</strong> — interval &amp; cron</span>
             </li>
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#34D399" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong style="color:var(--color-text);">AI remote conversation</strong> agent</span>
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               Feishu / Lark bot integration
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              2 devices per license
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Email support
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              License valid for 12 months
             </li>
           </ul>
           <!-- TODO: Replace with FastSpring checkout URL -->
-          <a class="pr-btn b-pro" href="/pricing.html">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            Get Professional
+          <a class="plan-btn-h pro-btn" href="#" onclick="return false;" style="opacity:0.7;cursor:not-allowed;" title="Checkout coming soon">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Buy License — $300/yr
           </a>
         </div>
 
         <!-- Enterprise -->
-        <div class="pr-cell">
-          <span class="pr-badge ent">Enterprise</span>
-          <div class="pr-name">Lifetime &amp; Custom</div>
-          <div class="pr-price-wrap">
-            <span class="pr-price ent">Custom pricing</span>
+        <div class="plan-card-h">
+          <span class="plan-badge-h ent">Enterprise</span>
+          <div class="plan-name-h">Lifetime &amp; Custom</div>
+          <div class="plan-price-h">
+            <span class="plan-price-num-h ent-num">Custom</span>
           </div>
-          <div class="pr-tagline">Offline payment · signed contract · lifetime license</div>
-          <ul class="pr-highlights">
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              Lifetime license — no renewal
+          <div class="plan-price-sub-h">Offline payment · signed contract</div>
+          <div class="plan-divider-h"></div>
+          <ul class="plan-features-h">
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Everything in Professional
             </li>
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <strong style="color:var(--color-text);">Lifetime license</strong> — no renewal
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               AI workflow training &amp; onboarding
             </li>
-            <li class="pr-hl">
-              <svg width="14" height="14" fill="none" stroke="#A78BFA" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              Custom scripts &amp; priority support
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Custom AI scripts &amp; reports
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Priority support via Feishu
+            </li>
+            <li class="plan-feature-h">
+              <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Signed service contract
             </li>
           </ul>
-          <a class="pr-btn b-ent" href="javascript:void(0)" onclick="openContactModal()">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a class="plan-btn-h ent-btn" href="javascript:void(0)" onclick="openContactModal()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             Contact Us
           </a>
         </div>
