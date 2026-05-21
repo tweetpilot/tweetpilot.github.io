@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-title-key="index.title">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TweetPilot — AI-Powered Twitter Automation</title>
+  <script src="/i18n.js"></script>
   <meta name="description" content="TweetPilot is a macOS desktop app that automates your Twitter/X workflow with AI. Multi-account management, scheduled tasks, Python scripting, and intelligent content generation." />
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -101,6 +102,15 @@
     }
     .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
     .nav-mobile-menu { display: none; }
+    .nav-lang-toggle {
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+      padding: 5px 12px; border-radius: 7px;
+      border: 1px solid var(--color-border);
+      cursor: pointer; transition: all 200ms ease; margin-left: 4px;
+    }
+    .nav-lang-toggle:hover { color: var(--color-secondary); border-color: var(--color-border-bright); background: var(--color-surface-hover); }
 
     /* ── Hero ── */
     .hero {
@@ -798,13 +808,14 @@
       TweetPilot
     </a>
     <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how-it-works">How It Works</a></li>
-      <li><a href="#ai">AI Engine</a></li>
-      <li><a href="/pricing.html">Pricing</a></li>
-      <li><a href="#download">Download</a></li>
+      <li><a href="#features" data-i18n="nav.features">Features</a></li>
+      <li><a href="#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
+      <li><a href="#ai" data-i18n="nav.ai_engine">AI Engine</a></li>
+      <li><a href="/pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+      <li><a href="#download" data-i18n="nav.download">Download</a></li>
     </ul>
-    <a class="nav-cta" href="#download">Download Free</a>
+    <a class="nav-cta" href="#download" data-i18n="nav.download_free">Download Free</a>
+    <button id="lang-toggle" class="nav-lang-toggle" onclick="toggleLang()" type="button">中文</button>
     <button class="nav-mobile-menu" aria-label="Menu" style="background:none;border:none;color:var(--color-text);cursor:pointer;">
       <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
@@ -817,13 +828,13 @@
     <div class="hero">
       <div class="hero-badge">
         <div class="hero-badge-dot"></div>
-        AI-Powered Twitter Automation · macOS
+        <span data-i18n="hero.badge">AI-Powered Twitter Automation · macOS</span>
       </div>
       <h1>
-        Your Twitter Workflow,<br />
-        <span class="gradient-text">Fully Automated</span>
+        <span data-i18n="hero.h1_line1">Your Twitter Workflow,</span><br />
+        <span class="gradient-text" data-i18n="hero.h1_gradient">Fully Automated</span>
       </h1>
-      <p class="hero-sub">
+      <p class="hero-sub" data-i18n="hero.sub">
         TweetPilot is a macOS desktop app that lets AI agents manage your Twitter/X presence — scheduling posts, analyzing accounts, running Python scripts, all from one intelligent workspace.
       </p>
       <div class="hero-actions">
@@ -831,7 +842,7 @@
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          Download for macOS
+          <span data-i18n="hero.btn_download">Download for macOS</span>
         </a>
         <a class="btn-secondary" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -839,7 +850,7 @@
             <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
             <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
           </svg>
-          Get TweetClaw Extension
+          <span data-i18n="hero.btn_extension">Get TweetClaw Extension</span>
         </a>
       </div>
       <div class="hero-meta">
@@ -847,14 +858,14 @@
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          Runs locally on macOS
+          <span data-i18n="hero.meta_local">Runs locally on macOS</span>
         </div>
         <div class="hero-meta-sep"></div>
         <div class="hero-meta-item">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
-          Scheduled automation
+          <span data-i18n="hero.meta_scheduled">Scheduled automation</span>
         </div>
         <div class="hero-meta-sep"></div>
         <div class="hero-meta-item">
@@ -862,7 +873,7 @@
             <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
             <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
           </svg>
-          Multi-account support
+          <span data-i18n="hero.meta_multi">Multi-account support</span>
         </div>
       </div>
     </div>
@@ -907,21 +918,21 @@
         </div>
         <!-- Sidebar -->
         <div class="w-sidebar">
-          <div class="w-sidebar-label">Workspaces</div>
+          <div class="w-sidebar-label" data-i18n="mockup.workspaces">Workspaces</div>
           <div class="w-sidebar-item active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            Main Workspace
+            <span data-i18n="mockup.main_workspace">Main Workspace</span>
             <div class="w-sidebar-dot"></div>
           </div>
           <div class="w-sidebar-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
-            Growth Campaign
+            <span data-i18n="mockup.growth_campaign">Growth Campaign</span>
           </div>
           <div class="w-sidebar-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
-            Content Schedule
+            <span data-i18n="mockup.content_schedule">Content Schedule</span>
           </div>
-          <div class="w-sidebar-label" style="margin-top:16px;">Accounts</div>
+          <div class="w-sidebar-label" style="margin-top:16px;" data-i18n="mockup.accounts">Accounts</div>
           <div class="w-sidebar-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             @myaccount
@@ -939,30 +950,30 @@
               <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
               <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
             </svg>
-            Active Tasks
+            <span data-i18n="mockup.active_tasks">Active Tasks</span>
           </div>
           <div class="w-task-list">
             <div class="w-task-card">
               <div class="w-task-status running"></div>
               <div class="w-task-info">
-                <div class="w-task-name">Auto Reply to Mentions</div>
-                <div class="w-task-meta">mention_reply.py · runs every 15min</div>
+                <div class="w-task-name" data-i18n="mockup.task1_name">Auto Reply to Mentions</div>
+                <div class="w-task-meta" data-i18n="mockup.task1_meta">mention_reply.py · runs every 15min</div>
               </div>
               <span class="w-task-badge ai">AI</span>
             </div>
             <div class="w-task-card">
               <div class="w-task-status done"></div>
               <div class="w-task-info">
-                <div class="w-task-name">Daily Growth Report</div>
-                <div class="w-task-meta">growth_report.py · cron 09:00 daily</div>
+                <div class="w-task-name" data-i18n="mockup.task2_name">Daily Growth Report</div>
+                <div class="w-task-meta" data-i18n="mockup.task2_meta">growth_report.py · cron 09:00 daily</div>
               </div>
-              <span class="w-task-badge sched">Scheduled</span>
+              <span class="w-task-badge sched" data-i18n="mockup.badge_sched">Scheduled</span>
             </div>
             <div class="w-task-card">
               <div class="w-task-status waiting"></div>
               <div class="w-task-info">
-                <div class="w-task-name">Trend Search &amp; Post</div>
-                <div class="w-task-meta">trend_post.py · runs every 2hr</div>
+                <div class="w-task-name" data-i18n="mockup.task3_name">Trend Search &amp; Post</div>
+                <div class="w-task-meta" data-i18n="mockup.task3_meta">trend_post.py · runs every 2hr</div>
               </div>
               <span class="w-task-badge ai">AI</span>
             </div>
@@ -971,8 +982,8 @@
             <div class="w-chat-msg">
               <div class="w-chat-avatar">AI</div>
               <div>
-                <div style="font-size:11px;color:var(--color-secondary);font-weight:600;margin-bottom:5px;">TweetPilot Agent</div>
-                Found 3 trending topics. Drafting reply thread for @user's mention...
+                <div style="font-size:11px;color:var(--color-secondary);font-weight:600;margin-bottom:5px;" data-i18n="mockup.ai_agent">TweetPilot Agent</div>
+                <span data-i18n="mockup.ai_msg">Found 3 trending topics. Drafting reply thread for @user's mention...</span>
                 <div class="typing-indicator" style="margin-top:8px;">
                   <span></span><span></span><span></span>
                 </div>
@@ -989,19 +1000,19 @@
     <div class="stats-inner">
       <div class="stat-item">
         <div class="stat-num">5+</div>
-        <div class="stat-label">AI Providers</div>
+        <div class="stat-label" data-i18n="stats.ai_providers">AI Providers</div>
       </div>
       <div class="stat-item">
         <div class="stat-num">2</div>
-        <div class="stat-label">X Access Modes</div>
+        <div class="stat-label" data-i18n="stats.x_modes">X Access Modes</div>
       </div>
       <div class="stat-item">
         <div class="stat-num">∞</div>
-        <div class="stat-label">Scheduled Tasks</div>
+        <div class="stat-label" data-i18n="stats.scheduled">Scheduled Tasks</div>
       </div>
       <div class="stat-item">
         <div class="stat-num">100%</div>
-        <div class="stat-label">Local & Private</div>
+        <div class="stat-label" data-i18n="stats.local">Local & Private</div>
       </div>
     </div>
   </div>
@@ -1010,9 +1021,9 @@
   <section class="features">
     <div class="section-inner">
       <div class="features-header">
-        <div class="section-label">Capabilities</div>
-        <h2 class="section-title">Everything you need to<br />dominate Twitter/X</h2>
-        <p class="section-desc">A full-featured desktop workspace with AI at the core — built for power users who want total control.</p>
+        <div class="section-label" data-i18n="features.label">Capabilities</div>
+        <h2 class="section-title" data-i18n-html="features.title">Everything you need to<br />dominate Twitter/X</h2>
+        <p class="section-desc" data-i18n="features.desc">A full-featured desktop workspace with AI at the core — built for power users who want total control.</p>
       </div>
       <div class="features-grid">
         <div class="feature-cell featured">
@@ -1021,8 +1032,8 @@
               <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
             </svg>
           </div>
-          <div class="feature-title">AI-Powered Chat Interface</div>
-          <div class="feature-desc">Talk to your AI agent directly. Ask it to search tweets, analyze accounts, draft content, or execute any Twitter action — all through natural conversation.</div>
+          <div class="feature-title" data-i18n="feat1.title">AI-Powered Chat Interface</div>
+          <div class="feature-desc" data-i18n="feat1.desc">Talk to your AI agent directly. Ask it to search tweets, analyze accounts, draft content, or execute any Twitter action — all through natural conversation.</div>
         </div>
         <div class="feature-cell">
           <div class="feature-icon purple">
@@ -1030,8 +1041,8 @@
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
           </div>
-          <div class="feature-title">Task Scheduling</div>
-          <div class="feature-desc">Set up recurring tasks with flexible interval or cron schedules. Run Python scripts automatically — post at peak times, monitor keywords, send reports.</div>
+          <div class="feature-title" data-i18n="feat2.title">Task Scheduling</div>
+          <div class="feature-desc" data-i18n="feat2.desc">Set up recurring tasks with flexible interval or cron schedules. Run Python scripts automatically — post at peak times, monitor keywords, send reports.</div>
         </div>
         <div class="feature-cell">
           <div class="feature-icon green">
@@ -1040,8 +1051,8 @@
               <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
             </svg>
           </div>
-          <div class="feature-title">Multi-Account Management</div>
-          <div class="feature-desc">Manage multiple Twitter/X accounts in one place. Switch contexts instantly. Each account runs in its own isolated workspace with dedicated credentials.</div>
+          <div class="feature-title" data-i18n="feat3.title">Multi-Account Management</div>
+          <div class="feature-desc" data-i18n="feat3.desc">Manage multiple Twitter/X accounts in one place. Switch contexts instantly. Each account runs in its own isolated workspace with dedicated credentials.</div>
         </div>
         <div class="feature-cell">
           <div class="feature-icon orange">
@@ -1049,8 +1060,8 @@
               <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
             </svg>
           </div>
-          <div class="feature-title">Python Script Execution</div>
-          <div class="feature-desc">Write and run Python scripts that interact with Twitter. Full access to the TweetPilot SDK — search, post, retweet, follow, and analyze data programmatically.</div>
+          <div class="feature-title" data-i18n="feat4.title">Python Script Execution</div>
+          <div class="feature-desc" data-i18n="feat4.desc">Write and run Python scripts that interact with Twitter. Full access to the TweetPilot SDK — search, post, retweet, follow, and analyze data programmatically.</div>
         </div>
         <div class="feature-cell">
           <div class="feature-icon pink">
@@ -1059,8 +1070,8 @@
               <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
             </svg>
           </div>
-          <div class="feature-title">Data Blocks</div>
-          <div class="feature-desc">Build structured knowledge bases that feed directly into your AI sessions. Store personas, templates, target audiences, and brand guidelines for consistent outputs.</div>
+          <div class="feature-title" data-i18n="feat5.title">Data Blocks</div>
+          <div class="feature-desc" data-i18n="feat5.desc">Build structured knowledge bases that feed directly into your AI sessions. Store personas, templates, target audiences, and brand guidelines for consistent outputs.</div>
         </div>
         <div class="feature-cell">
           <div class="feature-icon red">
@@ -1069,8 +1080,8 @@
               <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
             </svg>
           </div>
-          <div class="feature-title">Feishu / Lark Integration</div>
-          <div class="feature-desc">Connect TweetPilot to Feishu (Lark) bots. Receive automated reports, alerts, and summaries directly in your enterprise messaging channels.</div>
+          <div class="feature-title" data-i18n="feat6.title">Feishu / Lark Integration</div>
+          <div class="feature-desc" data-i18n="feat6.desc">Connect TweetPilot to Feishu (Lark) bots. Receive automated reports, alerts, and summaries directly in your enterprise messaging channels.</div>
         </div>
       </div>
     </div>
@@ -1080,9 +1091,9 @@
   <section class="how-it-works" id="how-it-works">
     <div class="section-inner">
       <div class="hiw-header">
-        <div class="section-label">Architecture</div>
-        <h2 class="section-title">Two ways to reach X</h2>
-        <p class="section-desc">TweetPilot supports both browser-based automation via TweetClaw and direct API access — pick the mode that fits your setup.</p>
+        <div class="section-label" data-i18n="hiw.label">Architecture</div>
+        <h2 class="section-title" data-i18n="hiw.title">Two ways to reach X</h2>
+        <p class="section-desc" data-i18n="hiw.desc">TweetPilot supports both browser-based automation via TweetClaw and direct API access — pick the mode that fits your setup.</p>
       </div>
       <div class="hiw-modes">
         <!-- TweetClaw Mode -->
@@ -1093,29 +1104,29 @@
               <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
               <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
             </svg>
-            Chrome Extension Mode
+            <span data-i18n="hiw.ext_badge">Chrome Extension Mode</span>
           </span>
-          <h3>TweetClaw Bridge</h3>
-          <p>Use the TweetClaw Chrome extension as a local WebSocket bridge. TweetPilot connects directly to your logged-in browser session — no API keys needed, no rate limit headaches.</p>
+          <h3 data-i18n="hiw.ext_title">TweetClaw Bridge</h3>
+          <p data-i18n="hiw.ext_desc">Use the TweetClaw Chrome extension as a local WebSocket bridge. TweetPilot connects directly to your logged-in browser session — no API keys needed, no rate limit headaches.</p>
           <div class="hiw-steps">
             <div class="hiw-step">
               <div class="hiw-step-num">1</div>
-              <div class="hiw-step-text">Install the <strong>TweetClaw</strong> Chrome extension from the Web Store</div>
+              <div class="hiw-step-text" data-i18n-html="hiw.ext_step1">Install the <strong>TweetClaw</strong> Chrome extension from the Web Store</div>
             </div>
             <div class="hiw-step">
               <div class="hiw-step-num">2</div>
-              <div class="hiw-step-text">Open Twitter/X in Chrome — the extension starts a local <strong>WebSocket server</strong> on port 20086</div>
+              <div class="hiw-step-text" data-i18n-html="hiw.ext_step2">Open Twitter/X in Chrome — the extension starts a local <strong>WebSocket server</strong> on port 20086</div>
             </div>
             <div class="hiw-step">
               <div class="hiw-step-num">3</div>
-              <div class="hiw-step-text">TweetPilot connects via LocalBridge and can <strong>read, post, search, and interact</strong> using your browser session</div>
+              <div class="hiw-step-text" data-i18n-html="hiw.ext_step3">TweetPilot connects via LocalBridge and can <strong>read, post, search, and interact</strong> using your browser session</div>
             </div>
           </div>
           <a class="hiw-ext-link" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
-            Install TweetClaw from Chrome Web Store
+            <span data-i18n="hiw.ext_link">Install TweetClaw from Chrome Web Store</span>
           </a>
         </div>
         <!-- X API Mode -->
@@ -1125,22 +1136,22 @@
               <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
               <line x1="7" y1="7" x2="7.01" y2="7"/>
             </svg>
-            Official X API Mode
+            <span data-i18n="hiw.api_badge">Official X API Mode</span>
           </span>
-          <h3>X API Direct</h3>
-          <p>Connect with official X API credentials (OAuth 2.0 or API keys) for enterprise-grade reliability. Full access to all X API endpoints with your own developer app credentials.</p>
+          <h3 data-i18n="hiw.api_title">X API Direct</h3>
+          <p data-i18n="hiw.api_desc">Connect with official X API credentials (OAuth 2.0 or API keys) for enterprise-grade reliability. Full access to all X API endpoints with your own developer app credentials.</p>
           <div class="hiw-steps">
             <div class="hiw-step api">
               <div class="hiw-step-num" style="background:rgba(5,150,105,0.15);border-color:rgba(5,150,105,0.25);color:#34D399;">1</div>
-              <div class="hiw-step-text">Create an app at <strong>developer.twitter.com</strong> and obtain your API keys</div>
+              <div class="hiw-step-text" data-i18n-html="hiw.api_step1">Create an app at <strong>developer.twitter.com</strong> and obtain your API keys</div>
             </div>
             <div class="hiw-step api">
               <div class="hiw-step-num" style="background:rgba(5,150,105,0.15);border-color:rgba(5,150,105,0.25);color:#34D399;">2</div>
-              <div class="hiw-step-text">Enter your <strong>Consumer Key, Secret, and OAuth tokens</strong> in TweetPilot Settings</div>
+              <div class="hiw-step-text" data-i18n-html="hiw.api_step2">Enter your <strong>Consumer Key, Secret, and OAuth tokens</strong> in TweetPilot Settings</div>
             </div>
             <div class="hiw-step api">
               <div class="hiw-step-num" style="background:rgba(5,150,105,0.15);border-color:rgba(5,150,105,0.25);color:#34D399;">3</div>
-              <div class="hiw-step-text">TweetPilot calls X API directly — supports <strong>v1.1 and v2 endpoints</strong> with automatic credential management</div>
+              <div class="hiw-step-text" data-i18n-html="hiw.api_step3">TweetPilot calls X API directly — supports <strong>v1.1 and v2 endpoints</strong> with automatic credential management</div>
             </div>
           </div>
         </div>
@@ -1153,17 +1164,17 @@
     <div class="section-inner">
       <div class="ai-layout">
         <div>
-          <div class="section-label">AI Engine</div>
-          <h2 class="section-title">Bring your own AI model</h2>
-          <p class="section-desc">TweetPilot is model-agnostic. Connect to Claude, GPT-4, a local Ollama model, or any OpenAI-compatible API. Switch providers without changing your workflows.</p>
+          <div class="section-label" data-i18n="ai.label">AI Engine</div>
+          <h2 class="section-title" data-i18n="ai.title">Bring your own AI model</h2>
+          <p class="section-desc" data-i18n="ai.desc">TweetPilot is model-agnostic. Connect to Claude, GPT-4, a local Ollama model, or any OpenAI-compatible API. Switch providers without changing your workflows.</p>
           <div class="ai-providers">
             <div class="ai-provider">
               <div class="ai-provider-icon" style="background:linear-gradient(135deg,#C77B58,#8B4513);">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
               </div>
               <div>
-                <div class="ai-provider-name">Anthropic Claude</div>
-                <div class="ai-provider-desc">Claude 3 Opus / Sonnet</div>
+                <div class="ai-provider-name" data-i18n="ai.provider1_name">Anthropic Claude</div>
+                <div class="ai-provider-desc" data-i18n="ai.provider1_desc">Claude 3 Opus / Sonnet</div>
               </div>
             </div>
             <div class="ai-provider">
@@ -1171,8 +1182,8 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" fill="none"/></svg>
               </div>
               <div>
-                <div class="ai-provider-name">OpenAI</div>
-                <div class="ai-provider-desc">GPT-4o / GPT-4 Turbo</div>
+                <div class="ai-provider-name" data-i18n="ai.provider2_name">OpenAI</div>
+                <div class="ai-provider-desc" data-i18n="ai.provider2_desc">GPT-4o / GPT-4 Turbo</div>
               </div>
             </div>
             <div class="ai-provider">
@@ -1180,8 +1191,8 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16z"/></svg>
               </div>
               <div>
-                <div class="ai-provider-name">Ollama</div>
-                <div class="ai-provider-desc">Local models, 100% private</div>
+                <div class="ai-provider-name" data-i18n="ai.provider3_name">Ollama</div>
+                <div class="ai-provider-desc" data-i18n="ai.provider3_desc">Local models, 100% private</div>
               </div>
             </div>
             <div class="ai-provider">
@@ -1189,8 +1200,8 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
               </div>
               <div>
-                <div class="ai-provider-name">Custom API</div>
-                <div class="ai-provider-desc">Any OpenAI-compatible endpoint</div>
+                <div class="ai-provider-name" data-i18n="ai.provider4_name">Custom API</div>
+                <div class="ai-provider-desc" data-i18n="ai.provider4_desc">Any OpenAI-compatible endpoint</div>
               </div>
             </div>
           </div>
@@ -1199,17 +1210,17 @@
         <div class="ai-chat-demo">
           <div class="ai-chat-header">
             <div class="ai-chat-header-dot"></div>
-            <div class="ai-chat-header-title">AI Session · Main Workspace</div>
+            <div class="ai-chat-header-title" data-i18n="ai.chat_header">AI Session · Main Workspace</div>
             <div class="ai-chat-header-model">claude-3-5-sonnet</div>
           </div>
           <div class="ai-chat-messages">
-            <div class="chat-bubble user">Search for tweets about "AI automation" from the past 24h and like the top 5 most engaging ones</div>
+            <div class="chat-bubble user" data-i18n="ai.chat_user_msg">Search for tweets about "AI automation" from the past 24h and like the top 5 most engaging ones</div>
             <div class="chat-bubble ai">
               <div class="ai-prefix">
                 <div style="width:6px;height:6px;border-radius:50%;background:var(--color-secondary);animation:pulse-dot 2s infinite;"></div>
-                TweetPilot Agent
+                <span data-i18n="ai.chat_agent_name">TweetPilot Agent</span>
               </div>
-              Searching Twitter for "AI automation" tweets from the last 24 hours...
+              <span data-i18n="ai.chat_searching">Searching Twitter for "AI automation" tweets from the last 24 hours...</span>
               <div class="tool-call">
                 <div class="tool-call-label">▶ TOOL CALL · search_tweets</div>
                 <div class="tool-call-code">{ "query": "AI automation", "hours": 24, "sort": "engagement" }</div>
@@ -1218,12 +1229,12 @@
             <div class="chat-bubble ai">
               <div class="ai-prefix">
                 <div style="width:6px;height:6px;border-radius:50%;background:#34D399;"></div>
-                Result
+                <span data-i18n="ai.chat_result_label">Result</span>
               </div>
-              Found 47 tweets. Identified top 5 by engagement score. Liking them now...
+              <span data-i18n="ai.chat_found">Found 47 tweets. Identified top 5 by engagement score. Liking them now...</span>
               <div class="tool-call">
                 <div class="tool-call-label">▶ TOOL CALL · like_tweet ×5</div>
-                <div class="tool-call-code">✓ All 5 tweets liked successfully</div>
+                <div class="tool-call-code" data-i18n="ai.chat_done">✓ All 5 tweets liked successfully</div>
               </div>
             </div>
             <div style="display:flex;gap:6px;align-items:center;padding:4px 8px;">
@@ -1240,8 +1251,8 @@
   <!-- Integrations -->
   <section class="integrations">
     <div class="section-inner">
-      <div class="section-label">Integrations</div>
-      <h2 class="section-title">Connects to your stack</h2>
+      <div class="section-label" data-i18n="int.label">Integrations</div>
+      <h2 class="section-title" data-i18n="int.title">Connects to your stack</h2>
       <div class="int-grid">
         <div class="int-card">
           <div class="int-card-icon" style="background:rgba(8,145,178,0.12);border:1px solid rgba(8,145,178,0.2);">
@@ -1250,7 +1261,7 @@
             </svg>
           </div>
           <div class="int-card-name">Twitter / X</div>
-          <div class="int-card-desc">Full read/write access via TweetClaw or official X API</div>
+          <div class="int-card-desc" data-i18n="int.twitter_desc">Full read/write access via TweetClaw or official X API</div>
         </div>
         <div class="int-card">
           <div class="int-card-icon" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2);">
@@ -1261,7 +1272,7 @@
             </svg>
           </div>
           <div class="int-card-name">TweetClaw</div>
-          <div class="int-card-desc">Chrome extension WebSocket bridge for browserless access</div>
+          <div class="int-card-desc" data-i18n="int.tweetclaw_desc">Chrome extension WebSocket bridge for browserless access</div>
         </div>
         <div class="int-card">
           <div class="int-card-icon" style="background:rgba(16,163,127,0.12);border:1px solid rgba(16,163,127,0.2);">
@@ -1271,7 +1282,7 @@
             </svg>
           </div>
           <div class="int-card-name">Feishu / Lark</div>
-          <div class="int-card-desc">Push reports and alerts to enterprise Feishu bots</div>
+          <div class="int-card-desc" data-i18n="int.feishu_desc">Push reports and alerts to enterprise Feishu bots</div>
         </div>
         <div class="int-card">
           <div class="int-card-icon" style="background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.2);">
@@ -1280,7 +1291,7 @@
             </svg>
           </div>
           <div class="int-card-name">Python Scripts</div>
-          <div class="int-card-desc">Execute custom automation scripts with TweetPilot's local SDK</div>
+          <div class="int-card-desc" data-i18n="int.python_desc">Execute custom automation scripts with TweetPilot's local SDK</div>
         </div>
       </div>
     </div>
@@ -1289,152 +1300,152 @@
   <!-- Pricing -->
   <section class="pricing-section" id="pricing">
     <div class="section-inner">
-      <div class="section-label">Pricing</div>
-      <h2 class="section-title">Simple, transparent pricing</h2>
-      <p class="section-desc">Start for free. Upgrade when you need scheduled automation and AI-powered remote conversations.</p>
+      <div class="section-label" data-i18n="pricing.label">Pricing</div>
+      <h2 class="section-title" data-i18n="pricing.title">Simple, transparent pricing</h2>
+      <p class="section-desc" data-i18n="pricing.desc">Start for free. Upgrade when you need scheduled automation and AI-powered remote conversations.</p>
 
       <div class="pricing-grid-home">
 
         <!-- Free -->
         <div class="plan-card-h">
-          <span class="plan-badge-h free">Free</span>
-          <div class="plan-name-h">Starter</div>
+          <span class="plan-badge-h free" data-i18n="plan.free_badge">Free</span>
+          <div class="plan-name-h" data-i18n="plan.free_name">Starter</div>
           <div class="plan-price-h">
             <span class="plan-price-num-h free-num">$0</span>
           </div>
-          <div class="plan-price-sub-h">Forever free, no credit card required</div>
+          <div class="plan-price-sub-h" data-i18n="plan.free_sub">Forever free, no credit card required</div>
           <div class="plan-divider-h"></div>
           <ul class="plan-features-h">
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Multi-account management
+              <span data-i18n="plan.feat_multi_account">Multi-account management</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Manual task execution
+              <span data-i18n="plan.feat_manual_task">Manual task execution</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Python script runner
+              <span data-i18n="plan.feat_python">Python script runner</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              X API &amp; TweetClaw support
+              <span data-i18n="plan.feat_x_api">X API &amp; TweetClaw support</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Workspace &amp; Data Blocks
+              <span data-i18n="plan.feat_workspace">Workspace &amp; Data Blocks</span>
             </li>
             <li class="plan-feature-h disabled">
               <svg class="feat-icon-h cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Scheduled tasks (interval &amp; cron)
+              <span data-i18n="plan.feat_scheduled_no">Scheduled tasks (interval &amp; cron)</span>
             </li>
             <li class="plan-feature-h disabled">
               <svg class="feat-icon-h cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              AI remote conversation agent
+              <span data-i18n="plan.feat_ai_agent_no">AI remote conversation agent</span>
             </li>
             <li class="plan-feature-h disabled">
               <svg class="feat-icon-h cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Feishu / Lark integration
+              <span data-i18n="plan.feat_feishu_no">Feishu / Lark integration</span>
             </li>
           </ul>
           <a class="plan-btn-h free-btn" href="#download">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download Free
+            <span data-i18n="plan.free_btn">Download Free</span>
           </a>
         </div>
 
         <!-- Pro -->
         <div class="plan-card-h featured">
-          <span class="plan-badge-h pro">Most Popular</span>
-          <div class="plan-name-h">Professional</div>
+          <span class="plan-badge-h pro" data-i18n="plan.pro_badge">Most Popular</span>
+          <div class="plan-name-h" data-i18n="plan.pro_name">Professional</div>
           <div class="plan-price-h">
             <span class="plan-price-num-h pro-num">$300</span>
-            <span class="plan-price-period-h">/ year</span>
+            <span class="plan-price-period-h" data-i18n="plan.pro_period">/ year</span>
           </div>
-          <div class="plan-price-sub-h">1 license · up to 2 devices · 1 year</div>
+          <div class="plan-price-sub-h" data-i18n="plan.pro_sub">1 license · up to 2 devices · 1 year</div>
           <div class="plan-divider-h"></div>
           <ul class="plan-features-h">
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Everything in Starter
+              <span data-i18n="plan.feat_everything_starter">Everything in Starter</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span><strong style="color:var(--color-text);">Scheduled tasks</strong> — interval &amp; cron</span>
+              <span data-i18n-html="plan.feat_scheduled"><strong style="color:var(--color-text);">Scheduled tasks</strong> — interval &amp; cron</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span><strong style="color:var(--color-text);">AI remote conversation</strong> agent</span>
+              <span data-i18n-html="plan.feat_ai_agent"><strong style="color:var(--color-text);">AI remote conversation</strong> agent</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Feishu / Lark bot integration
+              <span data-i18n="plan.feat_feishu_bot">Feishu / Lark bot integration</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              2 devices per license
+              <span data-i18n="plan.feat_2devices">2 devices per license</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Email support
+              <span data-i18n="plan.feat_email_support">Email support</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              License valid for 12 months
+              <span data-i18n="plan.feat_12months">License valid for 12 months</span>
             </li>
           </ul>
           <!-- TODO: Replace with FastSpring checkout URL -->
           <a class="plan-btn-h pro-btn" href="#" onclick="return false;" style="opacity:0.7;cursor:not-allowed;" title="Checkout coming soon">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            Buy License — $300/yr
+            <span data-i18n="plan.pro_btn">Buy License — $300/yr</span>
           </a>
         </div>
 
         <!-- Enterprise -->
         <div class="plan-card-h">
-          <span class="plan-badge-h ent">Enterprise</span>
-          <div class="plan-name-h">Lifetime &amp; Custom</div>
+          <span class="plan-badge-h ent" data-i18n="plan.ent_badge">Enterprise</span>
+          <div class="plan-name-h" data-i18n="plan.ent_name">Lifetime &amp; Custom</div>
           <div class="plan-price-h">
-            <span class="plan-price-num-h ent-num">Custom</span>
+            <span class="plan-price-num-h ent-num" data-i18n="plan.ent_price">Custom</span>
           </div>
-          <div class="plan-price-sub-h">Offline payment · signed contract</div>
+          <div class="plan-price-sub-h" data-i18n="plan.ent_sub_index">Offline payment · signed contract</div>
           <div class="plan-divider-h"></div>
           <ul class="plan-features-h">
             <li class="plan-feature-h">
               <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Everything in Professional
+              <span data-i18n="plan.feat_everything_pro">Everything in Professional</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <strong style="color:var(--color-text);">Lifetime license</strong> — no renewal
+              <span data-i18n-html="plan.feat_lifetime"><strong style="color:var(--color-text);">Lifetime license</strong> — no renewal</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              AI workflow training &amp; onboarding
+              <span data-i18n-html="plan.feat_training">AI workflow training &amp; onboarding</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Custom AI scripts &amp; reports
+              <span data-i18n-html="plan.feat_custom_scripts">Custom AI scripts &amp; reports</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Priority support via Feishu
+              <span data-i18n="plan.feat_priority_support">Priority support via Feishu</span>
             </li>
             <li class="plan-feature-h">
               <svg class="feat-icon-h star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Signed service contract
+              <span data-i18n="plan.feat_contract">Signed service contract</span>
             </li>
           </ul>
           <a class="plan-btn-h ent-btn" href="javascript:void(0)" onclick="openContactModal()">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Contact Us
+            <span data-i18n="plan.ent_btn">Contact Us</span>
           </a>
         </div>
 
       </div>
       <a class="pr-more" href="/pricing.html">
-        View full pricing &amp; FAQ
+        <span data-i18n="pricing.view_full">View full pricing &amp; FAQ</span>
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
@@ -1444,9 +1455,9 @@
   <section class="download" id="download">
     <div class="section-inner">
       <div class="download-inner">
-        <div class="section-label">Download</div>
-        <h2 class="section-title">Ready to automate?</h2>
-        <p class="section-desc">TweetPilot is a native macOS app. Download, install, and connect your accounts in minutes.</p>
+        <div class="section-label" data-i18n="download.label">Download</div>
+        <h2 class="section-title" data-i18n="download.title">Ready to automate?</h2>
+        <p class="section-desc" data-i18n="download.desc">TweetPilot is a native macOS app. Download, install, and connect your accounts in minutes.</p>
         <div style="display:flex;justify-content:center;">
           <div class="download-card">
             <div class="download-app-icon">
@@ -1460,7 +1471,7 @@
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="M12 17l-5-5h3V3h4v9h3l-5 5z"/><path d="M20 21H4"/>
               </svg>
-              Download .dmg for macOS
+              <span data-i18n="download.btn">Download .dmg for macOS</span>
             </a>
             <a class="download-ext-link" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1468,13 +1479,13 @@
                 <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
                 <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
               </svg>
-              Also install TweetClaw Chrome Extension
+              <span data-i18n="download.ext_link">Also install TweetClaw Chrome Extension</span>
             </a>
             <div class="download-req">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
-              macOS 12 Monterey or later · Apple Silicon &amp; Intel
+              <span data-i18n-html="download.req">macOS 12 Monterey or later · Apple Silicon &amp; Intel</span>
             </div>
           </div>
         </div>
@@ -1490,16 +1501,16 @@
           <img src="logo.png" width="24" height="24" alt="TweetPilot" style="border-radius:6px;display:block;" />
           TweetPilot
         </a>
-        <span class="footer-copy">© 2026 TweetPilot. All rights reserved.</span>
+        <span class="footer-copy" data-i18n="footer.copyright">© 2026 TweetPilot. All rights reserved.</span>
       </div>
       <div class="footer-links">
-        <a href="/pricing.html">Pricing</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/refund.html">Refund Policy</a>
+        <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+        <a href="/terms.html" data-i18n="footer.terms">Terms of Service</a>
+        <a href="/privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+        <a href="/refund.html" data-i18n="footer.refund">Refund Policy</a>
         <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
         <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">TweetClaw</a>
-        <a href="javascript:void(0)" onclick="openContactModal()">Contact</a>
+        <a href="javascript:void(0)" onclick="openContactModal()" data-i18n="footer.contact">Contact</a>
       </div>
     </div>
   </footer>
@@ -1510,30 +1521,30 @@
       <button class="contact-modal-x" onclick="closeContactModal()" type="button" aria-label="Close">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-      <div class="contact-modal-title">Get in Touch</div>
-      <div class="contact-modal-sub">Reach us via email or scan the Feishu QR code below</div>
+      <div class="contact-modal-title" data-i18n="modal.title">Get in Touch</div>
+      <div class="contact-modal-sub" data-i18n="modal.sub">Reach us via email or scan the Feishu QR code below</div>
 
       <div class="cm-section">
-        <div class="cm-section-label">Email</div>
+        <div class="cm-section-label" data-i18n="modal.email_label">Email</div>
         <div class="cm-email-row">
           <span class="cm-email-addr">ribencong@gmail.com</span>
           <div class="cm-email-actions">
             <a class="cm-btn primary" href="mailto:ribencong@gmail.com">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              Send
+              <span data-i18n="modal.send">Send</span>
             </a>
             <button class="cm-btn ghost" id="copyEmailBtn" onclick="copyEmail()" type="button">
               <svg id="copyIcon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              <span id="copyEmailText">Copy</span>
+              <span id="copyEmailText" data-i18n="modal.copy">Copy</span>
             </button>
           </div>
         </div>
       </div>
 
       <div class="cm-section">
-        <div class="cm-section-label">Feishu / Lark</div>
+        <div class="cm-section-label" data-i18n="modal.feishu_label">Feishu / Lark</div>
         <img class="cm-qr" src="feishu.png" alt="Feishu QR Code" />
-        <div class="cm-qr-hint">Scan with Feishu app to start a conversation</div>
+        <div class="cm-qr-hint" data-i18n="modal.qr_hint">Scan with Feishu app to start a conversation</div>
       </div>
     </div>
   </div>
@@ -1545,11 +1556,11 @@
         const text = document.getElementById('copyEmailText');
         const icon = document.getElementById('copyIcon');
         btn.classList.add('copied');
-        text.textContent = 'Copied';
+        text.textContent = window.i18n ? window.i18n.t('modal.copied') : 'Copied';
         icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
         setTimeout(function() {
           btn.classList.remove('copied');
-          text.textContent = 'Copy';
+          text.textContent = window.i18n ? window.i18n.t('modal.copy') : 'Copy';
           icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>';
         }, 2000);
       });

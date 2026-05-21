@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terms of Service — TweetPilot</title>
+  <script src="/i18n.js"></script>
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,6 +33,15 @@
     .nav-links a:hover { color: var(--color-secondary); }
     .nav-cta { background: var(--color-cta); color: white; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 8px; text-decoration: none; transition: all 200ms; }
     .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .nav-lang-toggle {
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+      padding: 5px 12px; border-radius: 7px;
+      border: 1px solid var(--color-border);
+      cursor: pointer; transition: all 200ms ease; margin-left: 4px;
+    }
+    .nav-lang-toggle:hover { color: var(--color-secondary); border-color: var(--color-border-bright); background: var(--color-surface-hover); }
 
     .page { position: relative; z-index: 1; padding: 120px 40px 100px; max-width: 800px; margin: 0 auto; }
     .page-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 12px; display: block; }
@@ -73,13 +83,14 @@
     TweetPilot
   </a>
   <ul class="nav-links">
-    <li><a href="/#features">Features</a></li>
-    <li><a href="/#how-it-works">How It Works</a></li>
-    <li><a href="/#ai">AI Engine</a></li>
-    <li><a href="/pricing.html">Pricing</a></li>
-    <li><a href="/#download">Download</a></li>
+    <li><a href="/#features" data-i18n="nav.features">Features</a></li>
+    <li><a href="/#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
+    <li><a href="/#ai" data-i18n="nav.ai_engine">AI Engine</a></li>
+    <li><a href="/pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+    <li><a href="/#download" data-i18n="nav.download">Download</a></li>
   </ul>
-  <a class="nav-cta" href="/#download">Download Free</a>
+  <a class="nav-cta" href="/#download" data-i18n="nav.download_free">Download Free</a>
+  <button id="lang-toggle" class="nav-lang-toggle" onclick="toggleLang()" type="button">中文</button>
 </nav>
 
 <div class="page">
@@ -173,16 +184,16 @@
   <div class="footer-inner">
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
       <a class="footer-logo" href="/"><img src="logo.png" width="24" height="24" alt="TweetPilot" style="border-radius:6px;" /> TweetPilot</a>
-      <span class="footer-copy">© 2026 TweetPilot. All rights reserved.</span>
+      <span class="footer-copy" data-i18n="footer.copyright">© 2026 TweetPilot. All rights reserved.</span>
     </div>
     <div class="footer-links">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/terms.html">Terms of Service</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/refund.html">Refund Policy</a>
+      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="/terms.html" data-i18n="footer.terms">Terms of Service</a>
+      <a href="/privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+      <a href="/refund.html" data-i18n="footer.refund">Refund Policy</a>
       <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
       <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">TweetClaw</a>
-      <a href="mailto:ribencong@gmail.com">Contact</a>
+      <a href="mailto:ribencong@gmail.com" data-i18n="footer.contact">Contact</a>
     </div>
   </div>
 </footer>

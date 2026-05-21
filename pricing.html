@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-title-key="pricing.title">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing — TweetPilot</title>
+  <script src="/i18n.js"></script>
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -191,6 +192,15 @@
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
     .footer-links a { font-size: 13px; color: var(--color-text-dim); text-decoration: none; transition: color 200ms; }
     .footer-links a:hover { color: var(--color-secondary); }
+    .nav-lang-toggle {
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+      padding: 5px 12px; border-radius: 7px;
+      border: 1px solid var(--color-border);
+      cursor: pointer; transition: all 200ms ease; margin-left: 4px;
+    }
+    .nav-lang-toggle:hover { color: var(--color-secondary); border-color: var(--color-border-bright); background: var(--color-surface-hover); }
 
     @media (max-width: 1024px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 768px) {
@@ -211,186 +221,187 @@
     TweetPilot
   </a>
   <ul class="nav-links">
-    <li><a href="/#features">Features</a></li>
-    <li><a href="/#how-it-works">How It Works</a></li>
-    <li><a href="/#ai">AI Engine</a></li>
-    <li><a href="/pricing.html" class="active">Pricing</a></li>
-    <li><a href="/#download">Download</a></li>
+    <li><a href="/#features" data-i18n="nav.features">Features</a></li>
+    <li><a href="/#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
+    <li><a href="/#ai" data-i18n="nav.ai_engine">AI Engine</a></li>
+    <li><a href="/pricing.html" class="active" data-i18n="nav.pricing">Pricing</a></li>
+    <li><a href="/#download" data-i18n="nav.download">Download</a></li>
   </ul>
-  <a class="nav-cta" href="/#download">Download Free</a>
+  <a class="nav-cta" href="/#download" data-i18n="nav.download_free">Download Free</a>
+  <button id="lang-toggle" class="nav-lang-toggle" onclick="toggleLang()" type="button">中文</button>
 </nav>
 
 <div class="page">
-  <span class="page-label">Pricing</span>
-  <h1 class="page-title">Simple, <span class="gradient-text">transparent</span> pricing</h1>
-  <p class="page-sub">Start for free. Upgrade when you need scheduled automation and AI-powered remote conversations.</p>
+  <span class="page-label" data-i18n="pp.label">Pricing</span>
+  <h1 class="page-title"><span data-i18n="pp.title_before">Simple, </span><span class="gradient-text" data-i18n="pp.title_gradient">transparent</span><span data-i18n="pp.title_after"> pricing</span></h1>
+  <p class="page-sub" data-i18n="pp.sub">Start for free. Upgrade when you need scheduled automation and AI-powered remote conversations.</p>
 
   <div class="pricing-grid">
     <!-- Free -->
     <div class="plan-card">
-      <span class="plan-badge free">Free</span>
-      <div class="plan-name">Starter</div>
+      <span class="plan-badge free" data-i18n="plan.free_badge">Free</span>
+      <div class="plan-name" data-i18n="plan.free_name">Starter</div>
       <div class="plan-price">
         <span class="plan-price-num free-num">$0</span>
       </div>
-      <div class="plan-price-sub">Forever free, no credit card required</div>
+      <div class="plan-price-sub" data-i18n="plan.free_sub">Forever free, no credit card required</div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Multi-account management
+          <span data-i18n="plan.feat_multi_account">Multi-account management</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Manual task execution
+          <span data-i18n="plan.feat_manual_task">Manual task execution</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Python script runner
+          <span data-i18n="plan.feat_python">Python script runner</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          X API &amp; TweetClaw support
+          <span data-i18n="plan.feat_x_api">X API &amp; TweetClaw support</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Workspace &amp; Data Blocks
+          <span data-i18n="plan.feat_workspace">Workspace &amp; Data Blocks</span>
         </li>
         <li class="plan-feature disabled">
           <svg class="feat-icon cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          Scheduled tasks (interval &amp; cron)
+          <span data-i18n="plan.feat_scheduled_no">Scheduled tasks (interval &amp; cron)</span>
         </li>
         <li class="plan-feature disabled">
           <svg class="feat-icon cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          AI remote conversation agent
+          <span data-i18n="plan.feat_ai_agent_no">AI remote conversation agent</span>
         </li>
         <li class="plan-feature disabled">
           <svg class="feat-icon cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          Feishu / Lark integration
+          <span data-i18n="plan.feat_feishu_no">Feishu / Lark integration</span>
         </li>
       </ul>
       <a class="plan-btn free-btn" href="/#download">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download Free
+        <span data-i18n="plan.free_btn">Download Free</span>
       </a>
     </div>
 
     <!-- Pro Annual -->
     <div class="plan-card featured">
-      <span class="plan-badge pro">Most Popular</span>
-      <div class="plan-name">Professional</div>
+      <span class="plan-badge pro" data-i18n="plan.pro_badge">Most Popular</span>
+      <div class="plan-name" data-i18n="plan.pro_name">Professional</div>
       <div class="plan-price">
         <span class="plan-price-num pro-num">$300</span>
-        <span class="plan-price-period">/ year</span>
+        <span class="plan-price-period" data-i18n="plan.pro_period">/ year</span>
       </div>
-      <div class="plan-price-sub">1 license · up to 2 devices · 1 year</div>
+      <div class="plan-price-sub" data-i18n="plan.pro_sub">1 license · up to 2 devices · 1 year</div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Everything in Starter
+          <span data-i18n="plan.feat_everything_starter">Everything in Starter</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span><strong style="color:var(--color-text);">Scheduled tasks</strong> — interval &amp; cron</span>
+          <span data-i18n-html="plan.feat_scheduled"><strong style="color:var(--color-text);">Scheduled tasks</strong> — interval &amp; cron</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span><strong style="color:var(--color-text);">AI remote conversation</strong> agent</span>
+          <span data-i18n-html="plan.feat_ai_agent"><strong style="color:var(--color-text);">AI remote conversation</strong> agent</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Feishu / Lark bot integration
+          <span data-i18n="plan.feat_feishu_bot">Feishu / Lark bot integration</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          2 devices per license
+          <span data-i18n="plan.feat_2devices">2 devices per license</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Email support
+          <span data-i18n="plan.feat_email_support">Email support</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          License valid for 12 months
+          <span data-i18n="plan.feat_12months">License valid for 12 months</span>
         </li>
       </ul>
       <!-- TODO: Replace with FastSpring checkout URL -->
       <a class="plan-btn pro-btn" href="#" onclick="return false;" style="opacity:0.7;cursor:not-allowed;" title="Checkout coming soon">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        Buy License — $300/yr
+        <span data-i18n="plan.pro_btn">Buy License — $300/yr</span>
       </a>
     </div>
 
     <!-- Enterprise -->
     <div class="plan-card" id="contact">
-      <span class="plan-badge enterprise">Enterprise</span>
-      <div class="plan-name">Lifetime &amp; Custom</div>
+      <span class="plan-badge enterprise" data-i18n="plan.ent_badge">Enterprise</span>
+      <div class="plan-name" data-i18n="plan.ent_name">Lifetime &amp; Custom</div>
       <div class="plan-price">
-        <span class="plan-price-num ent-num">Custom</span>
+        <span class="plan-price-num ent-num" data-i18n="plan.ent_price">Custom</span>
       </div>
-      <div class="plan-price-sub">Offline payment · contract required</div>
+      <div class="plan-price-sub" data-i18n="plan.ent_sub_pricing">Offline payment · contract required</div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li class="plan-feature">
           <svg class="feat-icon star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Everything in Professional
+          <span data-i18n="plan.feat_everything_pro">Everything in Professional</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <strong style="color:var(--color-text);">Lifetime license</strong> — no renewal
+          <span data-i18n-html="plan.feat_lifetime"><strong style="color:var(--color-text);">Lifetime license</strong> — no renewal</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          AI workflow training &amp; onboarding
+          <span data-i18n-html="plan.feat_training">AI workflow training &amp; onboarding</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Custom AI scripts &amp; reports
+          <span data-i18n-html="plan.feat_custom_scripts">Custom AI scripts &amp; reports</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Priority support via Feishu
+          <span data-i18n="plan.feat_priority_support">Priority support via Feishu</span>
         </li>
         <li class="plan-feature">
           <svg class="feat-icon star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Signed service contract
+          <span data-i18n="plan.feat_contract">Signed service contract</span>
         </li>
       </ul>
       <a class="plan-btn ent-btn" href="javascript:void(0)" onclick="openContactModal()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Contact Us
+        <span data-i18n="plan.ent_btn">Contact Us</span>
       </a>
     </div>
   </div>
 
   <!-- FAQ -->
   <div class="faq">
-    <h2 class="faq-title">Frequently asked questions</h2>
+    <h2 class="faq-title" data-i18n="faq.title">Frequently asked questions</h2>
     <div class="faq-list">
       <div class="faq-item">
-        <div class="faq-q">What does the free plan include?</div>
-        <div class="faq-a">The free plan lets you manage multiple Twitter/X accounts, run Python scripts manually, use the TweetClaw browser extension or X API, and build workspaces with Data Blocks. The only limitations are scheduled (automatic) tasks and the AI remote conversation agent — those require a paid license.</div>
+        <div class="faq-q" data-i18n="faq.q1">What does the free plan include?</div>
+        <div class="faq-a" data-i18n="faq.a1">The free plan lets you manage multiple Twitter/X accounts, run Python scripts manually, use the TweetClaw browser extension or X API, and build workspaces with Data Blocks. The only limitations are scheduled (automatic) tasks and the AI remote conversation agent — those require a paid license.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">How many devices can I use per license?</div>
-        <div class="faq-a">Each Professional license supports up to 2 devices simultaneously. If you need more devices, you can purchase additional licenses.</div>
+        <div class="faq-q" data-i18n="faq.q2">How many devices can I use per license?</div>
+        <div class="faq-a" data-i18n="faq.a2">Each Professional license supports up to 2 devices simultaneously. If you need more devices, you can purchase additional licenses.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">What happens when my annual license expires?</div>
-        <div class="faq-a">When your license expires, your account reverts to the free plan. All your data, workspaces, and scripts remain intact — you just lose access to scheduled tasks and the AI conversation agent until you renew.</div>
+        <div class="faq-q" data-i18n="faq.q3">What happens when my annual license expires?</div>
+        <div class="faq-a" data-i18n="faq.a3">When your license expires, your account reverts to the free plan. All your data, workspaces, and scripts remain intact — you just lose access to scheduled tasks and the AI conversation agent until you renew.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">What is the Enterprise Lifetime plan?</div>
-        <div class="faq-a">The Lifetime plan is an offline, contract-based arrangement designed for businesses or power users who want a permanent license plus hands-on services: AI workflow training, custom report development, and dedicated script writing. Payment is handled offline with a signed service contract. Contact us at ribencong@gmail.com or via Feishu to discuss.</div>
+        <div class="faq-q" data-i18n="faq.q4">What is the Enterprise Lifetime plan?</div>
+        <div class="faq-a" data-i18n="faq.a4">The Lifetime plan is an offline, contract-based arrangement designed for businesses or power users who want a permanent license plus hands-on services: AI workflow training, custom report development, and dedicated script writing. Payment is handled offline with a signed service contract. Contact us at ribencong@gmail.com or via Feishu to discuss.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">Do you offer refunds?</div>
-        <div class="faq-a">Yes. We offer a 7-day refund for annual licenses if you are not satisfied. See our <a href="/refund.html" style="color:var(--color-secondary);">Refund Policy</a> for details.</div>
+        <div class="faq-q" data-i18n="faq.q5">Do you offer refunds?</div>
+        <div class="faq-a" data-i18n-html="faq.a5">Yes. We offer a 7-day refund for annual licenses if you are not satisfied. See our <a href="/refund.html" style="color:var(--color-secondary);">Refund Policy</a> for details.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">Is my data stored on your servers?</div>
-        <div class="faq-a">No. TweetPilot runs entirely locally on your macOS device. Your credentials, scripts, and workspaces never leave your machine. License validation is the only network call made to our servers.</div>
+        <div class="faq-q" data-i18n="faq.q6">Is my data stored on your servers?</div>
+        <div class="faq-a" data-i18n="faq.a6">No. TweetPilot runs entirely locally on your macOS device. Your credentials, scripts, and workspaces never leave your machine. License validation is the only network call made to our servers.</div>
       </div>
     </div>
   </div>
@@ -402,22 +413,22 @@
     <button class="contact-modal-x" onclick="closeContactModal()" type="button" aria-label="Close">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <div class="contact-modal-title">Get in Touch</div>
-    <div class="contact-modal-sub">Reach us via email or scan the Feishu QR code below</div>
+    <div class="contact-modal-title" data-i18n="modal.title">Get in Touch</div>
+    <div class="contact-modal-sub" data-i18n="modal.sub">Reach us via email or scan the Feishu QR code below</div>
 
     <!-- Email block -->
     <div class="cm-section">
-      <div class="cm-section-label">Email</div>
+      <div class="cm-section-label" data-i18n="modal.email_label">Email</div>
       <div class="cm-email-row">
         <span class="cm-email-addr">ribencong@gmail.com</span>
         <div class="cm-email-actions">
           <a class="cm-btn primary" href="mailto:ribencong@gmail.com">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Send
+            <span data-i18n="modal.send">Send</span>
           </a>
           <button class="cm-btn ghost" id="copyEmailBtn" onclick="copyEmail()" type="button">
             <svg id="copyIcon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            <span id="copyEmailText">Copy</span>
+            <span id="copyEmailText" data-i18n="modal.copy">Copy</span>
           </button>
         </div>
       </div>
@@ -425,9 +436,9 @@
 
     <!-- Feishu block -->
     <div class="cm-section">
-      <div class="cm-section-label">Feishu / Lark</div>
+      <div class="cm-section-label" data-i18n="modal.feishu_label">Feishu / Lark</div>
       <img class="cm-qr" src="feishu.png" alt="Feishu QR Code" />
-      <div class="cm-qr-hint">Scan with Feishu app to start a conversation</div>
+      <div class="cm-qr-hint" data-i18n="modal.qr_hint">Scan with Feishu app to start a conversation</div>
     </div>
   </div>
 </div>
@@ -439,16 +450,16 @@
         <img src="logo.png" width="24" height="24" alt="TweetPilot" style="border-radius:6px;" />
         TweetPilot
       </a>
-      <span class="footer-copy">© 2026 TweetPilot. All rights reserved.</span>
+      <span class="footer-copy" data-i18n="footer.copyright">© 2026 TweetPilot. All rights reserved.</span>
     </div>
     <div class="footer-links">
-      <a href="/pricing.html">Pricing</a>
-      <a href="/terms.html">Terms of Service</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/refund.html">Refund Policy</a>
+      <a href="/pricing.html" data-i18n="nav.pricing">Pricing</a>
+      <a href="/terms.html" data-i18n="footer.terms">Terms of Service</a>
+      <a href="/privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+      <a href="/refund.html" data-i18n="footer.refund">Refund Policy</a>
       <a href="https://github.com/tweetpilot" target="_blank" rel="noopener">GitHub</a>
       <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">TweetClaw</a>
-      <a href="javascript:void(0)" onclick="openContactModal()">Contact</a>
+      <a href="javascript:void(0)" onclick="openContactModal()" data-i18n="footer.contact">Contact</a>
     </div>
   </div>
 </footer>
@@ -462,11 +473,11 @@
       const text = document.getElementById('copyEmailText');
       const icon = document.getElementById('copyIcon');
       btn.classList.add('copied');
-      text.textContent = 'Copied';
+      text.textContent = window.i18n ? window.i18n.t('modal.copied') : 'Copied';
       icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
       setTimeout(function() {
         btn.classList.remove('copied');
-        text.textContent = 'Copy';
+        text.textContent = window.i18n ? window.i18n.t('modal.copy') : 'Copy';
         icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>';
       }, 2000);
     });
