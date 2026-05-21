@@ -422,7 +422,16 @@
   };
 
   /* ─── Core engine ────────────────────────────────────────────── */
-  var lang = localStorage.getItem('tp_lang') || 'en';
+  /* Language priority:
+   * 1. User's explicit choice (saved in localStorage)
+   * 2. Browser / OS language (navigator.language)
+   * 3. Fallback → 'en'
+   */
+  function detectBrowserLang() {
+    var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+    return nav.startsWith('zh') ? 'zh' : 'en';
+  }
+  var lang = localStorage.getItem('tp_lang') || detectBrowserLang();
 
   function t(key) {
     return (T[lang] && T[lang][key]) || (T['en'] && T['en'][key]) || key;
