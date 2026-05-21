@@ -18,6 +18,7 @@
       'nav.how_it_works': 'How It Works',
       'nav.ai_engine': 'AI Engine',
       'nav.pricing': 'Pricing',
+      'nav.help': 'Help',
       'nav.download': 'Download',
       'nav.download_free': 'Download Free',
 
@@ -179,6 +180,7 @@
       'footer.terms': 'Terms of Service',
       'footer.privacy': 'Privacy Policy',
       'footer.refund': 'Refund Policy',
+      'footer.help': 'Help Center',
       'footer.contact': 'Contact',
 
       // Contact modal
@@ -393,6 +395,7 @@
       'nav.how_it_works': '工作原理',
       'nav.ai_engine': 'AI 引擎',
       'nav.pricing': '价格',
+      'nav.help': '帮助',
       'nav.download': '下载',
       'nav.download_free': '免费下载',
 
@@ -554,6 +557,7 @@
       'footer.terms': '服务条款',
       'footer.privacy': '隐私政策',
       'footer.refund': '退款政策',
+      'footer.help': '帮助中心',
       'footer.contact': '联系我们',
 
       // Contact modal
