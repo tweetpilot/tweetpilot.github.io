@@ -5,6 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pricing — TweetPilot</title>
   <script src="/i18n.js"></script>
+  <!--
+    FastSpring SBL 集成
+    - staging: ?env=staging → tweetpilot.test.onfastspring.com/popup-tweetpilot
+    - live:    (default)   → tweetpilot.onfastspring.com/popup-tweetpilot-live
+                              ↑ KYC 通过后把 LIVE_STOREFRONT 里的 .test 去掉即可
+  -->
+  <script>
+    (function() {
+      var STAGING_STOREFRONT = 'tweetpilot.test.onfastspring.com/popup-tweetpilot';
+      var STAGING_PRODUCT    = 'tweetpilot-professional';
+      // TODO(KYC): KYC 通过后将下面两行中的 .test 去掉，改为正式域名
+      var LIVE_STOREFRONT    = 'tweetpilot.test.onfastspring.com/popup-tweetpilot-live';
+      var LIVE_PRODUCT       = 'tweetpilot-professional-live';
+
+      var params = new URLSearchParams(window.location.search);
+      var isStaging = params.get('env') === 'staging';
+
+      window._fsStorefront = isStaging ? STAGING_STOREFRONT : LIVE_STOREFRONT;
+      window._fsProduct    = isStaging ? STAGING_PRODUCT    : LIVE_PRODUCT;
+
+      var s = document.createElement('script');
+      s.id = 'fsc-api';
+      s.src = 'https://sbl.onfastspring.com/sbl/1.0.7/fastspring-builder.min.js';
+      s.type = 'text/javascript';
+      s.setAttribute('data-storefront', window._fsStorefront);
+      document.head.appendChild(s);
+    })();
+  </script>
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -326,11 +354,11 @@
           <span data-i18n="plan.feat_12months">License valid for 12 months</span>
         </li>
       </ul>
-      <!-- TODO: Replace with FastSpring checkout URL -->
-      <a class="plan-btn pro-btn" href="#" onclick="return false;" style="opacity:0.7;cursor:not-allowed;" title="Checkout coming soon">
+      <!-- FastSpring Popup Checkout -->
+      <button class="plan-btn pro-btn" onclick="handleBuyLicense()" type="button">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         <span data-i18n="plan.pro_btn">Buy License — $300/yr</span>
-      </a>
+      </button>
     </div>
 
     <!-- Enterprise -->
@@ -465,6 +493,18 @@
 </footer>
 
 <script>
+  // FastSpring Popup Checkout
+  function handleBuyLicense() {
+    if (typeof fastspring !== 'undefined' && fastspring.builder) {
+      fastspring.builder.add(window._fsProduct);
+      fastspring.builder.checkout();
+    } else {
+      // SBL 未加载（离线或拦截），降级到 FastSpring 直链
+      var base = 'https://tweetpilot.onfastspring.com/popup-tweetpilot-live';
+      window.open(base, '_blank');
+    }
+  }
+
   // Copy email
   function copyEmail() {
     const email = 'ribencong@gmail.com';

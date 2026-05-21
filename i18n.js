@@ -45,9 +45,9 @@
       'mockup.task2_meta': 'growth_report.py · cron 09:00 daily',
       'mockup.task3_name': 'Trend Search & Post',
       'mockup.task3_meta': 'trend_post.py · runs every 2hr',
-      ‘mockup.badge_sched’: ‘Scheduled’,
-      ‘mockup.ai_agent’: ‘TweetPilot Agent’,
-      ‘mockup.ai_msg’: "Found 3 trending topics. Drafting reply thread for @user’s mention...",
+      'mockup.badge_sched': 'Scheduled',
+      'mockup.ai_agent': 'TweetPilot Agent',
+      'mockup.ai_msg': "Found 3 trending topics. Drafting reply thread for @user's mention...",
 
       // Stats
       'stats.ai_providers': 'AI Providers',
@@ -116,7 +116,7 @@
       'int.twitter_desc': 'Full read/write access via TweetClaw or official X API',
       'int.tweetclaw_desc': 'Chrome extension WebSocket bridge for browserless access',
       'int.feishu_desc': 'Push reports and alerts to enterprise Feishu bots',
-      'int.python_desc': "Execute custom automation scripts with TweetPilot’s local SDK",
+      'int.python_desc': "Execute custom automation scripts with TweetPilot's local SDK",
 
       // Pricing section (index)
       'pricing.label': 'Pricing',
