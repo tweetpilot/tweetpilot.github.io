@@ -85,6 +85,18 @@
     .step-desc a { color: var(--color-secondary); text-decoration: none; }
     .step-desc a:hover { text-decoration: underline; }
     .step-desc code { font-family: monospace; font-size: 12px; background: rgba(8,145,178,0.1); color: var(--color-secondary); padding: 2px 6px; border-radius: 4px; }
+    /* SUB-STEPS */
+    .substep-list { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .substep { display: flex; gap: 10px; align-items: flex-start; }
+    .substep-dot { width: 20px; height: 20px; border-radius: 50%; background: rgba(8,145,178,0.08); border: 1px solid rgba(8,145,178,0.2); color: var(--color-text-dim); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .substep-text { font-size: 13.5px; color: var(--color-text-muted); line-height: 1.65; }
+    .substep-text strong { color: var(--color-text); font-weight: 600; }
+    .substep-text code { font-family: monospace; font-size: 12px; background: rgba(8,145,178,0.1); color: var(--color-secondary); padding: 2px 6px; border-radius: 4px; }
+    .substep-text a { color: var(--color-secondary); text-decoration: none; }
+    .substep-text a:hover { text-decoration: underline; }
+    .substep-img { display: block; margin-top: 10px; border-radius: 8px; border: 1px solid rgba(8,145,178,0.2); max-width: 320px; width: 100%; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+    .substep-alt { margin-top: 8px; padding: 8px 12px; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.18); border-radius: 8px; font-size: 13px; color: var(--color-text-muted); line-height: 1.6; }
+    .substep-alt strong { color: var(--color-text); }
 
     /* INFO CARDS */
     .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 36px; }
@@ -273,28 +285,105 @@
           <div class="step-num">2</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.qs_s2_title">Install TweetClaw Extension</div>
-            <div class="step-desc" data-i18n-html="help.qs_s2_desc">Install the <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank">TweetClaw Chrome extension</a>. Then open <a href="https://x.com" target="_blank">x.com</a> in Chrome — TweetClaw will auto-start a local WebSocket server on port <code>20086</code>.</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.qs_s2_sub1">Open the <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">Chrome Web Store listing</a> and click <strong>Add to Chrome</strong>. Confirm the permissions popup — TweetClaw only needs access to x.com.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text">
+                  <span data-i18n-html="help.qs_s2_sub2_main">Pin TweetClaw to your toolbar so you can always check its status at a glance.</span>
+                  <img src="/images/tweetclaw-pin.png" alt="Pin TweetClaw to Chrome toolbar" class="substep-img" />
+                  <div class="substep-alt" data-i18n-html="help.qs_s2_sub2_alt"><strong>Can't see the puzzle piece icon?</strong> Some browsers hide it when no extensions are installed. Click the <strong>three-dot menu (⋮)</strong> in the top-right corner of Chrome → <strong>Extensions</strong> → <strong>Manage Extensions</strong>. Find TweetClaw in the list and toggle it on, then return to the toolbar — the puzzle piece icon should now appear.</div>
+                </div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">c</div>
+                <div class="substep-text" data-i18n-html="help.qs_s2_sub3">Navigate to <a href="https://x.com" target="_blank" rel="noopener">x.com</a> in the same Chrome window and make sure you're logged in. TweetClaw will activate automatically and start a local WebSocket bridge in the background.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">d</div>
+                <div class="substep-text" data-i18n-html="help.qs_s2_sub4">Click the TweetClaw icon in your toolbar. The popup shows your connected <strong>Twitter username</strong> and the active <strong>port number</strong> (default: <code>20086</code>). Confirm both are displayed correctly.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">e</div>
+                <div class="substep-text" data-i18n-html="help.qs_s2_sub5">In TweetPilot, open <strong>Settings → LocalBridge</strong> and verify the port matches what TweetClaw shows. <strong>Both must use the same port</strong> — if you change one, update the other. A mismatch will prevent the connection from establishing.</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.qs_s3_title">Configure an AI Model</div>
-            <div class="step-desc" data-i18n-html="help.qs_s3_desc">In TweetPilot, go to <strong>Settings → AI Providers</strong>. Add your API key from OpenAI, Anthropic, or DeepSeek. This powers the AI chat and all automated actions.</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.qs_s3_sub1">In TweetPilot, click <strong>Settings</strong> in the top menu bar, then select <strong>AI Providers</strong>.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text" data-i18n-html="help.qs_s3_sub2">Choose a provider from the list. If you're unsure which to pick: <strong>DeepSeek</strong> is the most affordable for getting started; <strong>Claude Sonnet</strong> or <strong>GPT-4o</strong> give the best results for complex automation tasks.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">c</div>
+                <div class="substep-text" data-i18n-html="help.qs_s3_sub3">Paste your API key into the field. Your key is encrypted and stored in macOS Keychain — it never leaves your Mac. Don't have a key yet? Get one from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">OpenAI</a>, <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic</a>, or <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">DeepSeek</a>.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">d</div>
+                <div class="substep-text" data-i18n-html="help.qs_s3_sub4">Select a model from the dropdown, then click <strong>Test Connection</strong>. A green checkmark confirms the key is valid and the model is reachable. You're ready to go.</div>
+              </div>
+            </div>
+            <div class="substep-alt" style="margin-top:12px;" data-i18n-html="help.qs_s3_ollama"><strong>Prefer a local model?</strong> TweetPilot also supports <a href="https://ollama.ai" target="_blank" rel="noopener">Ollama</a> — start the Ollama server on your Mac, select "Ollama" as the provider, and no API key is needed. See the <a href="javascript:void(0)" onclick="showSection('ai-config')">AI Model Configuration</a> section for full details.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.qs_s4_title">Add Your Twitter Account</div>
-            <div class="step-desc" data-i18n-html="help.qs_s4_desc">Go to Accounts in the sidebar and click Add Account. Select TweetClaw (browser mode) — TweetPilot will detect your logged-in session automatically.</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.qs_s4_sub1">Click <strong>Accounts</strong> in the left sidebar, then click <strong>Add Account</strong>.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text" data-i18n-html="help.qs_s4_sub2">Choose a connection method. <strong>TweetClaw (Browser)</strong> is recommended for most users — it reads your existing logged-in session from Chrome, so no passwords or tokens are required. <strong>X API (Direct)</strong> uses your own developer credentials and works without the browser extension, but requires setting up an app on the Twitter Developer Portal first.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">c</div>
+                <div class="substep-text" data-i18n-html="help.qs_s4_sub3">If you chose TweetClaw: make sure Chrome is open with x.com and TweetClaw is active. TweetPilot will detect your session automatically and display your Twitter username. Click <strong>Confirm</strong> to complete.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">d</div>
+                <div class="substep-text" data-i18n-html="help.qs_s4_sub4">Once added, your account appears in the Accounts list with a <strong>green status indicator</strong>. You can add multiple accounts and switch between them at any time from the account dropdown at the top of the sidebar.</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">5</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.qs_s5_title">Run Your First Script</div>
-            <div class="step-desc" data-i18n-html="help.qs_s5_desc">Create a new workspace, open the AI chat, and try a command like "search tweets about AI automation from the last 24 hours". The agent will execute it using your connected account.</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.qs_s5_sub1">Click <strong>New Workspace</strong> in the sidebar to create your first workspace. A workspace is where you manage scripts, data blocks, and AI conversations for a specific goal.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text" data-i18n-html="help.qs_s5_sub2">Open the <strong>AI Chat</strong> panel. This is your main interface for giving instructions — you talk to the agent in plain language, and it handles the code and Twitter API calls for you.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">c</div>
+                <div class="substep-text" data-i18n-html="help.qs_s5_sub3">Try this example to verify everything is working:<br /><br /><em>"Search for the 5 most recent tweets mentioning 'AI automation' and show me the usernames and like counts."</em><br /><br />The agent will write and run the script automatically, then display the results in the chat.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">d</div>
+                <div class="substep-text" data-i18n-html="help.qs_s5_sub4">If you see results returned — you're all set. From here you can ask follow-up questions, save the script for reuse, or bind it to a scheduled task to run automatically.</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
