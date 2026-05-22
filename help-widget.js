@@ -71,7 +71,7 @@
       // X API
       'xapi.step1': 'Go to <a href="https://developer.twitter.com/en/portal/dashboard" target="_blank" rel="noopener">Twitter Developer Portal</a>',
       'xapi.step2': 'Create a new App (or use existing)',
-      'xapi.step3': 'Copy 4 keys: API Key, API Secret, Access Token, Access Secret',
+      'xapi.step3': 'Copy Client ID and Client Secret from the app\'s Keys and Tokens tab',
       'xapi.step4': 'Paste into TweetPilot → Settings → X API',
       'xapi.tip': 'Choose API version: v1.1 (more features) or v2 (newer).',
 
@@ -171,7 +171,7 @@
       // X API
       'xapi.step1': '前往 <a href="https://developer.twitter.com/en/portal/dashboard" target="_blank" rel="noopener">Twitter 开发者门户</a>',
       'xapi.step2': '创建新应用（或使用现有应用）',
-      'xapi.step3': '复制 4 个密钥：API Key、API Secret、Access Token、Access Secret',
+      'xapi.step3': '在应用的 Keys and Tokens 标签中复制 Client ID 和 Client Secret',
       'xapi.step4': '粘贴到 TweetPilot → 设置 → X API',
       'xapi.tip': '选择 API 版本：v1.1（功能更多）或 v2（更新）。',
 

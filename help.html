@@ -65,6 +65,7 @@
     .help-content { padding: 48px 60px 80px; overflow-y: auto; }
     .help-section > * { max-width: 740px; }
     .help-section .compare-table { max-width: 100%; }
+    .help-section .plan-grid { max-width: 100%; }
 
     /* SECTION */
     .help-section { display: none; }
@@ -120,6 +121,17 @@
     .code-block code { font-family: 'Courier New', monospace; font-size: 13px; color: #a8d8ea; line-height: 1.7; white-space: pre; }
     .code-label { font-size: 11px; color: var(--color-text-dim); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
 
+    /* ARCH FLOW */
+    .arch-flow { display: flex; align-items: stretch; gap: 0; margin-bottom: 36px; flex-wrap: wrap; }
+    .arch-node { background: var(--color-bg-3); border: 1px solid var(--color-border); border-radius: 10px; padding: 14px 18px; min-width: 140px; flex: 1; }
+    .arch-node-name { font-size: 13px; font-weight: 700; color: var(--color-text); margin-bottom: 4px; }
+    .arch-node-desc { font-size: 12px; color: var(--color-text-dim); line-height: 1.5; }
+    .arch-node-tag { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,145,178,0.1); color: var(--color-secondary); }
+    .arch-node.arch-highlight { border-color: rgba(8,145,178,0.4); background: rgba(8,145,178,0.06); }
+    .arch-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 6px; color: var(--color-text-dim); font-size: 11px; gap: 3px; flex-shrink: 0; }
+    .arch-arrow-line { color: var(--color-secondary); font-size: 16px; line-height: 1; }
+    .arch-arrow-label { font-size: 10px; color: var(--color-text-dim); white-space: nowrap; }
+
     /* DIVIDER */
     .content-divider { height: 1px; background: var(--color-border); margin: 36px 0; }
 
@@ -152,6 +164,85 @@
     .feishu-thumb-hint { font-size: 11px; color: var(--color-text-dim); }
     .feishu-thumb-arrow { margin-left: auto; color: var(--color-text-dim); flex-shrink: 0; }
 
+    /* AGENT CARDS */
+    .agent-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+    .agent-card { border-radius: 14px; border: 1px solid var(--color-border); background: var(--color-bg-3); overflow: hidden; }
+    .agent-card-accent { height: 3px; }
+    .agent-card-body { padding: 20px 24px 0; display: flex; gap: 18px; }
+    .agent-num { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+    .agent-card-content { flex: 1; min-width: 0; }
+    .agent-card-name { font-size: 16px; font-weight: 700; color: var(--color-text); margin-bottom: 5px; }
+    .agent-role-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 9px; border-radius: 100px; margin-bottom: 12px; }
+    .agent-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .agent-chip { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 100px; font-family: 'Courier New', monospace; }
+    .agent-chip-plain { font-family: 'Inter', sans-serif; }
+    .agent-card-desc { font-size: 13.5px; color: var(--color-text-muted); line-height: 1.65; padding-bottom: 16px; }
+    .agent-card-desc code { font-family: monospace; font-size: 12px; background: rgba(8,145,178,0.1); color: var(--color-secondary); padding: 1px 5px; border-radius: 4px; }
+    .agent-usecase { display: flex; align-items: baseline; gap: 10px; padding: 11px 24px; background: rgba(255,255,255,0.025); border-top: 1px solid var(--color-border); font-size: 13px; color: var(--color-text-muted); }
+    .agent-usecase-label { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; padding: 2px 7px; border-radius: 4px; }
+    /* Blue */
+    .agent-card-blue .agent-card-accent { background: linear-gradient(90deg,#0891B2,#22D3EE); }
+    .agent-card-blue .agent-num { background: rgba(8,145,178,0.15); color: #22D3EE; }
+    .agent-card-blue .agent-role-tag { background: rgba(8,145,178,0.12); color: #22D3EE; }
+    .agent-card-blue .agent-chip { background: rgba(8,145,178,0.08); border: 1px solid rgba(8,145,178,0.2); color: #22D3EE; }
+    .agent-card-blue .agent-usecase-label { background: rgba(8,145,178,0.12); color: #22D3EE; }
+    /* Purple */
+    .agent-card-purple .agent-card-accent { background: linear-gradient(90deg,#7C3AED,#A78BFA); }
+    .agent-card-purple .agent-num { background: rgba(124,58,237,0.15); color: #A78BFA; }
+    .agent-card-purple .agent-role-tag { background: rgba(124,58,237,0.12); color: #A78BFA; }
+    .agent-card-purple .agent-chip { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); color: #A78BFA; }
+    .agent-card-purple .agent-chip.agent-chip-plain { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); color: #A78BFA; }
+    .agent-card-purple .agent-usecase-label { background: rgba(124,58,237,0.12); color: #A78BFA; }
+    /* Green */
+    .agent-card-green .agent-card-accent { background: linear-gradient(90deg,#059669,#34D399); }
+    .agent-card-green .agent-num { background: rgba(5,150,105,0.15); color: #34D399; }
+    .agent-card-green .agent-role-tag { background: rgba(5,150,105,0.12); color: #34D399; }
+    .agent-card-green .agent-chip { background: rgba(5,150,105,0.08); border: 1px solid rgba(5,150,105,0.2); color: #34D399; }
+    .agent-card-green .agent-usecase-label { background: rgba(5,150,105,0.12); color: #34D399; }
+
+    /* CLAURST BOX */
+    .claurst-box { border: 1px solid rgba(8,145,178,0.25); border-radius: 14px; background: rgba(8,145,178,0.04); padding: 20px 24px; margin-bottom: 28px; }
+    .claurst-header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .claurst-name { font-size: 20px; font-weight: 800; color: var(--color-text); letter-spacing: -0.01em; }
+    .claurst-meta { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--color-text-dim); padding: 2px 8px; background: rgba(255,255,255,0.05); border-radius: 5px; border: 1px solid var(--color-border); }
+    .claurst-tagline { font-size: 13.5px; color: var(--color-text-muted); line-height: 1.65; margin-bottom: 16px; }
+    .claurst-caps { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+    .claurst-cap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-text-muted); padding: 9px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 8px; }
+    .claurst-cap-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-secondary); flex-shrink: 0; }
+    .claurst-note { font-size: 12.5px; color: var(--color-text-dim); padding: 9px 14px; background: rgba(8,145,178,0.05); border-radius: 8px; border-left: 3px solid rgba(8,145,178,0.3); line-height: 1.6; }
+    .claurst-note strong { color: var(--color-text-muted); }
+    @media (max-width: 600px) {
+      .claurst-caps { grid-template-columns: repeat(2,1fr); }
+      .agent-card-body { flex-direction: column; gap: 10px; }
+    }
+
+    /* UPGRADE PLAN CARDS */
+    .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+    .plan-card { border-radius: 14px; border: 1px solid var(--color-border); background: var(--color-bg-3); overflow: hidden; }
+    .plan-card-pro { border-color: rgba(5,150,105,0.4); background: rgba(5,150,105,0.04); }
+    .plan-card-top { padding: 20px 22px 16px; }
+    .plan-label { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+    .plan-name { font-size: 22px; font-weight: 800; color: var(--color-text); letter-spacing: -0.01em; margin-bottom: 4px; }
+    .plan-price { font-size: 13px; color: var(--color-text-muted); }
+    .plan-price strong { font-size: 28px; font-weight: 800; color: var(--color-text); }
+    .plan-price-free { font-size: 28px; font-weight: 800; color: var(--color-text); }
+    .plan-rows { border-top: 1px solid var(--color-border); }
+    .plan-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 22px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; color: var(--color-text-muted); }
+    .plan-row:last-child { border-bottom: none; }
+    .plan-row.pro-only { background: rgba(5,150,105,0.04); }
+    .plan-row-name { display: flex; align-items: center; gap: 7px; }
+    .plan-row-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--color-text-dim); flex-shrink: 0; }
+    .plan-card-pro .plan-row.pro-only .plan-row-dot { background: #34D399; }
+    .plan-row-val { font-weight: 600; }
+    .plan-row-check { color: #34D399; font-weight: 700; font-size: 15px; }
+    .plan-row-cross { color: #4A7A8A; font-weight: 700; font-size: 15px; }
+    .plan-free-label { color: var(--color-text-dim); }
+    .plan-cta { display: block; text-align: center; margin: 16px 22px 20px; padding: 11px; border-radius: 9px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 200ms; }
+    .plan-cta-pro { background: var(--color-cta); color: white; }
+    .plan-cta-pro:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .plan-cta-free { background: rgba(255,255,255,0.05); color: var(--color-text-muted); border: 1px solid var(--color-border); cursor: default; }
+    @media (max-width: 640px) { .plan-grid { grid-template-columns: 1fr; } }
+
     /* QR Modal */
     .qr-modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 250ms ease; }
     .qr-modal-overlay.open { opacity: 1; pointer-events: auto; }
@@ -173,7 +264,7 @@
     .footer-links a:hover { color: var(--color-secondary); }
 
     /* MOBILE */
-    @media (max-width: 900px) {
+    @media (max-width: 768px) {
       nav { padding: 0 20px; } .nav-links { display: none; }
       .help-layout { grid-template-columns: 1fr; padding-top: 64px; }
       .help-sidebar { position: static; height: auto; padding: 24px 20px 0; border-right: none; border-bottom: 1px solid var(--color-border); }
@@ -218,7 +309,7 @@
       </button>
       <button class="sidebar-item" data-target="ai-config" onclick="showSection('ai-config')">
         <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg></div>
-        <span class="sidebar-item-text" data-i18n-html="help.nav_ai">AI Model Config</span>
+        <span class="sidebar-item-text" data-i18n-html="help.nav_ai">AI Agent</span>
       </button>
       <button class="sidebar-item" data-target="tweetclaw" onclick="showSection('tweetclaw')">
         <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg></div>
@@ -233,8 +324,8 @@
         <span class="sidebar-item-text" data-i18n-html="help.nav_scheduler">Scheduler</span>
       </button>
       <button class="sidebar-item" data-target="reports" onclick="showSection('reports')">
-        <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-        <span class="sidebar-item-text" data-i18n-html="help.nav_reports">Custom Reports</span>
+        <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></div>
+        <span class="sidebar-item-text" data-i18n-html="help.nav_reports">Data Blocks</span>
       </button>
       <button class="sidebar-item" data-target="x-api" onclick="showSection('x-api')">
         <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
@@ -253,6 +344,7 @@
     <div class="sidebar-divider"></div>
     <div class="sidebar-contact">
       <div class="sidebar-contact-title" data-i18n-html="help.contact_label">Contact Support</div>
+      <div style="font-size:11px;color:var(--color-text-dim);margin-bottom:10px;line-height:1.5;" data-i18n-html="help.contact_note">For Pro &amp; Enterprise customers. We prioritize paid plan inquiries.</div>
       <a href="mailto:ribencong@dessage.xyz">
         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         ribencong@dessage.xyz
@@ -278,7 +370,7 @@
           <div class="step-num">1</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.qs_s1_title">Download & Install</div>
-            <div class="step-desc" data-i18n-html="help.qs_s1_desc">Visit the <a href="/#download">homepage</a> and download the latest <code>TweetPilot.dmg</code>. Open the DMG, drag TweetPilot to your Applications folder, then launch it. macOS 12 Monterey or later required.</div>
+            <div class="step-desc" data-i18n-html="help.qs_s1_desc">Visit the <a href="/#download">homepage</a> and download the installer for your platform. <strong>macOS:</strong> open <code>TweetPilot.dmg</code>, drag TweetPilot to your Applications folder, then launch it (macOS 12 Monterey or later). <strong>Windows:</strong> run <code>TweetPilot.msi</code> and follow the setup wizard (Windows 10 or later, x64).</div>
           </div>
         </div>
         <div class="step">
@@ -335,7 +427,7 @@
                 <div class="substep-text" data-i18n-html="help.qs_s3_sub4">Select a model from the dropdown, then click <strong>Test Connection</strong>. A green checkmark confirms the key is valid and the model is reachable. You're ready to go.</div>
               </div>
             </div>
-            <div class="substep-alt" style="margin-top:12px;" data-i18n-html="help.qs_s3_ollama"><strong>Prefer a local model?</strong> TweetPilot also supports <a href="https://ollama.ai" target="_blank" rel="noopener">Ollama</a> — start the Ollama server on your Mac, select "Ollama" as the provider, and no API key is needed. See the <a href="javascript:void(0)" onclick="showSection('ai-config')">AI Model Configuration</a> section for full details.</div>
+            <div class="substep-alt" style="margin-top:12px;" data-i18n-html="help.qs_s3_ollama"><strong>Prefer a local model?</strong> TweetPilot also supports <a href="https://ollama.ai" target="_blank" rel="noopener">Ollama</a> — start the Ollama server on your Mac, select "Ollama" as the provider, and no API key is needed. See the <a href="javascript:void(0)" onclick="showSection('ai-config')">AI Agent</a> section for full details.</div>
           </div>
         </div>
         <div class="step">
@@ -396,71 +488,220 @@
 
     <!-- ─── AI CONFIG ─── -->
     <section class="help-section" id="section-ai-config">
-      <span class="section-badge" data-i18n-html="help.ai_badge">Configuration</span>
-      <h1 class="section-title" data-i18n-html="help.ai_title">AI Model Configuration</h1>
-      <p class="section-intro" data-i18n-html="help.ai_intro">TweetPilot works with any AI provider. You bring your own API key — choose from cloud providers or run a local model with Ollama.</p>
+      <span class="section-badge" data-i18n-html="help.ai_badge">AI Agent</span>
+      <h1 class="section-title" data-i18n-html="help.ai_title">AI Agent</h1>
+      <p class="section-intro" data-i18n-html="help.ai_intro">TweetPilot ships three purpose-built AI agents, each optimized for a different role. All agents run locally on your Mac using your own AI provider — nothing is routed through TweetPilot servers.</p>
 
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-card-label">OpenAI</div>
-          <div class="info-card-value">GPT-4o, GPT-4 Turbo<br /><a href="https://platform.openai.com/api-keys" target="_blank">Get API key →</a></div>
+      <!-- CLAURST ENGINE -->
+      <h3 class="content-h3" data-i18n-html="help.ai_claurst_title">Built on Claurst</h3>
+      <div class="claurst-box">
+        <div class="claurst-header-row">
+          <span class="claurst-name">Claurst</span>
+          <span class="claurst-meta">Open Source · Rust</span>
         </div>
-        <div class="info-card">
-          <div class="info-card-label">Anthropic</div>
-          <div class="info-card-value">Claude 3 Opus / Sonnet<br /><a href="https://console.anthropic.com/settings/keys" target="_blank">Get API key →</a></div>
+        <p class="claurst-tagline" data-i18n-html="help.ai_claurst_tagline">An open-source agentic coding engine, originally a clean-room reimplementation of Claude Code's core behavior. TweetPilot embeds Claurst as its agent runtime and injects Twitter-specific tooling on top.</p>
+        <div class="claurst-caps">
+          <div class="claurst-cap"><span class="claurst-cap-dot"></span><span data-i18n-html="help.ai_cap_llm">Multi-provider LLM routing</span></div>
+          <div class="claurst-cap"><span class="claurst-cap-dot"></span><span data-i18n-html="help.ai_cap_tools">Structured tool system</span></div>
+          <div class="claurst-cap"><span class="claurst-cap-dot"></span><span data-i18n-html="help.ai_cap_perms">Granular permission model</span></div>
+          <div class="claurst-cap"><span class="claurst-cap-dot"></span><span data-i18n-html="help.ai_cap_mcp">MCP server integration</span></div>
+          <div class="claurst-cap"><span class="claurst-cap-dot"></span><span data-i18n-html="help.ai_cap_memory">Cross-session memory</span></div>
+          <div class="claurst-cap"><span class="claurst-cap-dot"></span><span data-i18n-html="help.ai_cap_logs">Full conversation logging</span></div>
         </div>
-        <div class="info-card">
-          <div class="info-card-label">DeepSeek</div>
-          <div class="info-card-value">DeepSeek-V3 / R1<br /><a href="https://platform.deepseek.com/api_keys" target="_blank">Get API key →</a></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label">Ollama</div>
-          <div class="info-card-value">Local models, 100% private<br /><a href="https://ollama.ai" target="_blank">Download Ollama →</a></div>
-        </div>
+        <div class="claurst-note" data-i18n-html="help.ai_claurst_note"><strong>All four agents below share this runtime.</strong> TweetPilot extends each agent's environment with a different set of tools and constraints — Twitter access via ClawBot or xdk, data block build rules, Feishu messaging, etc.</div>
       </div>
 
+      <!-- FOUR AGENTS -->
+      <h3 class="content-h3" data-i18n-html="help.ai_agents_title">Four Specialized Agents</h3>
+      <div class="agent-grid">
+
+        <!-- Agent 1 -->
+        <div class="agent-card agent-card-blue">
+          <div class="agent-card-accent"></div>
+          <div class="agent-card-body">
+            <div class="agent-num">①</div>
+            <div class="agent-card-content">
+              <div class="agent-card-name" data-i18n-html="help.ai_agent1_name">TweetPilot Agent</div>
+              <div class="agent-role-tag" data-i18n-html="help.ai_agent1_role">Interactive Chat · Main Workspace</div>
+              <div class="agent-chips">
+                <span class="agent-chip">ClawBot</span>
+                <span class="agent-chip">xdk</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_multi_account">Multi-account</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_workspace_docs">Workspace docs</span>
+              </div>
+              <div class="agent-card-desc" data-i18n-html="help.ai_agent1_desc">The interactive chat agent in the main workspace. Extends Claurst with two Twitter access layers: <strong>ClawBot</strong> (via LocalBridge → TweetClaw, free, no API keys) and <strong>xdk</strong> (X OAuth, official API). Automatically selects the right path based on account type. Reads <code>product.md</code> for product context and <code>content_rules.md</code> for tone and content constraints — every response stays on-brand.</div>
+            </div>
+          </div>
+          <div class="agent-usecase">
+            <span class="agent-usecase-label" data-i18n-html="help.ai_usecase_label">Use case</span>
+            <span data-i18n-html="help.ai_agent1_usecase">Explore data, draft tweets, write and debug Python scripts, manage accounts — all through natural-language conversation.</span>
+          </div>
+        </div>
+
+        <!-- Agent 2 -->
+        <div class="agent-card agent-card-purple">
+          <div class="agent-card-accent"></div>
+          <div class="agent-card-body">
+            <div class="agent-num">②</div>
+            <div class="agent-card-content">
+              <div class="agent-card-name" data-i18n-html="help.ai_agent2_name">Task AI Agent</div>
+              <div class="agent-role-tag" data-i18n-html="help.ai_agent2_role">Autonomous Operation · 7×24 Scheduled</div>
+              <div class="agent-chips">
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_no_interact">No user interaction</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_prompt_driven">Prompt-driven</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_content_rules">content_rules.md</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_session_log">Session log</span>
+              </div>
+              <div class="agent-card-desc" data-i18n-html="help.ai_agent2_desc">The autonomous account operation agent. Runs entirely from a prompt you define — no interaction during execution. Pair it with <code>content_rules.md</code> to enforce brand tone, religious constraints, or keyword blocklists across every run. Supports two permission modes: <strong>Workspace Full Access</strong> (recommended) limits file ops to the workspace; <strong>Full Access</strong> removes all restrictions. Full session logs are saved for every run.</div>
+            </div>
+          </div>
+          <div class="agent-usecase">
+            <span class="agent-usecase-label" data-i18n-html="help.ai_usecase_label">Use case</span>
+            <span data-i18n-html="help.ai_agent2_usecase">Auto-reply to mentions in a warm or technical tone, engage trending topics, post daily summaries — running 24/7 via scheduled tasks.</span>
+          </div>
+        </div>
+
+        <!-- Agent 3 -->
+        <div class="agent-card agent-card-green">
+          <div class="agent-card-accent"></div>
+          <div class="agent-card-body">
+            <div class="agent-num">③</div>
+            <div class="agent-card-content">
+              <div class="agent-card-name" data-i18n-html="help.ai_agent3_name">Data Block Agent</div>
+              <div class="agent-role-tag" data-i18n-html="help.ai_agent3_role">Data Visualization · Custom Blocks</div>
+              <div class="agent-chips">
+                <span class="agent-chip">custom_blocks.db</span>
+                <span class="agent-chip">window.tweetpilot.query()</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_inline_charts">Inlined charts</span>
+              </div>
+              <div class="agent-card-desc" data-i18n-html="help.ai_agent3_desc">A specialized variant of the TweetPilot Agent, activated inside the Data Block builder. Inherits all Twitter access capabilities and adds data block rules: create tables in <code>custom_blocks.db</code> (mandatory purpose comment in every <code>CREATE TABLE</code>), generate data write scripts, produce self-contained display HTML in the <code>cards/</code> folder. All chart libraries are inlined — no external CDN.</div>
+            </div>
+          </div>
+          <div class="agent-usecase">
+            <span class="agent-usecase-label" data-i18n-html="help.ai_usecase_label">Use case</span>
+            <span data-i18n-html="help.ai_agent3_usecase">Describe what you want to visualize — the agent creates the DB table, writes the data script, and generates the display HTML end-to-end.</span>
+          </div>
+        </div>
+
+        <!-- Agent 4: Feishu -->
+        <div class="agent-card" style="border-color:rgba(245,158,11,0.25);background:var(--color-bg-3);">
+          <div class="agent-card-accent" style="background:linear-gradient(90deg,#D97706,#FCD34D);"></div>
+          <div class="agent-card-body">
+            <div class="agent-num" style="background:rgba(217,119,6,0.15);color:#FCD34D;">④</div>
+            <div class="agent-card-content">
+              <div class="agent-card-name" data-i18n-html="help.ai_agent4_name">Feishu AI Assistant</div>
+              <div class="agent-role-tag" style="background:rgba(217,119,6,0.12);color:#FCD34D;" data-i18n-html="help.ai_agent4_role">Remote Control · Feishu Private Message</div>
+              <div class="agent-chips">
+                <span class="agent-chip" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;">ClawBot</span>
+                <span class="agent-chip" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;">xdk</span>
+                <span class="agent-chip agent-chip-plain" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;" data-i18n-html="help.ai_chip_mobile_access">Mobile access</span>
+                <span class="agent-chip agent-chip-plain" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;" data-i18n-html="help.ai_chip_file_boundary">Workspace boundary</span>
+              </div>
+              <div class="agent-card-desc" data-i18n-html="help.ai_agent4_desc">The Feishu AI Assistant lets you interact with TweetPilot remotely through <strong>Feishu private messages</strong> — from your phone or any device. It carries the same Twitter access capabilities as the TweetPilot Agent (ClawBot + xdk) but operates under strict workspace boundaries: file access is limited to the workspace directory, it will not initiate network calls on its own, and it only executes operations you explicitly authorize. When you send a file or image, it waits for your next instruction before acting.</div>
+            </div>
+          </div>
+          <div class="agent-usecase" style="border-top:1px solid rgba(255,255,255,0.06);">
+            <span class="agent-usecase-label" style="background:rgba(217,119,6,0.12);color:#FCD34D;" data-i18n-html="help.ai_usecase_label">Use case</span>
+            <span data-i18n-html="help.ai_agent4_usecase">Step away from your Mac — send commands via Feishu on your phone: "check follower growth today", "draft a reply to the top mention", "run the weekly report script".</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROVIDER CONFIG -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.ai_providers_title">Supported Provider Types</h3>
+      <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:20px;" data-i18n-html="help.ai_provider_intro">All four agents use the same active AI provider. Configure multiple providers and switch the active one at any time — the switch takes effect immediately across all agents.</p>
+      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th data-i18n-html="help.ai_col_type">Type</th>
+            <th data-i18n-html="help.ai_col_examples">Built-in Examples</th>
+            <th data-i18n-html="help.ai_col_key">API Key</th>
+            <th data-i18n-html="help.ai_col_baseurl">Base URL</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Anthropic</strong></td>
+              <td>claude-sonnet-4-5, claude-opus-4-5…</td>
+              <td class="check" data-i18n-html="help.ai_required">Required</td>
+              <td><code>https://api.anthropic.com</code></td>
+            </tr>
+            <tr>
+              <td><strong>OpenAI</strong></td>
+              <td>gpt-4o, gpt-4-turbo…</td>
+              <td class="check" data-i18n-html="help.ai_required">Required</td>
+              <td><code>https://api.openai.com</code></td>
+            </tr>
+            <tr>
+              <td><strong>OpenAI Compatible</strong></td>
+              <td>DeepSeek, Groq, <span data-i18n-html="help.ai_compat_etc">and others</span></td>
+              <td class="check" data-i18n-html="help.ai_required">Required</td>
+              <td data-i18n-html="help.ai_compat_url">Provider's endpoint</td>
+            </tr>
+            <tr>
+              <td><strong>Ollama</strong></td>
+              <td>llama3, qwen2.5, mistral…</td>
+              <td class="cross" data-i18n-html="help.ai_not_needed">Not needed</td>
+              <td><code>http://localhost:11434</code></td>
+            </tr>
+            <tr>
+              <td><strong>Custom</strong></td>
+              <td data-i18n-html="help.ai_custom_any">Any OpenAI-compatible endpoint</td>
+              <td data-i18n-html="help.ai_optional">Optional</td>
+              <td data-i18n-html="help.ai_custom_url">Your custom URL</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SETUP STEPS -->
       <h3 class="content-h3" data-i18n-html="help.ai_setup_title">Setup Steps</h3>
       <div class="steps-block">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.ai_s1_title">Open AI Provider Settings</div>
-            <div class="step-desc" data-i18n-html="help.ai_s1_desc">In TweetPilot, click <strong>Settings</strong> in the top menu bar, then select <strong>AI Providers</strong>.</div>
+            <div class="step-desc" data-i18n-html="help.ai_s1_desc">In TweetPilot, click the <strong>Settings</strong> icon in the top bar, then select <strong>AI Providers</strong>.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.ai_s2_title">Choose a Provider</div>
-            <div class="step-desc" data-i18n-html="help.ai_s2_desc">Select from the list: OpenAI, Anthropic, DeepSeek, Ollama, or Custom (any OpenAI-compatible endpoint). For Ollama, make sure the local server is running first.</div>
+            <div class="step-heading" data-i18n-html="help.ai_s2_title">Add a Provider</div>
+            <div class="step-desc" data-i18n-html="help.ai_s2_desc">Click <strong>Add Provider</strong>. In the form, select the <strong>Type</strong> (Anthropic / OpenAI / OpenAI Compatible / Ollama / Custom), fill in the <strong>Model</strong> name (free text — type it exactly, e.g. <code>claude-sonnet-4-5</code>), and optionally set a <strong>Base URL</strong>. Built-in provider types are locked and cannot be changed after creation.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.ai_s3_title">Enter Your API Key</div>
-            <div class="step-desc" data-i18n-html="help.ai_s3_desc">Paste your API key into the field. Keys are stored encrypted in your macOS Keychain — never sent to TweetPilot servers.</div>
+            <div class="step-desc" data-i18n-html="help.ai_s3_desc">Paste your API key. Ollama does not require one. For all other types, the key is required. Keys are stored encrypted on your Mac — they are never sent to TweetPilot servers.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.ai_s4_title">Select Model & Test</div>
-            <div class="step-desc" data-i18n-html="help.ai_s4_desc">Pick a model from the dropdown, then click "Test Connection". A green checkmark confirms everything is working.</div>
+            <div class="step-heading" data-i18n-html="help.ai_s4_title">Set as Active</div>
+            <div class="step-desc" data-i18n-html="help.ai_s4_desc">You can add multiple providers. Click the <strong>★ Set Active</strong> button on the provider you want to use. All AI tasks and chat sessions will use the active provider until you switch it.</div>
           </div>
         </div>
       </div>
 
-      <div class="tip-box">
-        <div class="tip-icon">💡</div>
-        <div class="tip-text" data-i18n-html="help.ai_tip">For best results, use <strong>Claude Sonnet</strong> or <strong>GPT-4o</strong> — they have the largest context windows and best tool-calling accuracy for Twitter automation tasks.</div>
-      </div>
-
+      <!-- OLLAMA -->
       <div class="content-divider"></div>
       <h3 class="content-h3" data-i18n-html="help.ai_ollama_title">Using Ollama (Local Models)</h3>
       <div class="tip-box">
         <div class="tip-icon">ℹ️</div>
-        <div class="tip-text" data-i18n-html="help.ai_ollama_desc">Ollama runs AI models entirely on your Mac. Install from <a href="https://ollama.ai" target="_blank">ollama.ai</a>, pull a model with <code>ollama pull llama3</code>, then select "Ollama" in TweetPilot settings. The default endpoint is <code>http://localhost:11434</code>.</div>
+        <div class="tip-text" data-i18n-html="help.ai_ollama_desc">Ollama runs models entirely on your Mac — no internet required, no API cost, completely private. Install from <a href="https://ollama.ai" target="_blank" rel="noopener">ollama.ai</a>, pull a model with <code>ollama pull llama3</code> (or any other model), then add Ollama as a provider in TweetPilot. The default base URL is <code>http://localhost:11434</code> and no API key is needed.</div>
+      </div>
+
+      <!-- OPENAI-COMPATIBLE -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.ai_compat_title">OpenAI-Compatible Providers (DeepSeek, Groq, etc.)</h3>
+      <div class="tip-box">
+        <div class="tip-icon">ℹ️</div>
+        <div class="tip-text" data-i18n-html="help.ai_compat_desc">DeepSeek and Groq are built-in as <strong>OpenAI Compatible</strong> type. For any other provider that exposes an OpenAI-compatible API, use the <strong>Custom</strong> type — set the Base URL to their endpoint and enter your API key. The model field is always free text, so enter the exact model identifier the provider requires.</div>
       </div>
     </section>
 
@@ -468,53 +709,120 @@
     <section class="help-section" id="section-tweetclaw">
       <span class="section-badge" data-i18n-html="help.tc_badge">Browser Extension</span>
       <h1 class="section-title" data-i18n-html="help.tc_title">TweetClaw Extension</h1>
-      <p class="section-intro" data-i18n-html="help.tc_intro">TweetClaw is a Chrome extension that acts as a bridge between TweetPilot and your Twitter/X browser session. No API keys needed — it uses your logged-in browser session directly.</p>
+      <p class="section-intro" data-i18n-html="help.tc_intro">TweetClaw is a Chrome extension developed alongside TweetPilot. It acts as a zero-cost, high-fidelity bridge to Twitter/X — operating entirely through your existing browser session, with no API keys, no rate limits, and no extra fees.</p>
 
-      <div class="tip-box success">
-        <div class="tip-icon">✓</div>
-        <div class="tip-text" data-i18n-html="help.tc_benefit">Using TweetClaw means <strong>no API rate limits</strong>, no developer account required, and access to all Twitter features that the official API doesn't expose.</div>
+      <!-- HOW IT WORKS -->
+      <h3 class="content-h3" data-i18n-html="help.tc_how_title">How It Works</h3>
+      <p class="tip-text" style="margin-bottom:20px;" data-i18n-html="help.tc_how_desc">TweetClaw's architecture has three layers working together. LocalBridge (compiled into TweetPilot as a static library) runs a local WebSocket server and REST API. TweetClaw connects to that WebSocket from inside Chrome and injects a content script into the x.com page. When TweetPilot issues a task — search, post, like, follow — it goes through the REST API → WebSocket → TweetClaw content script → Twitter's own web API, using the full authenticated page session.</p>
+
+      <div class="arch-flow">
+        <div class="arch-node">
+          <div class="arch-node-name">TweetPilot</div>
+          <div class="arch-node-desc">Issues tasks via AI agent or script</div>
+          <span class="arch-node-tag">macOS App</span>
+        </div>
+        <div class="arch-arrow">
+          <div class="arch-arrow-line">→</div>
+          <div class="arch-arrow-label">REST API<br/>:20088</div>
+        </div>
+        <div class="arch-node arch-highlight">
+          <div class="arch-node-name">LocalBridge</div>
+          <div class="arch-node-desc">WebSocket server + REST gateway, compiled into TweetPilot</div>
+          <span class="arch-node-tag">Go static lib</span>
+        </div>
+        <div class="arch-arrow">
+          <div class="arch-arrow-line">→</div>
+          <div class="arch-arrow-label">WebSocket<br/>:20086</div>
+        </div>
+        <div class="arch-node arch-highlight">
+          <div class="arch-node-name">TweetClaw</div>
+          <div class="arch-node-desc">Receives tasks, executes via injected content script</div>
+          <span class="arch-node-tag">Chrome Extension</span>
+        </div>
+        <div class="arch-arrow">
+          <div class="arch-arrow-line">→</div>
+          <div class="arch-arrow-label">Web session<br/>x.com</div>
+        </div>
+        <div class="arch-node">
+          <div class="arch-node-name">Twitter/X</div>
+          <div class="arch-node-desc">Real web API calls using live browser session</div>
+          <span class="arch-node-tag">Web API</span>
+        </div>
       </div>
 
+      <!-- WHY TWEETCLAW -->
+      <h3 class="content-h3" data-i18n-html="help.tc_why_title">Why TweetClaw — Two Core Advantages</h3>
+
+      <div class="info-grid" style="margin-bottom:28px;">
+        <div class="info-card" style="border-color:rgba(5,150,105,0.3);background:rgba(5,150,105,0.05);">
+          <div class="info-card-label" data-i18n-html="help.tc_adv1_label">Zero API Cost</div>
+          <div class="info-card-value" data-i18n-html="help.tc_adv1_value">The X API charges for both read and write operations — even basic search and timeline access require a paid developer plan ($100/month+). TweetClaw operates through your browser session, so <strong>every operation is completely free</strong>, with no usage caps or billing surprises.</div>
+        </div>
+        <div class="info-card" style="border-color:rgba(8,145,178,0.3);background:rgba(8,145,178,0.05);">
+          <div class="info-card-label" data-i18n-html="help.tc_adv2_label">Dramatically Lower Token Usage</div>
+          <div class="info-card-value" data-i18n-html="help.tc_adv2_value">Tools like OpenAI's browser operator work by taking screenshots and asking the AI to interpret the page visually — consuming enormous tokens per action and often misreading content. TweetClaw returns <strong>structured JSON data directly</strong> from Twitter's internal API, so the AI receives clean, precise data with near-zero token overhead.</div>
+        </div>
+      </div>
+
+      <div class="compare-table-wrap" style="margin-bottom:36px;overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th data-i18n-html="help.tc_cmp_feature">Feature</th>
+            <th>TweetClaw</th>
+            <th data-i18n-html="help.tc_cmp_xapi">X API (Direct)</th>
+            <th data-i18n-html="help.tc_cmp_browser">AI Browser Operator</th>
+          </tr></thead>
+          <tbody>
+            <tr><td data-i18n-html="help.tc_cmp_cost">Cost</td><td class="check" data-i18n-html="help.tc_cmp_free">Free</td><td class="cross">$100+/month</td><td class="check" data-i18n-html="help.tc_cmp_free">Free</td></tr>
+            <tr><td data-i18n-html="help.tc_cmp_tokens">AI Token Usage</td><td class="check" data-i18n-html="help.tc_cmp_low">Low (structured JSON)</td><td class="check" data-i18n-html="help.tc_cmp_low">Low (structured JSON)</td><td class="cross" data-i18n-html="help.tc_cmp_high">Very High (screenshot parsing)</td></tr>
+            <tr><td data-i18n-html="help.tc_cmp_accuracy">Data Accuracy</td><td class="check" data-i18n-html="help.tc_cmp_exact">Exact</td><td class="check" data-i18n-html="help.tc_cmp_exact">Exact</td><td class="cross" data-i18n-html="help.tc_cmp_unreliable">Unreliable (OCR errors)</td></tr>
+            <tr><td data-i18n-html="help.tc_cmp_rate">Rate Limits</td><td class="check" data-i18n-html="help.tc_cmp_none">None</td><td class="cross" data-i18n-html="help.tc_cmp_strict">Strict</td><td class="check" data-i18n-html="help.tc_cmp_none">None</td></tr>
+            <tr><td data-i18n-html="help.tc_cmp_setup">Setup Required</td><td class="check" data-i18n-html="help.tc_cmp_ext_only">Extension install only</td><td class="cross" data-i18n-html="help.tc_cmp_dev_portal">Developer Portal + OAuth</td><td class="cross" data-i18n-html="help.tc_cmp_complex">Complex configuration</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SETUP -->
+      <h3 class="content-h3" data-i18n-html="help.tc_setup_title">Setup (if you haven't already)</h3>
+      <p class="tip-text" style="margin-bottom:16px;" data-i18n-html="help.tc_setup_refer">Full installation walkthrough is covered in <a href="javascript:void(0)" onclick="showSection('quick-start')">Quick Start → Step 2</a>. In brief:</p>
       <div class="steps-block">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-body">
             <div class="step-heading" data-i18n-html="help.tc_s1_title">Install from Chrome Web Store</div>
-            <div class="step-desc" data-i18n-html="help.tc_s1_desc">Visit the <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank">TweetClaw Chrome Web Store page</a> and click "Add to Chrome". Confirm the permissions prompt.</div>
+            <div class="step-desc" data-i18n-html="help.tc_s1_desc"><a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">Install TweetClaw</a>, open x.com while logged in, then pin it to your toolbar.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.tc_s2_title">Open Twitter in Chrome</div>
-            <div class="step-desc" data-i18n-html="help.tc_s2_desc">Navigate to x.com or twitter.com and make sure you are logged in. TweetClaw automatically starts a local WebSocket server on port 20086 when it detects a Twitter page.</div>
+            <div class="step-heading" data-i18n-html="help.tc_s2_title">Align the Port</div>
+            <div class="step-desc" data-i18n-html="help.tc_s2_desc">Click the TweetClaw icon — confirm the port shown (default <code>20086</code>). In TweetPilot, open <strong>Settings → LocalBridge</strong> and ensure the <strong>Browser Extension port</strong> matches. Both must be identical.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.tc_s3_title">Verify Connection in TweetPilot</div>
-            <div class="step-desc" data-i18n-html="help.tc_s3_desc">In TweetPilot, go to <strong>Settings → TweetClaw</strong>. You should see a green "Connected" status. If not, try clicking "Reconnect".</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.tc_s4_title">Add Account via TweetClaw</div>
-            <div class="step-desc" data-i18n-html="help.tc_s4_desc">Go to Accounts in TweetPilot, click Add Account, and select "TweetClaw (Browser Mode)". TweetPilot will detect which Twitter account is logged in and import it automatically.</div>
+            <div class="step-heading" data-i18n-html="help.tc_s3_title">Add Account</div>
+            <div class="step-desc" data-i18n-html="help.tc_s3_desc">In TweetPilot go to <strong>Accounts → Add Account → TweetClaw (Browser Mode)</strong>. Your logged-in Twitter username will be detected automatically.</div>
           </div>
         </div>
       </div>
 
+      <!-- TROUBLESHOOTING -->
       <div class="content-divider"></div>
       <h3 class="content-h3" data-i18n-html="help.tc_trouble_title">Troubleshooting</h3>
       <div class="tip-box warning">
         <div class="tip-icon">⚠️</div>
-        <div class="tip-text" data-i18n-html="help.tc_trouble_port"><strong>Port conflict:</strong> If port 20086 is in use by another app, change the port in TweetPilot settings under Settings → TweetClaw → Port, then restart Chrome.</div>
+        <div class="tip-text" data-i18n-html="help.tc_trouble_port"><strong>Port conflict:</strong> If port 20086 is in use by another process, change it in TweetPilot <strong>Settings → LocalBridge → Browser Extension port</strong>. Then open the TweetClaw popup and update the port there too. Both must match, then refresh the x.com tab.</div>
       </div>
       <div class="tip-box warning">
         <div class="tip-icon">⚠️</div>
-        <div class="tip-text" data-i18n-html="help.tc_trouble_reload"><strong>Not connecting:</strong> Try refreshing the Twitter tab in Chrome and clicking Reconnect in TweetPilot. Make sure Chrome is not blocking localhost connections.</div>
+        <div class="tip-text" data-i18n-html="help.tc_trouble_reload"><strong>Status shows disconnected:</strong> Refresh the x.com tab in Chrome — TweetClaw re-establishes the WebSocket connection on page load. If it still fails, check that TweetClaw is enabled in Chrome's extension manager and that you're logged into Twitter.</div>
+      </div>
+      <div class="tip-box warning">
+        <div class="tip-icon">⚠️</div>
+        <div class="tip-text" data-i18n-html="help.tc_trouble_multi"><strong>Multiple Twitter accounts:</strong> TweetClaw connects the account currently active in Chrome. To switch, log into the desired account in your browser, then refresh x.com — TweetPilot will detect the new session automatically.</div>
       </div>
     </section>
 
@@ -522,42 +830,92 @@
     <section class="help-section" id="section-accounts">
       <span class="section-badge" data-i18n-html="help.acc_badge">Account Management</span>
       <h1 class="section-title" data-i18n-html="help.acc_title">Managing Accounts</h1>
-      <p class="section-intro" data-i18n-html="help.acc_intro">TweetPilot supports multiple Twitter/X accounts simultaneously. Each account runs in its own isolated workspace with dedicated credentials.</p>
+      <p class="section-intro" data-i18n-html="help.acc_intro">TweetPilot supports two fundamentally different account types. Each has its own connection method, API capabilities, and data access model. Understanding the difference helps you choose the right type for each workflow.</p>
 
-      <div class="steps-block">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.acc_s1_title">Open the Accounts Panel</div>
-            <div class="step-desc" data-i18n-html="help.acc_s1_desc">Click "Accounts" in the left sidebar of TweetPilot. You'll see all connected accounts and their status.</div>
-          </div>
+      <!-- TWO ACCOUNT TYPES -->
+      <h3 class="content-h3" data-i18n-html="help.acc_types_title">Two Account Types</h3>
+
+      <div class="info-grid" style="margin-bottom: 28px;">
+        <div class="info-card" style="border-color:rgba(8,145,178,0.3);background:rgba(8,145,178,0.05);">
+          <div class="info-card-label" data-i18n-html="help.acc_tc_label">TweetClaw Account</div>
+          <div class="info-card-value" data-i18n-html="help.acc_type_tc">Connected via the TweetClaw browser extension. Operates through your live browser session — <strong>requires Chrome to be open and logged in to x.com</strong>. Gives the AI access to Twitter's internal web APIs (timeline, search, post, like, follow, bookmark, and more) through LocalBridge.</div>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.acc_s2_title">Add a New Account</div>
-            <div class="step-desc" data-i18n-html="help.acc_s2_desc">Click "Add Account" and choose a connection method: TweetClaw (browser session) for no API keys, or X API (direct) if you have developer credentials.</div>
-          </div>
+        <div class="info-card" style="border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.05);">
+          <div class="info-card-label" data-i18n-html="help.acc_oauth_label">X OAuth Account</div>
+          <div class="info-card-value" data-i18n-html="help.acc_type_oauth">Connected via Twitter's official OAuth 2.0 flow. TweetPilot securely stores the access token — <strong>no browser required once authorized</strong>. The AI can call Twitter's official API v2 using this token, with access to posts, users, DMs, media, lists, and more.</div>
         </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.acc_s3_title">Switch Between Accounts</div>
-            <div class="step-desc" data-i18n-html="help.acc_s3_desc">Use the account dropdown at the top of any workspace to switch context. Scripts and tasks in each workspace run under their assigned account.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.acc_s4_title">Assign Accounts to Workspaces</div>
-            <div class="step-desc" data-i18n-html="help.acc_s4_desc">Open a workspace's settings and set a "Default Account". All scripts and scheduled tasks in that workspace will use this account unless overridden.</div>
-          </div>
-        </div>
+      </div>
+
+      <!-- CAPABILITY COMPARISON -->
+      <h3 class="content-h3" data-i18n-html="help.acc_cap_title">Capability Comparison</h3>
+      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th data-i18n-html="help.acc_cap_feature">Capability</th>
+            <th>TweetClaw</th>
+            <th>X OAuth</th>
+          </tr></thead>
+          <tbody>
+            <tr><td data-i18n-html="help.acc_cap_browser">Browser required</td><td class="cross" data-i18n-html="help.acc_cap_yes_browser">Yes (Chrome + x.com)</td><td class="check" data-i18n-html="help.acc_cap_no">No</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_timeline">Home timeline</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_search">Tweet search</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_post">Post / Delete tweet</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_engage">Like / Retweet / Follow / Bookmark</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_dm">Direct Messages</td><td class="cross" data-i18n-html="help.acc_cap_no">No</td><td class="check">✓</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_media">Media upload</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_rate">Rate limits</td><td class="check" data-i18n-html="help.acc_cap_none">None</td><td class="cross" data-i18n-html="help.acc_cap_api_limits">Twitter API tier limits apply</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_cost">Cost</td><td class="check" data-i18n-html="help.acc_cap_free">Free</td><td class="cross" data-i18n-html="help.acc_cap_paid">Paid developer plan required</td></tr>
+            <tr><td data-i18n-html="help.acc_cap_ai_ask">Ask AI about capabilities</td><td class="check" data-i18n-html="help.acc_cap_ai_yes">Ask AI — it knows all available APIs</td><td class="check" data-i18n-html="help.acc_cap_ai_yes">Ask AI — it knows all available APIs</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="tip-box">
         <div class="tip-icon">💡</div>
-        <div class="tip-text" data-i18n-html="help.acc_tip">Use separate workspaces for different accounts to keep automation rules, Data Blocks, and schedules organized and isolated per account.</div>
+        <div class="tip-text" data-i18n-html="help.acc_cap_tip">Not sure what's possible with your account type? Just ask the AI in plain language — for example: <em>"What can I do with a TweetClaw account?"</em> or <em>"Can I send DMs using my OAuth account?"</em>. The AI has full knowledge of both account types' API capabilities.</div>
+      </div>
+
+      <!-- MANAGED vs UNMANAGED -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.acc_mgmt_title">Managed vs. Unmanaged</h3>
+      <p class="tip-text" style="margin-bottom:20px;" data-i18n-html="help.acc_mgmt_intro">After connecting an account, you can choose whether to <strong>manage</strong> it. This controls whether TweetPilot actively collects data for that account.</p>
+
+      <div class="info-grid" style="margin-bottom:24px;">
+        <div class="info-card" style="border-color:rgba(5,150,105,0.3);background:rgba(5,150,105,0.05);">
+          <div class="info-card-label" data-i18n-html="help.acc_managed_label">Managed</div>
+          <div class="info-card-value" data-i18n-html="help.acc_managed_value">Data Blocks will <strong>periodically collect this account's profile data</strong> — followers, following count, tweet count, and more. Snapshots accumulate locally over time, letting you track trends and changes. You can also set a <strong>personality prompt</strong> for the AI to adopt when writing on behalf of this account.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label" data-i18n-html="help.acc_unmanaged_label">Unmanaged</div>
+          <div class="info-card-value" data-i18n-html="help.acc_unmanaged_value">Only the account's <strong>online/offline status is synced</strong>. No profile data is collected, no snapshots are stored. Use this for accounts you want connected but don't need to monitor — it keeps things lightweight.</div>
+        </div>
+      </div>
+
+      <div class="substep-alt" data-i18n-html="help.acc_mgmt_switch">You can toggle an account between managed and unmanaged at any time from the account detail page. All collected data stays on your Mac — nothing is uploaded to TweetPilot servers. Historical snapshots are retained even if you temporarily unmanage an account.</div>
+
+      <!-- STATUS INDICATORS -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.acc_status_title">Account Status Indicators</h3>
+      <div class="compare-table-wrap" style="margin-bottom:24px;overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th data-i18n-html="help.acc_status_col_status">Status</th>
+            <th data-i18n-html="help.acc_status_col_type">Account Type</th>
+            <th data-i18n-html="help.acc_status_col_meaning">Meaning</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><span style="color:var(--color-success);font-weight:600;">online</span></td><td>TweetClaw</td><td data-i18n-html="help.acc_status_tc_online">Browser is open, TweetClaw is connected, and x.com is active. Ready to execute tasks.</td></tr>
+            <tr><td><span style="color:var(--color-text-dim);font-weight:600;">instance</span></td><td>TweetClaw</td><td data-i18n-html="help.acc_status_tc_instance">Connected as a background instance. May have limited capabilities depending on page state.</td></tr>
+            <tr><td><span style="color:var(--color-success);font-weight:600;">online</span></td><td>X OAuth</td><td data-i18n-html="help.acc_status_oauth_online">Token is valid and the account is accessible. Ready for API calls without needing a browser.</td></tr>
+            <tr><td><span style="color:var(--color-text-dim);font-weight:600;">offline</span></td><td>X OAuth</td><td data-i18n-html="help.acc_status_oauth_offline">Token may have expired or been revoked. API calls will fail until re-authorized.</td></tr>
+            <tr><td><span style="color:#f59e0b;font-weight:600;">reauth required</span></td><td>X OAuth</td><td data-i18n-html="help.acc_status_oauth_reauth">Token has expired. Go to the account detail page and click <strong>Re-authorize</strong> to log in again.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-icon">💡</div>
+        <div class="tip-text" data-i18n-html="help.acc_tip">You can add multiple accounts of either type and run different workspaces under different accounts simultaneously. Managed accounts will accumulate historical trend data locally over time — the longer you run TweetPilot, the richer your local dataset becomes.</div>
       </div>
     </section>
 
@@ -565,113 +923,295 @@
     <section class="help-section" id="section-scheduler">
       <span class="section-badge" data-i18n-html="help.sched_badge">Automation</span>
       <h1 class="section-title" data-i18n-html="help.sched_title">Task Scheduler</h1>
-      <p class="section-intro" data-i18n-html="help.sched_intro">Run Python scripts automatically on a schedule. TweetPilot supports both interval-based timing and full cron expressions.</p>
+      <p class="section-intro" data-i18n-html="help.sched_intro">TweetPilot's task scheduler combines two dimensions — <strong>task type</strong> (Python or AI) × <strong>execution mode</strong> (instant or scheduled) — giving you four ways to automate Twitter workflows, from one-click scripts to fully unattended AI-driven operations running around the clock.</p>
 
+      <!-- TWO DIMENSIONS -->
+      <h3 class="content-h3" data-i18n-html="help.sched_dim_title">Two Dimensions, Four Combinations</h3>
+      <div class="info-grid" style="margin-bottom:20px;">
+        <div class="info-card" style="border-color:rgba(109,91,246,0.3);background:rgba(109,91,246,0.05);">
+          <div class="info-card-label" data-i18n-html="help.sched_type_python_label">Python Task</div>
+          <div class="info-card-value" data-i18n-html="help.sched_type_python_desc">Executes a fixed Python script. The logic is fully in your hands — read data, call APIs, post tweets, send notifications. Predictable, repeatable, zero ambiguity.</div>
+        </div>
+        <div class="info-card" style="border-color:rgba(8,145,178,0.3);background:rgba(8,145,178,0.05);">
+          <div class="info-card-label" data-i18n-html="help.sched_type_ai_label">AI Task</div>
+          <div class="info-card-value" data-i18n-html="help.sched_type_ai_desc">You write a prompt describing <em>what to do</em>; the AI figures out <em>how</em>. It can browse timelines, draft replies, fetch data, and take action — all driven by natural language. Full session logs are saved for every run.</div>
+        </div>
+      </div>
+      <div class="info-grid" style="margin-bottom:28px;">
+        <div class="info-card">
+          <div class="info-card-label" data-i18n-html="help.sched_mode_instant_label">Instant Execution</div>
+          <div class="info-card-value" data-i18n-html="help.sched_mode_instant_desc">Run on demand with one click. Perfect for non-programmers who want to execute a Python script or fire an AI task without touching the command line. <strong>Available on all plans.</strong></div>
+        </div>
+        <div class="info-card" style="border-color:rgba(215,186,125,0.3);background:rgba(215,186,125,0.04);">
+          <div class="info-card-label" data-i18n-html="help.sched_mode_sched_label">Scheduled Execution</div>
+          <div class="info-card-value" data-i18n-html="help.sched_mode_sched_desc">Runs automatically at a fixed interval or cron time — no one needs to be at the keyboard. The cornerstone of unattended automation. <strong>Requires Pro or higher.</strong></div>
+        </div>
+      </div>
+
+      <!-- COMBINATION EXAMPLES -->
+      <h3 class="content-h3" data-i18n-html="help.sched_combo_title">What You Can Build — Real Examples</h3>
+      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th data-i18n-html="help.sched_combo_col_combo">Combination</th>
+            <th data-i18n-html="help.sched_combo_col_usecase">Example Use Case</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><strong data-i18n-html="help.sched_combo_ip">Instant + Python</strong></td>
+              <td data-i18n-html="help.sched_combo_ip_ex">Run a one-off data export, bulk-like a list of tweets, or trigger a notification — without opening a terminal.</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n-html="help.sched_combo_ia">Instant + AI</strong></td>
+              <td data-i18n-html="help.sched_combo_ia_ex">Paste a tweet URL and ask the AI to "write three professional reply options in English." Get results in seconds, no code needed.</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n-html="help.sched_combo_sp">Scheduled + Python</strong></td>
+              <td data-i18n-html="help.sched_combo_sp_ex">Every hour, fetch your latest mentions, filter for support questions, and post a structured summary to Feishu — fully unattended.</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n-html="help.sched_combo_sa">Scheduled + AI</strong></td>
+              <td data-i18n-html="help.sched_combo_sa_ex">Every 30 minutes, let the AI scan new replies under your product tweet and respond as a warm, friendly customer support agent. Or have the AI answer technical questions in a precise, engineering-team tone on a fixed schedule.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PRO BANNER -->
       <div class="upgrade-banner">
         <div class="upgrade-banner-text">
-          <h3 data-i18n-html="help.sched_pro_title">Pro Feature</h3>
-          <p data-i18n-html="help.sched_pro_desc">Scheduled tasks require a Professional or Enterprise license. The free plan supports manual script execution only.</p>
+          <h3 data-i18n-html="help.sched_pro_title">Scheduled Tasks Require Pro</h3>
+          <p data-i18n-html="help.sched_pro_desc">Instant tasks (manual execution) are free on all plans. Scheduled tasks — both Python and AI — require a Professional or higher license.</p>
         </div>
         <a href="/pricing.html" class="upgrade-banner-btn" data-i18n-html="help.sched_pro_btn">View Plans →</a>
       </div>
 
+      <!-- CREATE TASK -->
+      <h3 class="content-h3" data-i18n-html="help.sched_create_title">Creating a Task</h3>
       <div class="steps-block">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.sched_s1_title">Write or Select a Script</div>
-            <div class="step-desc" data-i18n-html="help.sched_s1_desc">Create a Python script in TweetPilot's script editor. The script should be self-contained — it runs without any user interaction.</div>
+            <div class="step-heading" data-i18n-html="help.sched_s1_title">Open the Task Workbench</div>
+            <div class="step-desc" data-i18n-html="help.sched_s1_desc">In TweetPilot, click <strong>Tasks</strong> in the left sidebar, then click <strong>New Task</strong>. The Task Workbench opens — a single form for configuring all task dimensions.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.sched_s2_title">Click "Schedule This Script"</div>
-            <div class="step-desc" data-i18n-html="help.sched_s2_desc">In the script editor, click the clock icon or "Schedule" button in the toolbar. This opens the scheduling dialog.</div>
+            <div class="step-heading" data-i18n-html="help.sched_s2_title">Choose Task Type</div>
+            <div class="step-desc" data-i18n-html="help.sched_s2_desc">Select <strong>Python Script</strong> to run a <code>.py</code> file, or <strong>AI Task</strong> to describe the job in natural language. For Python, pick the script file. For AI, type your prompt — be specific about tone, target, and action.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.sched_s3_title">Set Timing</div>
-            <div class="step-desc" data-i18n-html="help.sched_s3_desc">Choose <strong>Interval</strong> (e.g., every 15 minutes) or <strong>Cron</strong> (e.g., <code>0 9 * * *</code> for 9am daily). Cron uses standard 5-field syntax.</div>
+            <div class="step-heading" data-i18n-html="help.sched_s3_title">Choose Execution Mode</div>
+            <div class="step-desc" data-i18n-html="help.sched_s3_desc">Select <strong>Manual</strong> for on-demand execution, or <strong>Scheduled</strong> to run automatically. If scheduled, pick <strong>Simple Interval</strong> (every N minutes / hours / days) or <strong>Fixed Time (Cron)</strong> for precise scheduling like "every weekday at 9 AM".</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.sched_s4_title">Enable & Monitor</div>
-            <div class="step-desc" data-i18n-html="help.sched_s4_desc">Toggle the task on. Check the "Scheduled Tasks" panel to see upcoming runs, execution history, and output logs for each run.</div>
+            <div class="step-heading" data-i18n-html="help.sched_s4_title">Set Permission Mode (AI Tasks Only)</div>
+            <div class="step-desc" data-i18n-html="help.sched_s4_desc"><strong>Relaxed (recommended)</strong> — allows most operations while blocking a small set of highly destructive commands (e.g. <code>rm -rf /</code>, <code>sudo</code>). <strong>Full Access</strong> — no restrictions at all; use only if you fully trust the prompt.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.sched_s5_title">Save and Run</div>
+            <div class="step-desc" data-i18n-html="help.sched_s5_desc">Click <strong>Save</strong>. For manual tasks, click <strong>Execute Now</strong>. For scheduled tasks, the scheduler activates immediately and shows the next execution time. You can also click <strong>Test Run</strong> on a scheduled task to trigger it immediately without waiting.</div>
           </div>
         </div>
       </div>
 
+      <!-- SCHEDULE TYPES -->
       <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.sched_timing_title">Schedule Types</h3>
+      <div class="info-grid" style="margin-bottom:20px;">
+        <div class="info-card">
+          <div class="info-card-label" data-i18n-html="help.sched_interval_label">Simple Interval</div>
+          <div class="info-card-value" data-i18n-html="help.sched_interval_desc">Runs every N <strong>minutes</strong>, <strong>hours</strong>, or <strong>days</strong> starting from the moment you save the task. Easiest to set up — no syntax required.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label" data-i18n-html="help.sched_cron_label">Fixed Time (Cron)</div>
+          <div class="info-card-value" data-i18n-html="help.sched_cron_desc">Runs at a precise time of day, week, or month. Uses a 6-field cron expression: <code>second  minute  hour  day  month  weekday</code>. The UI has a visual helper that translates your settings into a human-readable summary (e.g. "9:00 每周一").</div>
+        </div>
+      </div>
+
       <h3 class="content-h3" data-i18n-html="help.sched_cron_title">Cron Expression Reference</h3>
       <div class="code-block">
-        <div class="code-label">Examples</div>
-        <code>0 9 * * *       # Every day at 9:00 AM
-*/15 * * * *    # Every 15 minutes
-0 9 * * 1-5    # Weekdays at 9:00 AM
-0 */2 * * *     # Every 2 hours
-30 8,20 * * *   # 8:30 AM and 8:30 PM daily</code>
+        <div class="code-label" data-i18n-html="help.sched_cron_format_label">Format: second  minute  hour  day  month  weekday</div>
+        <code>0 0 9 * * *        # Every day at 09:00
+0 0 */2 * * *      # Every 2 hours
+0 30 8 * * 1-5     # Weekdays at 08:30
+0 0 9,21 * * *     # 09:00 and 21:00 daily
+0 */30 * * * *     # Every 30 minutes
+0 0 9 1 * *        # 1st of every month at 09:00</code>
+      </div>
+      <div class="substep-alt" style="margin-top:8px;" data-i18n-html="help.sched_cron_note">Weekday: 0 = Sunday, 1 = Monday … 6 = Saturday. The UI handles UTC↔local time conversion automatically — always enter times in your local timezone.</div>
+
+      <!-- TASK MANAGEMENT -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.sched_mgmt_title">Managing Tasks</h3>
+      <div class="compare-table-wrap" style="margin-bottom:24px;overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th data-i18n-html="help.sched_mgmt_col_action">Action</th>
+            <th data-i18n-html="help.sched_mgmt_col_desc">Description</th>
+          </tr></thead>
+          <tbody>
+            <tr><td data-i18n-html="help.sched_mgmt_test">Test Run</td><td data-i18n-html="help.sched_mgmt_test_desc">Triggers a scheduled task immediately without changing its schedule. Useful for verifying a new prompt or script before the next automatic run.</td></tr>
+            <tr><td data-i18n-html="help.sched_mgmt_pause">Pause Schedule</td><td data-i18n-html="help.sched_mgmt_pause_desc">Suspends automatic execution without deleting the task. The task stays in the list with a "paused" badge and can be resumed at any time.</td></tr>
+            <tr><td data-i18n-html="help.sched_mgmt_resume">Resume Schedule</td><td data-i18n-html="help.sched_mgmt_resume_desc">Re-activates a paused scheduled task. The next run will be calculated from the current time according to the original schedule.</td></tr>
+            <tr><td data-i18n-html="help.sched_mgmt_history">Execution History</td><td data-i18n-html="help.sched_mgmt_history_desc">Each task keeps a log of past runs with status (success / failure), duration, exit code, stdout/stderr output. For AI tasks, the full session conversation is also stored and viewable.</td></tr>
+            <tr><td data-i18n-html="help.sched_mgmt_edit">Edit Task</td><td data-i18n-html="help.sched_mgmt_edit_desc">Change the task name, prompt, script, or schedule at any time. Not available while a task is currently running.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-icon">💡</div>
+        <div class="tip-text" data-i18n-html="help.sched_tip">Drafts are auto-saved as you type in the task workbench — if you accidentally close the window, your work will be restored when you reopen the New Task form.</div>
       </div>
     </section>
 
     <!-- ─── REPORTS ─── -->
     <section class="help-section" id="section-reports">
       <span class="section-badge" data-i18n-html="help.rep_badge">Analytics</span>
-      <h1 class="section-title" data-i18n-html="help.rep_title">Custom Reports</h1>
-      <p class="section-intro" data-i18n-html="help.rep_intro">Build automated analytics reports with Python and send them to Feishu, email, or any webhook. Reports run on a schedule and deliver insights directly to your team.</p>
+      <h1 class="section-title" data-i18n-html="help.rep_title">Data Blocks</h1>
+      <p class="section-intro" data-i18n-html="help.rep_intro">Data Blocks are visual panels that display account metrics and custom data right inside TweetPilot. There are two kinds: <strong>built-in blocks</strong> that automatically read your managed account data, and <strong>custom blocks</strong> that you build yourself — powered by any data source you choose.</p>
 
+      <!-- BUILT-IN BLOCKS -->
+      <h3 class="content-h3" data-i18n-html="help.rep_builtin_title">Built-in Data Blocks</h3>
+      <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:20px;" data-i18n-html="help.rep_builtin_intro">Built-in blocks are tied to your <strong>managed accounts</strong>. Use the account switcher at the top of each block to view data for different accounts. Only accounts marked as <strong>Managed</strong> appear here — the longer TweetPilot runs, the richer the historical data becomes.</p>
+
+      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+        <table class="compare-table">
+          <thead><tr>
+            <th data-i18n-html="help.rep_col_block">Block</th>
+            <th data-i18n-html="help.rep_col_what">What It Shows</th>
+            <th data-i18n-html="help.rep_col_range">Time Range</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><strong data-i18n-html="help.rep_block_metrics">Account Snapshot</strong></td>
+              <td data-i18n-html="help.rep_block_metrics_desc">The latest values for followers, following count, tweet count, liked count, listed count, and media count — a real-time snapshot of the account's current state.</td>
+              <td data-i18n-html="help.rep_latest">Latest</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n-html="help.rep_block_growth">Follower Growth Trend</strong></td>
+              <td data-i18n-html="help.rep_block_growth_desc">A time-series curve of follower count changes over the past N hours, letting you see whether the account is growing, plateauing, or declining.</td>
+              <td data-i18n-html="help.rep_range_select">24h / 7d / 30d</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n-html="help.rep_block_activity">Activity Metrics</strong></td>
+              <td data-i18n-html="help.rep_block_activity_desc">Trends in tweet count, liked count, and media count over time — useful for understanding posting frequency and content activity changes.</td>
+              <td data-i18n-html="help.rep_range_select">24h / 7d / 30d</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n-html="help.rep_block_overview">Account Overview</strong></td>
+              <td data-i18n-html="help.rep_block_overview_desc">A consolidated multi-metric dashboard showing current values alongside change deltas — all key dimensions at a glance.</td>
+              <td data-i18n-html="help.rep_range_select">24h / 7d / 30d</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="substep-alt" data-i18n-html="help.rep_builtin_note">Built-in blocks require at least one Managed account with collected snapshots. If you just added an account, data will appear after the first collection cycle. Go to <strong>Account Management → set account as Managed</strong> to start collecting.</div>
+
+      <!-- CUSTOM BLOCKS -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.rep_custom_title">Custom Data Blocks</h3>
+      <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:20px;" data-i18n-html="help.rep_custom_intro">Custom blocks let you visualize <em>any data you care about</em> — not just Twitter metrics. You define both the data and how it's displayed. Each custom block has a dedicated AI agent that guides you through the full build process.</p>
+
+      <!-- HOW IT WORKS -->
+      <h3 class="content-h3" data-i18n-html="help.rep_arch_title">How Custom Blocks Work</h3>
+      <div class="info-grid" style="margin-bottom:24px;">
+        <div class="info-card" style="border-color:rgba(109,91,246,0.3);background:rgba(109,91,246,0.05);">
+          <div class="info-card-label" data-i18n-html="help.rep_arch_db_label">① Local Database</div>
+          <div class="info-card-value" data-i18n-html="help.rep_arch_db_desc">All custom block data lives in a single SQLite file at <code>.tweetpilot/custom_blocks.db</code> in your workspace. TweetPilot only reads from this file — nothing is synced to the cloud.</div>
+        </div>
+        <div class="info-card" style="border-color:rgba(8,145,178,0.3);background:rgba(8,145,178,0.05);">
+          <div class="info-card-label" data-i18n-html="help.rep_arch_write_label">② Data Write-in</div>
+          <div class="info-card-value" data-i18n-html="help.rep_arch_write_desc">Any program can write data into <code>custom_blocks.db</code> — a Python script run as a TweetPilot scheduled task, an external tool, or any process that can write SQLite. The AI can generate the write script for you.</div>
+        </div>
+        <div class="info-card" style="border-color:rgba(5,150,105,0.3);background:rgba(5,150,105,0.05);">
+          <div class="info-card-label" data-i18n-html="help.rep_arch_html_label">③ Display HTML</div>
+          <div class="info-card-value" data-i18n-html="help.rep_arch_html_desc">Each custom block is a self-contained HTML file. It uses <code>window.tweetpilot.query(sql)</code> to run SELECT queries against the database and renders results as charts or tables. The AI generates this HTML for you — just describe what you want to see.</div>
+        </div>
+      </div>
+
+      <!-- CREATE STEPS -->
+      <h3 class="content-h3" data-i18n-html="help.rep_create_title">Creating a Custom Block</h3>
       <div class="steps-block">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.rep_s1_title">Write a Report Script</div>
-            <div class="step-desc" data-i18n-html="help.rep_s1_desc">Write a Python script that collects data (follower counts, engagement rates, tweet metrics) using the TweetPilot SDK, then formats it as text or markdown.</div>
+            <div class="step-heading" data-i18n-html="help.rep_s1_title">Click + and Start AI Collaboration</div>
+            <div class="step-desc" data-i18n-html="help.rep_s1_desc">In the Data Blocks sidebar, click the <strong>+</strong> button. Enter a name and a brief description of what you want to track. Click <strong>Next — Start AI Collaboration</strong> to open the dedicated Data Block AI agent.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.rep_s2_title">Configure Output Destination</div>
-            <div class="step-desc" data-i18n-html="help.rep_s2_desc">Use the SDK's built-in output functions to send to Feishu (via webhook URL), print to the task log, or write to a local file for archiving.</div>
+            <div class="step-heading" data-i18n-html="help.rep_s2_title">AI Creates the Table and Write Script</div>
+            <div class="step-desc" data-i18n-html="help.rep_s2_desc">The AI agent will create the table in <code>custom_blocks.db</code> and generate a Python script (or other program) that writes data into it. You can schedule this script as a TweetPilot task to keep data flowing automatically.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.rep_s3_title">Schedule It</div>
-            <div class="step-desc" data-i18n-html="help.rep_s3_desc">Set a cron schedule (e.g., daily at 9am) so the report runs automatically. No manual triggering needed.</div>
+            <div class="step-heading" data-i18n-html="help.rep_s3_title">AI Generates the Display HTML</div>
+            <div class="step-desc" data-i18n-html="help.rep_s3_desc">The AI generates a self-contained HTML file (saved to the <code>cards/</code> folder in your workspace) that queries the database and renders your data as charts or tables. All chart libraries are inlined — no external CDN dependencies.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.rep_s4_title">Install and View</div>
+            <div class="step-desc" data-i18n-html="help.rep_s4_desc">Click <strong>+</strong> again, choose <strong>Install existing HTML</strong>, and select the generated file. The block appears in your sidebar immediately. Use <strong>AI Edit</strong> at any time to update the layout, queries, or styling.</div>
           </div>
         </div>
       </div>
 
+      <!-- DATA SOURCE EXAMPLE -->
       <div class="content-divider"></div>
-      <h3 class="content-h3" data-i18n-html="help.rep_example_title">Example Report Script</h3>
+      <h3 class="content-h3" data-i18n-html="help.rep_example_title">Example: Write Data with a Scheduled Python Script</h3>
       <div class="code-block">
-        <div class="code-label">daily_report.py</div>
-        <code>from tweetpilot import twitter, feishu
+        <div class="code-label">write_stats.py  ·  runs as a scheduled task</div>
+        <code>import sqlite3, os
+from clawbot import ClawBotClient
 
-# Fetch stats for active account
-stats = twitter.get_account_stats()
+DB_PATH = os.path.join(os.environ["TWEETPILOT_WORKSPACE"], ".tweetpilot", "custom_blocks.db")
 
-report = f"""
-📊 Daily Twitter Report
-Followers: {stats['followers']} (+{stats['new_followers']})
-Tweets today: {stats['tweets_today']}
-Impressions: {stats['impressions']:,}
-Top tweet: {stats['top_tweet_url']}
-"""
+bot = ClawBotClient()
+info = bot.x.users.get_basic_info()
 
-# Send to Feishu group
-feishu.send_message(report)</code>
+conn = sqlite3.connect(DB_PATH)
+conn.execute("""
+    CREATE TABLE IF NOT EXISTS daily_stats (
+        -- 用途：每日账号粉丝/推文数快照，由定时任务写入
+        date TEXT PRIMARY KEY,
+        followers INTEGER,
+        tweets INTEGER
+    )
+""")
+conn.execute(
+    "INSERT OR REPLACE INTO daily_stats VALUES (date('now'), ?, ?)",
+    (info["followers_count"], info["statuses_count"])
+)
+conn.commit()
+conn.close()
+print("✅ Stats written to custom_blocks.db")</code>
       </div>
 
-      <div class="tip-box">
+      <div class="substep-alt" style="margin-top:8px;" data-i18n-html="help.rep_example_note">The display HTML for this table would call <code>window.tweetpilot.query("SELECT date, followers FROM daily_stats ORDER BY date DESC LIMIT 30")</code> and render a trend chart. The AI generates both the script and the HTML for you.</div>
+
+      <div class="tip-box" style="margin-top:20px;">
         <div class="tip-icon">💡</div>
-        <div class="tip-text" data-i18n-html="help.rep_tip">Reports run as scheduled tasks — they require a Pro license. You can run them manually anytime from the script editor for testing.</div>
+        <div class="tip-text" data-i18n-html="help.rep_tip">Data doesn't have to come from Twitter. Any external program can write to <code>custom_blocks.db</code> — sales data, server metrics, WeChat analytics, anything. TweetPilot's custom blocks are a general-purpose local data visualization layer.</div>
       </div>
     </section>
 
@@ -679,92 +1219,216 @@ feishu.send_message(report)</code>
     <section class="help-section" id="section-x-api">
       <span class="section-badge" data-i18n-html="help.xapi_badge">API Integration</span>
       <h1 class="section-title" data-i18n-html="help.xapi_title">X API Configuration</h1>
-      <p class="section-intro" data-i18n-html="help.xapi_intro">Use the official Twitter/X API for enterprise-grade reliability. Required if you need v2 API endpoints or want to avoid browser-based automation entirely.</p>
-
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-card-label" data-i18n-html="help.xapi_v1_label">API v1.1</div>
-          <div class="info-card-value" data-i18n-html="help.xapi_v1_value">Full read/write access. Requires Basic developer plan or above.</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-label" data-i18n-html="help.xapi_v2_label">API v2</div>
-          <div class="info-card-value" data-i18n-html="help.xapi_v2_value">Newer endpoints, timeline access. OAuth 2.0 with PKCE support.</div>
-        </div>
-      </div>
+      <p class="section-intro" data-i18n-html="help.xapi_intro">TweetPilot uses OAuth 2.0 to connect via the official X API — no browser required. You only need two credentials: <strong>Client ID</strong> and <strong>Client Secret</strong>, obtained from the X Developer Portal.</p>
 
       <div class="steps-block">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.xapi_s1_title">Create a Developer Account</div>
-            <div class="step-desc" data-i18n-html="help.xapi_s1_desc">Go to <a href="https://developer.twitter.com/en/portal/dashboard" target="_blank">developer.twitter.com</a> and sign in with your Twitter account. Apply for developer access if you haven't already.</div>
+            <div class="step-heading" data-i18n-html="help.xapi_s1_title">Apply for Developer Access</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s1_sub1">Go to <a href="https://console.x.com/" target="_blank" rel="noopener">console.x.com</a> and sign in with your Twitter/X account.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s1_sub2">If this is your first time, complete the developer application. Briefly describe your intended use case — typical automation and analytics use cases are approved quickly.</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.xapi_s2_title">Create an App</div>
-            <div class="step-desc" data-i18n-html="help.xapi_s2_desc">In the Developer Portal, create a new App under a Project. Set the app permissions to "Read and Write" to enable posting and interactions.</div>
+            <div class="step-heading" data-i18n-html="help.xapi_s2_title">Create a Project and App</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s2_sub1">In the Developer Portal, create a new <strong>Project</strong>, then create an <strong>App</strong> inside it.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s2_sub2">In the App's <strong>Settings</strong> tab, find <strong>User authentication settings</strong> and enable <strong>OAuth 2.0</strong>. Set the App permissions to <strong>Read and Write</strong>.</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.xapi_s3_title">Copy Your Keys</div>
-            <div class="step-desc" data-i18n-html="help.xapi_s3_desc">From the App's "Keys and Tokens" page, copy all 4 values: <code>API Key</code>, <code>API Key Secret</code>, <code>Access Token</code>, and <code>Access Token Secret</code>.</div>
+            <div class="step-heading" data-i18n-html="help.xapi_s3_title">Fill in the Callback URL — This Step is Critical</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s3_sub1">In TweetPilot, go to <strong>Settings → X API</strong>. You will see a read-only <strong>Callback URL</strong> field with a <strong>Copy</strong> button. Click it to copy the URL — it looks like <code>http://127.0.0.1:20088/oauth/callback</code>.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s3_sub2">Back in the X Developer Portal, go to your App's <strong>Settings → App info</strong>. Find the <strong>Callback URI / Redirect URL</strong> field and paste the URL you just copied. Save the changes.</div>
+              </div>
+            </div>
+            <div class="substep-alt" style="margin-top:12px;" data-i18n-html="help.xapi_s3_note"><strong>Why this matters:</strong> The Callback URL is generated from your LocalBridge REST port. If you ever change the port in <strong>Settings → LocalBridge</strong>, the Callback URL will change — and you'll need to update it in the X Developer Portal as well, otherwise OAuth login will fail.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.xapi_s4_title">Paste into TweetPilot</div>
-            <div class="step-desc" data-i18n-html="help.xapi_s4_desc">In TweetPilot, go to <strong>Settings → X API</strong>. Paste all 4 keys and click Save. Then go to Accounts, add a new account, and choose "X API (Direct)".</div>
+            <div class="step-heading" data-i18n-html="help.xapi_s4_title">Copy Client ID and Client Secret</div>
+            <div class="substep-list">
+              <div class="substep">
+                <div class="substep-dot">a</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s4_sub1">In the X Developer Portal, go to your App's <strong>Keys and Tokens</strong> tab. Under <strong>OAuth 2.0 Client ID and Client Secret</strong>, copy both values.</div>
+              </div>
+              <div class="substep">
+                <div class="substep-dot">b</div>
+                <div class="substep-text" data-i18n-html="help.xapi_s4_sub2">Back in TweetPilot <strong>Settings → X API</strong>, paste the <strong>Client ID</strong> and <strong>Client Secret</strong> into the corresponding fields, then click <strong>Save</strong>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.xapi_s5_title">Add Account via X API</div>
+            <div class="step-desc" data-i18n-html="help.xapi_s5_desc">Go to <strong>Accounts</strong> in the sidebar, click <strong>Add Account</strong>, and choose <strong>X API (Direct)</strong>. TweetPilot will open an OAuth authorization page in your browser — log in and authorize the app. Once approved, the account will appear in your list.</div>
           </div>
         </div>
       </div>
 
       <div class="tip-box warning">
         <div class="tip-icon">⚠️</div>
-        <div class="tip-text" data-i18n-html="help.xapi_warn">The free X API tier (formerly Essential) has strict rate limits. For automation-heavy workflows, we recommend upgrading to the Basic tier ($100/month) or using TweetClaw mode instead.</div>
+        <div class="tip-text" data-i18n-html="help.xapi_warn">The free X API tier has strict rate limits. For automation-heavy workflows, consider upgrading to the Basic plan ($100/month) or using TweetClaw mode instead.</div>
       </div>
     </section>
 
     <!-- ─── FEISHU ─── -->
     <section class="help-section" id="section-feishu">
-      <span class="section-badge" data-i18n-html="help.fs_badge">Notifications</span>
+      <span class="section-badge" data-i18n-html="help.fs_badge">Feishu / Lark</span>
       <h1 class="section-title" data-i18n-html="help.fs_title">Feishu / Lark Integration</h1>
-      <p class="section-intro" data-i18n-html="help.fs_intro">Send automated reports, alerts, and summaries directly to your Feishu (Lark) group chats. Set it up in minutes with a webhook URL.</p>
+      <p class="section-intro" data-i18n-html="help.fs_intro">TweetPilot connects to Feishu via your own bot credentials (App ID + App Secret). Once configured, you get two capabilities: push messages from Python scripts, and a <strong>Feishu AI Assistant</strong> that lets you control TweetPilot remotely by private message — from your phone, anywhere.</p>
 
+      <!-- DIRECT CONNECTION CALLOUT -->
+      <div class="tip-box success" style="margin-bottom:28px;">
+        <div class="tip-icon">🔒</div>
+        <div class="tip-text" data-i18n-html="help.fs_direct_desc"><strong>Your bot, your data — zero relay.</strong> Messages travel directly between Feishu's servers and TweetPilot running on <em>your own Mac</em>. TweetPilot's servers are never in the loop. Every user creates their own Feishu app with their own credentials — no one else can see your conversations or commands.</div>
+      </div>
+
+      <!-- ARCH FLOW -->
+      <h3 class="content-h3" data-i18n-html="help.fs_arch_title">Message Flow</h3>
+      <div class="arch-flow" style="margin-bottom:8px;">
+        <div class="arch-node">
+          <div class="arch-node-name" data-i18n-html="help.fs_arch_phone">You (Feishu app)</div>
+          <div class="arch-node-desc" data-i18n-html="help.fs_arch_phone_desc">Send a message on phone or desktop</div>
+          <span class="arch-node-tag" data-i18n-html="help.fs_arch_phone_tag">Any device</span>
+        </div>
+        <div class="arch-arrow">
+          <div class="arch-arrow-line">→</div>
+          <div class="arch-arrow-label">Feishu API</div>
+        </div>
+        <div class="arch-node arch-highlight">
+          <div class="arch-node-name" data-i18n-html="help.fs_arch_mac">TweetPilot (your Mac)</div>
+          <div class="arch-node-desc" data-i18n-html="help.fs_arch_mac_desc">Receives event via long-poll to Feishu API using your credentials</div>
+          <span class="arch-node-tag" data-i18n-html="help.fs_arch_mac_tag">Local — your machine</span>
+        </div>
+        <div class="arch-arrow">
+          <div class="arch-arrow-line">→</div>
+          <div class="arch-arrow-label" data-i18n-html="help.fs_arch_local">Local agent</div>
+        </div>
+        <div class="arch-node arch-highlight">
+          <div class="arch-node-name" data-i18n-html="help.fs_arch_agent">Feishu AI Agent</div>
+          <div class="arch-node-desc" data-i18n-html="help.fs_arch_agent_desc">Runs locally, processes your command, replies via Feishu API</div>
+          <span class="arch-node-tag" data-i18n-html="help.fs_arch_agent_tag">ClawBot · xdk</span>
+        </div>
+      </div>
+      <div class="substep-alt" style="margin-bottom:28px;" data-i18n-html="help.fs_arch_note">TweetPilot's servers are <strong>not</strong> part of this chain. The bot only polls Feishu using the credentials you entered — if TweetPilot is not running on your Mac, the bot is offline.</div>
+
+      <!-- TWO CAPABILITIES -->
+      <h3 class="content-h3" data-i18n-html="help.fs_cap_title">Two Capabilities After Setup</h3>
+      <div class="info-grid" style="margin-bottom:24px;">
+        <div class="info-card" style="border-color:rgba(5,150,105,0.3);background:rgba(5,150,105,0.05);">
+          <div class="info-card-label" data-i18n-html="help.fs_cap_push_label">Push from Scripts</div>
+          <div class="info-card-value" data-i18n-html="help.fs_cap_push_desc">In any Python task or report script, call <code>POST http://localhost:20088/api/v1/feishu/send</code> to push a text message to your Feishu private conversation. Works from scheduled tasks for automated reporting.</div>
+        </div>
+        <div class="info-card" style="border-color:rgba(109,91,246,0.3);background:rgba(109,91,246,0.05);">
+          <div class="info-card-label" data-i18n-html="help.fs_cap_agent_label">Feishu AI Assistant</div>
+          <div class="info-card-value" data-i18n-html="help.fs_cap_agent_desc">Message the bot in a Feishu private chat like you'd message a person. It can read workspace files, help draft tweet content, answer questions about TweetPilot, and confirm execution of scripts — all in natural language, from your phone or desktop.</div>
+        </div>
+      </div>
+
+      <!-- SETUP -->
+      <h3 class="content-h3" data-i18n-html="help.fs_setup_title">Setup: Create a Feishu App</h3>
       <div class="steps-block">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.fs_s1_title">Create a Bot in Your Group Chat</div>
-            <div class="step-desc" data-i18n-html="help.fs_s1_desc">In Feishu/Lark, open the group chat where you want to receive reports. Click the "..." menu → "Bots" → "Add Bot" → "Custom Bot".</div>
+            <div class="step-heading" data-i18n-html="help.fs_s1_title">Create an App in the Feishu Developer Console</div>
+            <div class="step-desc" data-i18n-html="help.fs_s1_desc">Go to <a href="https://open.feishu.cn/app" target="_blank" rel="noopener">open.feishu.cn/app</a> and sign in. Click <strong>Create App</strong> → <strong>Custom App</strong>. Give it a name (e.g. "TweetPilot Bot") and save.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.fs_s2_title">Copy the Webhook URL</div>
-            <div class="step-desc" data-i18n-html="help.fs_s2_desc">After creating the bot, copy the webhook URL provided. It looks like: https://open.feishu.cn/open-apis/bot/v2/hook/xxxxx</div>
+            <div class="step-heading" data-i18n-html="help.fs_s2_title">Copy App ID and App Secret</div>
+            <div class="step-desc" data-i18n-html="help.fs_s2_desc">In the app's <strong>Credentials &amp; Basic Info</strong> page, copy the <strong>App ID</strong> and <strong>App Secret</strong>. These are the only two credentials you need.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.fs_s3_title">Add to TweetPilot</div>
-            <div class="step-desc" data-i18n-html="help.fs_s3_desc">In TweetPilot, go to <strong>Settings → Feishu</strong>. Paste the webhook URL and click "Test" to send a test message. You should see it appear in your group chat immediately.</div>
+            <div class="step-heading" data-i18n-html="help.fs_s3_title">Enable the Bot Feature &amp; Set Permissions</div>
+            <div class="step-desc" data-i18n-html="help.fs_s3_desc">Go to <strong>App Capabilities → Bot</strong> and enable it. Then go to <strong>Permissions &amp; Scopes</strong> and grant at least: <code>im:message:send_as_bot</code> and <code>im:message</code>.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
           <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.fs_s4_title">Use in Scripts</div>
-            <div class="step-desc" data-i18n-html="help.fs_s4_desc">In your Python scripts, call <code>feishu.send_message("your text")</code> to push messages to the configured group. Supports plain text and markdown.</div>
+            <div class="step-heading" data-i18n-html="help.fs_s4_title">Enter Credentials in TweetPilot</div>
+            <div class="step-desc" data-i18n-html="help.fs_s4_desc">In TweetPilot, go to <strong>Settings → Feishu</strong>. Paste your <strong>App ID</strong> and <strong>App Secret</strong>, then click <strong>Save</strong>. The status indicator will show <em>Connected</em> once the channel is established.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.fs_s5_title">Restrict Availability — Important</div>
+            <div class="step-desc" data-i18n-html="help.fs_s5_desc">Before publishing, go to <strong>App Release → App Availability</strong> and set the visible range to <strong>specific people only</strong> (yourself, or a small trusted list). Do <em>not</em> make the bot available to your entire organization. Anyone who can find and message your bot can issue commands to your TweetPilot — keep the list tight.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.fs_s6_title">Send Yourself a Message to Activate</div>
+            <div class="step-desc" data-i18n-html="help.fs_s6_desc">In Feishu, find the bot app and send it <strong>any message</strong> (e.g. "hello"). This binds your Feishu user ID so TweetPilot knows where to deliver future push messages. After this step, both push notifications and the AI assistant are fully active.</div>
           </div>
         </div>
       </div>
+
+      <!-- PERMISSION WARNING -->
+      <div class="tip-box warning" style="margin-top:4px;">
+        <div class="tip-icon">⚠️</div>
+        <div class="tip-text" data-i18n-html="help.fs_perm_warn"><strong>Access control is your responsibility.</strong> Feishu does not authenticate users at the bot level — anyone who messages your bot can talk to your TweetPilot AI agent, which has access to your workspace files and can execute scripts. Always restrict bot availability to yourself or a small, trusted list. If you suspect unauthorized access, regenerate your App Secret in the Feishu Developer Console immediately.</div>
+      </div>
+
+      <!-- PUSH EXAMPLE -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.fs_push_title">Push Messages from a Python Script</h3>
+      <div class="code-block">
+        <div class="code-label">send_feishu.py</div>
+        <code>import requests
+
+resp = requests.post(
+    "http://localhost:20088/api/v1/feishu/send",
+    json={"text": "📊 Daily report ready — check your workspace!"},
+    timeout=10,
+)
+print(resp.json())  # {"ok": true}</code>
+      </div>
+      <div class="substep-alt" style="margin-top:8px;" data-i18n-html="help.fs_push_note">Common errors: <code>尚未绑定任何飞书 ID</code> — you haven't sent the bot a message yet (Step 6). <code>empty_text</code> — the text field is empty.</div>
+
+      <!-- AI ASSISTANT -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.fs_agent_title">Feishu AI Assistant</h3>
+      <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:16px;" data-i18n-html="help.fs_agent_desc">Once connected, the bot is your private AI assistant running entirely on your own Mac. Message it like any Feishu contact — from your phone or desktop. It can draft tweet content, answer TweetPilot questions, read data files in your workspace, and confirm execution of pre-authorized scripts. Replies are always concise. See the <strong>AI Agent</strong> section for its full capabilities.</p>
 
       <div class="content-divider"></div>
       <h3 class="content-h3" data-i18n-html="help.fs_contact_title">Contact Us on Feishu</h3>
@@ -783,57 +1447,154 @@ feishu.send_message(report)</code>
     <section class="help-section" id="section-upgrade">
       <span class="section-badge" data-i18n-html="help.upg_badge">Plans & Billing</span>
       <h1 class="section-title" data-i18n-html="help.upg_title">Upgrade & Plans</h1>
-      <p class="section-intro" data-i18n-html="help.upg_intro">TweetPilot is free to start. Upgrade to Pro when you need scheduled automation and AI-powered remote agents.</p>
+      <p class="section-intro">
+        <span data-i18n-html="help.upg_intro">TweetPilot is free to start. Unlock scheduled automation and AI agents with Pro, or reach out for an Enterprise plan with hands-on service.</span>
+        &nbsp;<a href="/pricing.html" style="color:var(--color-secondary);text-decoration:none;font-weight:600;white-space:nowrap;" data-i18n-html="help.upg_pricing_link">View pricing &amp; purchase →</a>
+      </p>
 
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th data-i18n-html="help.upg_feature">Feature</th>
-            <th data-i18n-html="help.upg_free">Free</th>
-            <th data-i18n-html="help.upg_pro">Pro ($300/yr)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td data-i18n-html="help.upg_row_accounts">Multiple Twitter accounts</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_scripts">Manual Python scripts</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_tweetclaw">TweetClaw integration</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_xapi">X API integration</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_datablocks">Data Blocks & workspaces</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_scheduled"><strong>Scheduled tasks (cron)</strong></td><td class="cross">✗</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_agent"><strong>AI remote conversation agent</strong></td><td class="cross">✗</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_feishu">Feishu bot integration</td><td class="cross">✗</td><td class="check">✓</td></tr>
-          <tr><td data-i18n-html="help.upg_row_devices">Devices per license</td><td>1</td><td>2</td></tr>
-          <tr><td data-i18n-html="help.upg_row_support">Email support</td><td class="cross">✗</td><td class="check">✓</td></tr>
-        </tbody>
-      </table>
+      <!-- WHO IS THIS FOR -->
+      <h3 class="content-h3" data-i18n-html="help.upg_who_title">Which plan is right for you?</h3>
+      <div class="plan-grid" style="grid-template-columns:1fr 1fr;margin-bottom:32px;">
 
-      <div class="steps-block">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.upg_s1_title">Purchase a License</div>
-            <div class="step-desc" data-i18n-html="help.upg_s1_desc">Visit the <a href="/pricing.html">Pricing page</a> and click "Buy License". You'll be redirected to Stripe for secure payment. A license key is emailed instantly after purchase.</div>
+        <!-- Pro positioning -->
+        <div class="plan-card plan-card-pro">
+          <div class="plan-card-top">
+            <div class="plan-label" style="color:#34D399;" data-i18n-html="help.upg_pro_who_label">Pro · Self-serve online</div>
+            <div class="plan-name">Pro</div>
+            <div style="font-size:12px;color:var(--color-text-dim);margin-top:6px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;" data-i18n-html="help.upg_pro_who_target">Solo operators &amp; tech-savvy teams</div>
           </div>
+          <div style="padding:0 22px 22px;font-size:13.5px;color:var(--color-text-muted);line-height:1.75;" data-i18n-html="help.upg_pro_who_desc">Purchase online via FastSpring — the license key is emailed instantly after payment. Sign in with the same email inside TweetPilot and the license activates automatically. <strong style="color:var(--color-text);">Everything is self-serve.</strong> Set up AI agents and scheduled tasks by following our video tutorials and documentation. Best for individuals and teams who are comfortable running their own tools.</div>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.upg_s2_title">Activate in TweetPilot</div>
-            <div class="step-desc" data-i18n-html="help.upg_s2_desc">In TweetPilot, go to <strong>Settings → License</strong>. Paste your license key and click "Activate". The app will verify the key and unlock all Pro features immediately.</div>
+
+        <!-- Enterprise positioning -->
+        <div class="plan-card" style="border-color:rgba(245,158,11,0.35);background:rgba(217,119,6,0.03);">
+          <div class="plan-card-top">
+            <div class="plan-label" style="color:#FCD34D;" data-i18n-html="help.upg_ent_who_label">Enterprise · Hands-on service</div>
+            <div class="plan-name" style="color:#FCD34D;">Enterprise</div>
+            <div style="font-size:12px;color:var(--color-text-dim);margin-top:6px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;" data-i18n-html="help.upg_ent_who_target">Companies without an IT department</div>
           </div>
+          <div style="padding:0 22px 22px;font-size:13.5px;color:var(--color-text-muted);line-height:1.75;" data-i18n-html="help.upg_ent_who_desc">No online store — reach out to discuss your needs and we handle the rest. We provide <strong style="color:var(--color-text);">hands-on onboarding</strong>: demo the product with your team, configure the first AI agent together, and document your workflow. We can also develop custom scripts or features tailored to your business. A signed service agreement covers scope, pricing, and support terms. Permanent license (P-xxx), no annual renewal required.</div>
         </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-heading" data-i18n-html="help.upg_s3_title">Renew or Manage</div>
-            <div class="step-desc" data-i18n-html="help.upg_s3_desc">Licenses auto-renew annually. To cancel or request a refund within 7 days, email <a href="mailto:ribencong@dessage.xyz">ribencong@dessage.xyz</a>. See our <a href="/refund.html">Refund Policy</a> for details.</div>
-          </div>
-        </div>
+
       </div>
 
-      <div class="tip-box">
-        <div class="tip-icon">💡</div>
-        <div class="tip-text" data-i18n-html="help.upg_enterprise">Need a permanent license or custom integrations? Our <a href="/pricing.html#enterprise">Enterprise Lifetime plan</a> includes a signed service contract, custom scripts, and dedicated Feishu support. Contact us at <a href="mailto:ribencong@dessage.xyz">ribencong@dessage.xyz</a>.</div>
+      <!-- FEATURE COMPARISON -->
+      <h3 class="content-h3" data-i18n-html="help.upg_compare_title">Feature Comparison</h3>
+      <div class="compare-table-wrap" style="overflow-x:auto;margin-bottom:8px;">
+        <table class="compare-table" style="min-width:520px;">
+          <thead>
+            <tr>
+              <th data-i18n-html="help.upg_col_feature">Feature</th>
+              <th style="text-align:center;" data-i18n-html="help.upg_col_free">Free</th>
+              <th style="text-align:center;color:#34D399;" data-i18n-html="help.upg_col_pro">Pro</th>
+              <th style="text-align:center;color:#FCD34D;" data-i18n-html="help.upg_col_ent">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Core -->
+            <tr><td colspan="4" style="background:rgba(255,255,255,0.03);color:var(--color-text-dim);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:8px 16px;" data-i18n-html="help.upg_cat_core">Core</td></tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_accounts">Multiple accounts</td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_tweetclaw">TweetClaw integration</td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_xapi">X API integration</td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_datablocks">Data Blocks</td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_scripts">Manual Python scripts</td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <!-- Automation -->
+            <tr><td colspan="4" style="background:rgba(255,255,255,0.03);color:var(--color-text-dim);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:8px 16px;" data-i18n-html="help.upg_cat_automation">Automation &amp; AI</td></tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_scheduled">Scheduled tasks (cron)</td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_agent">AI agents (Task / Feishu)</td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_feishu">Feishu integration</td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <!-- License & Service -->
+            <tr><td colspan="4" style="background:rgba(255,255,255,0.03);color:var(--color-text-dim);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:8px 16px;" data-i18n-html="help.upg_cat_service">License &amp; Service</td></tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_price">Price</td>
+              <td style="text-align:center;color:var(--color-text-muted);">$0</td>
+              <td style="text-align:center;color:#34D399;font-weight:600;">$300 / yr</td>
+              <td style="text-align:center;color:#FCD34D;font-weight:600;" data-i18n-html="help.upg_ent_price_label">Contact us</td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_license_type">License type</td>
+              <td style="text-align:center;color:var(--color-text-dim);">—</td>
+              <td style="text-align:center;color:var(--color-text-muted);" data-i18n-html="help.upg_val_annual">Annual (S-xxx)</td>
+              <td style="text-align:center;color:var(--color-text-muted);" data-i18n-html="help.upg_val_permanent">Permanent (P-xxx)</td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_devices">Devices per license</td>
+              <td style="text-align:center;color:var(--color-text-muted);">1</td>
+              <td style="text-align:center;color:var(--color-text-muted);">2</td>
+              <td style="text-align:center;color:var(--color-text-muted);" data-i18n-html="help.upg_val_custom">Custom</td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_trial">30-day free trial</td>
+              <td style="text-align:center;"><span class="plan-row-check">✓</span></td>
+              <td style="text-align:center;color:var(--color-text-dim);">—</td>
+              <td style="text-align:center;color:var(--color-text-dim);">—</td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_onboarding">Onboarding &amp; training</td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;color:var(--color-text-dim);" data-i18n-html="help.upg_val_self">Self-serve (docs / video)</td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_customdev">Custom development</td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+            <tr>
+              <td data-i18n-html="help.upg_row_contract">Service contract</td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;"><span class="plan-row-cross">✗</span></td>
+              <td style="text-align:center;"><span class="plan-row-check" style="color:#FCD34D;">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TRIAL NOTE -->
+      <div class="tip-box" style="margin-top:16px;">
+        <div class="tip-icon">✨</div>
+        <div class="tip-text" data-i18n-html="help.upg_trial_note">Not ready to buy? Start a <strong>30-day free trial</strong> — click <em>Start Free Trial</em> after sign-in to unlock all Pro features for 30 days, no payment required. Trial is limited to 1 device and does not auto-renew.</div>
       </div>
     </section>
 
