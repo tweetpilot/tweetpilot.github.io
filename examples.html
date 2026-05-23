@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" data-title-key="ex.page_title">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scenario Examples — TweetPilot</title>
+  <script src="/i18n.js"></script>
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-primary: #0891B2; --color-secondary: #22D3EE; --color-cta: #059669; --color-cta-hover: #047857;
+      --color-bg: #060B14; --color-bg-2: #0A1220; --color-bg-3: #0E1A2D;
+      --color-surface: rgba(255,255,255,0.04); --color-border: rgba(255,255,255,0.08);
+      --color-border-bright: rgba(34,211,238,0.25);
+      --color-text: #E2F4F9; --color-text-muted: #7EA8B8; --color-text-dim: #4A7A8A;
+      --clawbot: #34D399; --xdk: #60A5FA; --http: #A78BFA;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--color-bg); } ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+
+    .grid-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(8,145,178,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,145,178,0.04) 1px, transparent 1px);
+      background-size: 64px 64px; }
+    .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(8,145,178,0.06) 0%, transparent 70%); }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px; background: rgba(6,11,20,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-border); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--color-text); text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--color-text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 200ms; }
+    .nav-links a:hover, .nav-links a.active { color: var(--color-secondary); }
+    .nav-cta { background: var(--color-cta); color: white; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 8px; text-decoration: none; transition: all 200ms; }
+    .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .nav-lang-toggle { background: var(--color-surface); color: var(--color-text-muted); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; padding: 5px 12px; border-radius: 7px; border: 1px solid var(--color-border); cursor: pointer; transition: all 200ms ease; margin-left: 4px; }
+    .nav-lang-toggle:hover { color: var(--color-secondary); border-color: var(--color-border-bright); }
+
+    /* ── PAGE WRAPPER ── */
+    .page-wrapper { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 96px 40px 80px; }
+
+    /* ── SECTION HEADER ── */
+    .section-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 10px; display: block; }
+    .section-title { font-size: clamp(26px, 3.5vw, 42px); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 14px; }
+    .section-intro { font-size: 15px; color: var(--color-text-muted); line-height: 1.8; margin-bottom: 36px; max-width: 660px; }
+
+    /* ── WARNING BANNER ── */
+    .warning-banner {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.25);
+      border-left: 4px solid rgba(245,158,11,0.7);
+      border-radius: 10px; padding: 16px 20px; margin-bottom: 32px;
+    }
+    .warning-banner-icon { flex-shrink: 0; margin-top: 1px; color: #F59E0B; }
+    .warning-banner-body { font-size: 13.5px; line-height: 1.7; color: var(--color-text-muted); }
+    .warning-banner-body strong { color: #FCD34D; font-weight: 600; }
+    .warning-banner-body a { color: #FCD34D; text-decoration: none; border-bottom: 1px solid rgba(252,211,77,0.3); transition: border-color 180ms; }
+    .warning-banner-body a:hover { border-color: #FCD34D; }
+
+    /* ── TOP-ROW ACTIONS ── */
+    .top-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+    .top-actions-label { font-size: 13px; color: var(--color-text-dim); font-weight: 500; }
+    .btn-download-all {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--color-cta); color: white; font-size: 13px; font-weight: 600;
+      padding: 9px 20px; border-radius: 8px; text-decoration: none; cursor: pointer;
+      border: none; transition: all 200ms;
+    }
+    .btn-download-all:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .btn-download-all.disabled { background: rgba(255,255,255,0.06); color: var(--color-text-dim); cursor: default; pointer-events: none; }
+
+    /* ── SCENARIO ACCORDION ── */
+    .scenario-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .scenario-card { border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; background: rgba(10,18,32,0.6); transition: border-color 200ms; }
+    .scenario-card:hover { border-color: rgba(8,145,178,0.25); }
+    .scenario-card.open { border-color: rgba(8,145,178,0.3); }
+
+    .scenario-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; cursor: pointer; user-select: none;
+      transition: background 180ms;
+    }
+    .scenario-header:hover { background: rgba(8,145,178,0.05); }
+
+    .scenario-num {
+      flex-shrink: 0; width: 34px; height: 34px; border-radius: 8px;
+      background: rgba(8,145,178,0.12); border: 1px solid rgba(8,145,178,0.25);
+      color: var(--color-secondary); font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+      letter-spacing: 0.02em;
+    }
+    .scenario-info { flex: 1; min-width: 0; }
+    .scenario-name { font-size: 15px; font-weight: 700; color: var(--color-text); line-height: 1.3; }
+    .scenario-desc { font-size: 13px; color: var(--color-text-muted); margin-top: 2px; line-height: 1.5; }
+    .scenario-chevron { flex-shrink: 0; color: var(--color-text-dim); transition: transform 250ms ease; }
+    .scenario-card.open .scenario-chevron { transform: rotate(180deg); }
+
+    /* ── SCENARIO BODY ── */
+    .scenario-body { max-height: 0; overflow: hidden; transition: max-height 250ms ease; }
+    .scenario-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--color-border); padding-top: 20px; }
+
+    /* ── TAB BAR ── */
+    .tab-bar { display: flex; align-items: center; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 7px; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.04em; cursor: pointer; border: 1px solid transparent;
+      background: rgba(255,255,255,0.04); color: var(--color-text-dim);
+      transition: all 180ms; white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--color-text-muted); background: rgba(255,255,255,0.07); }
+    .tab-btn.active[data-sdk="clawbot"] { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); color: var(--clawbot); }
+    .tab-btn.active[data-sdk="xdk"]     { background: rgba(96,165,250,0.1); border-color: rgba(96,165,250,0.3); color: var(--xdk); }
+    .tab-btn.active[data-sdk="http"]    { background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.3); color: var(--http); }
+
+    .tab-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* ── CODE BLOCK ── */
+    .code-wrap { position: relative; margin-bottom: 16px; }
+    .code-block {
+      background: #0A0F1A; border: 1px solid var(--color-border); border-radius: 10px;
+      padding: 20px 20px 20px; overflow-x: auto; overflow-y: auto;
+      max-height: 380px; min-height: 120px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 13px; line-height: 1.7; color: #94A3B8;
+      white-space: pre;
+    }
+    .code-block .cm { color: #4A6B8A; font-style: italic; } /* comment */
+    .copy-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(8,145,178,0.12); border: 1px solid rgba(8,145,178,0.25);
+      color: var(--color-text-muted); font-size: 11px; font-weight: 600;
+      padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 180ms;
+    }
+    .copy-btn:hover { background: rgba(8,145,178,0.22); color: var(--color-secondary); }
+
+    /* ── HTTP TAB: CURL SUB-LABEL ── */
+    .curl-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--color-text-dim); margin: 16px 0 8px;
+    }
+
+    /* ── PANE VISIBILITY ── */
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── DOWNLOAD ROW ── */
+    .download-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .download-row-label { font-size: 12px; color: var(--color-text-dim); margin-right: 4px; }
+    .btn-dl {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--color-border); background: transparent;
+      color: var(--color-text-muted); text-decoration: none; cursor: pointer;
+      transition: all 180ms;
+    }
+    .btn-dl:hover { border-color: var(--color-border-bright); color: var(--color-secondary); }
+    .btn-dl.clawbot:hover { border-color: rgba(52,211,153,0.4); color: var(--clawbot); }
+    .btn-dl.xdk:hover     { border-color: rgba(96,165,250,0.4); color: var(--xdk); }
+    .btn-dl.http:hover    { border-color: rgba(167,139,250,0.4); color: var(--http); }
+    .btn-dl.coming { opacity: 0.4; cursor: default; pointer-events: none; }
+
+    /* ── FOOTER ── */
+    footer { position: relative; z-index: 1; text-align: center; padding: 32px 40px;
+      border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-dim); }
+    footer a { color: var(--color-text-dim); text-decoration: none; }
+    footer a:hover { color: var(--color-secondary); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .page-wrapper { padding: 88px 20px 60px; }
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .top-actions { flex-direction: column; align-items: flex-start; }
+      .scenario-header { padding: 14px 16px; }
+      .scenario-body-inner { padding: 0 16px 16px; padding-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" width="32" height="32" alt="TweetPilot" style="border-radius:8px;" />
+    TweetPilot
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#features" data-i18n="nav.features">Features</a></li>
+    <li><a href="/#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
+    <li><a href="/#ai" data-i18n="nav.ai_engine">AI Engine</a></li>
+    <li><a href="/pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+    <li><a href="/help.html" data-i18n="nav.help">Help</a></li>
+    <li><a href="/#download" data-i18n="nav.download">Download</a></li>
+  </ul>
+  <a class="nav-cta" href="/#download" data-i18n="nav.download_free">Download Free</a>
+  <button id="lang-toggle" class="nav-lang-toggle" onclick="toggleLang()" type="button">中文</button>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- ── HEADER ── -->
+  <span class="section-badge" data-i18n="ex.badge">Developer Examples</span>
+  <h1 class="section-title" data-i18n="ex.title">Python Automation Scenarios</h1>
+  <p class="section-intro" data-i18n="ex.intro">Ready-to-run Python scripts covering common Twitter/X operations. Each scenario is implemented three ways — choose the approach that fits your setup.</p>
+
+  <!-- ── WARNING BANNER ── -->
+  <div class="warning-banner">
+    <div class="warning-banner-icon">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    <div class="warning-banner-body">
+      <span data-i18n-html="ex.warning"><strong>Single-account assumption:</strong> These examples assume only one TweetClaw extension is connected to TweetPilot, or only one OAuth account is managed.</span>
+      <br />
+      <a href="#" onclick="return false;" data-i18n-html="ex.warning_link">Ask TweetPilot AI how to use examples with multiple accounts &rarr;</a>
+    </div>
+  </div>
+
+  <!-- ── TOP ACTIONS ── -->
+  <div class="top-actions">
+    <span class="top-actions-label">8 scenarios &nbsp;·&nbsp; 3 implementations each</span>
+    <a class="btn-download-all disabled" href="#" data-i18n="ex.download_all_soon">Download All Examples (.zip) — coming soon</a>
+  </div>
+
+  <!-- ── SCENARIO LIST ── -->
+  <div class="scenario-list">
+
+    <!-- ───────────── S01 ───────────── -->
+    <div class="scenario-card" id="sc-s01">
+      <div class="scenario-header" onclick="toggleScenario('s01')">
+        <div class="scenario-num">S01</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s01_name">Scheduled Tweet</div>
+          <div class="scenario-desc" data-i18n="ex.s01_desc">Post a tweet on a fixed schedule — ideal for daily updates, market recaps, or broadcast-style content.</div>
+        </div>
+        <div class="scenario-chevron">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="scenario-body" id="body-s01">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s01','clawbot')">
+              <span class="tab-dot"></span> ClawBot SDK
+            </button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s01','xdk')">
+              <span class="tab-dot"></span> xdk SDK
+            </button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s01','http')">
+              <span class="tab-dot"></span> HTTP REST API
+            </button>
+          </div>
+
+          <!-- ClawBot pane -->
+          <div class="tab-pane active" data-pane="s01-clawbot">
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S01 · Scheduled Tweet — ClawBot SDK
+=====================================
+EN: Post via TweetClaw browser extension.
+    Add to TweetPilot Task Manager for automatic scheduling.
+中文：通过 TweetClaw 浏览器扩展发推。加入任务管理器实现定时自动发送。
+
+Manual run / 手动运行:
+  PYTHONPATH="$HOME/.tweetpilot/clawbot" python3 clawbot.py
+"""</span>
+
+from datetime import datetime
+from clawbot import ClawBotClient
+
+<span class="cm"># ── Config — edit TWEET_TEXT; {date} inserts today's date (YYYY-MM-DD)
+# 配置 — 修改 TWEET_TEXT；{date} 将被替换为当天日期</span>
+TWEET_TEXT = "Daily update {date} — powered by TweetPilot"
+
+
+def main():
+    client = ClawBotClient()
+
+    <span class="cm"># Auto-select the first connected TweetClaw instance.
+    # For multi-account use, ask TweetPilot AI for guidance.
+    # 自动选择第一个已连接的 TweetClaw 实例；多账号请询问 TweetPilot AI。</span>
+    instances = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        first = instances[0]
+        instance_id = first.get("instanceId") or first.get("id")
+
+    text = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
+    result = client.x.actions.create_tweet(text, instance_id=instance_id)
+
+    print(f"Tweet sent / 发推成功: {text}")
+    print(f"Result: {result}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+
+          <!-- xdk pane -->
+          <div class="tab-pane" data-pane="s01-xdk">
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S01 · Scheduled Tweet — xdk SDK
+==================================
+EN: Post via Twitter OAuth using xdk.
+    TweetPilot provides the token automatically — no manual setup.
+中文：通过 Twitter OAuth + xdk 客户端发推，TweetPilot 自动提供 token。
+
+pip install xdk requests
+"""</span>
+
+import sys
+import requests
+from datetime import datetime
+from xdk import Client
+
+<span class="cm"># ── Config — replace with your Twitter numeric ID
+# 配置 — 替换为你的 Twitter 数字 ID（TweetPilot → 账号设置 → 账号 ID）</span>
+TWITTER_ID = "YOUR_TWITTER_ID"
+TWEET_TEXT = "Daily update {date} — powered by TweetPilot"
+
+
+def get_access_token(twitter_id: str) -> str:
+    <span class="cm"># Fetch OAuth token from TweetPilot rust-bridge (port 20088)
+    # 从 TweetPilot rust-bridge（端口 20088）获取 OAuth token</span>
+    try:
+        resp = requests.post(
+            "http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10,
+        )
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running / TweetPilot 未在运行")
+        sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}")
+        sys.exit(1)
+
+
+def main():
+    client = Client(bearer_token=get_access_token(TWITTER_ID))
+    text   = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
+    result = client.posts.create(body={"text": text})
+
+    print(f"Tweet sent / 发推成功: {text}")
+    print(f"Tweet ID: {result.data.id}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+
+          <!-- HTTP REST pane -->
+          <div class="tab-pane" data-pane="s01-http">
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S01 · Scheduled Tweet — HTTP REST API (Python)
+================================================
+EN: Raw HTTP approach — no Twitter SDK required.
+    Step 1: fetch token from TweetPilot rust-bridge.
+    Step 2: POST /2/tweets to Twitter API v2.
+中文：原始 HTTP 发推，无需 SDK。第一步获取 token，第二步调用 Twitter v2。
+
+pip install requests
+"""</span>
+
+import sys
+import requests
+from datetime import datetime
+
+TWITTER_ID  = "YOUR_TWITTER_ID"
+TWEET_TEXT  = "Daily update {date} — powered by TweetPilot"
+RUST_BRIDGE = "http://127.0.0.1:20088"
+TWITTER_V2  = "https://api.twitter.com/2"
+
+
+def get_access_token(twitter_id: str) -> str:
+    try:
+        resp = requests.post(
+            f"{RUST_BRIDGE}/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10,
+        )
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running / TweetPilot 未在运行")
+        sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code}"); sys.exit(1)
+
+
+def main():
+    token = get_access_token(TWITTER_ID)
+    text  = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
+    resp  = requests.post(
+        f"{TWITTER_V2}/tweets",
+        json={"text": text},
+        headers={"Authorization": f"Bearer {token}",
+                 "Content-Type": "application/json"},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    tweet_id = resp.json()["data"]["id"]
+    print(f"Tweet sent / 发推成功: {text}")
+    print(f"Tweet ID: {tweet_id}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Step 1: Get OAuth token from TweetPilot rust-bridge
+# 第一步：从 TweetPilot rust-bridge 获取 OAuth token</span>
+TOKEN=$(curl -s -X POST http://127.0.0.1:20088/api/v1/x/oauth/access-token \
+  -H "Content-Type: application/json" \
+  -d '{"twitter_id": "YOUR_TWITTER_ID"}' \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])")
+
+<span class="cm"># Step 2: Post tweet via Twitter API v2
+# 第二步：通过 Twitter API v2 发推</span>
+curl -s -X POST https://api.twitter.com/2/tweets \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Daily update — powered by TweetPilot"}'</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+          </div>
+
+          <!-- Download row -->
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot" href="/examples/s01_scheduled_tweet/clawbot.py" download><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s01_scheduled_tweet/xdk.py" download><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s01_scheduled_tweet/http_rest.py" download><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── S02 ───────────── -->
+    <div class="scenario-card" id="sc-s02">
+      <div class="scenario-header" onclick="toggleScenario('s02')">
+        <div class="scenario-num">S02</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s02_name">Tweet with Image</div>
+          <div class="scenario-desc" data-i18n="ex.s02_desc">Upload a local image and attach it to a tweet — great for product screenshots, charts, or daily visual content.</div>
+        </div>
+        <div class="scenario-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="scenario-body" id="body-s02">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s02','clawbot')"><span class="tab-dot"></span> ClawBot SDK</button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s02','xdk')"><span class="tab-dot"></span> xdk SDK</button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s02','http')"><span class="tab-dot"></span> HTTP REST API</button>
+          </div>
+          <div class="tab-pane active" data-pane="s02-clawbot">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · Tweet with Image — ClawBot SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s02-xdk">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · Tweet with Image — xdk SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s02-http">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · Tweet with Image — Python requests
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── S03 ───────────── -->
+    <div class="scenario-card" id="sc-s03">
+      <div class="scenario-header" onclick="toggleScenario('s03')">
+        <div class="scenario-num">S03</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s03_name">Search &amp; Auto-Reply</div>
+          <div class="scenario-desc" data-i18n="ex.s03_desc">Search tweets by keyword and automatically reply to matching results — useful for brand monitoring and audience engagement.</div>
+        </div>
+        <div class="scenario-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="scenario-body" id="body-s03">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s03','clawbot')"><span class="tab-dot"></span> ClawBot SDK</button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s03','xdk')"><span class="tab-dot"></span> xdk SDK</button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s03','http')"><span class="tab-dot"></span> HTTP REST API</button>
+          </div>
+          <div class="tab-pane active" data-pane="s03-clawbot">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · Search &amp; Auto-Reply — ClawBot SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s03-xdk">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · Search &amp; Auto-Reply — xdk SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s03-http">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · Search &amp; Auto-Reply — Python requests
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── S04 ───────────── -->
+    <div class="scenario-card" id="sc-s04">
+      <div class="scenario-header" onclick="toggleScenario('s04')">
+        <div class="scenario-num">S04</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s04_name">Timeline Auto-Like</div>
+          <div class="scenario-desc" data-i18n="ex.s04_desc">Read the home timeline and like tweets that match a keyword filter — a simple engagement automation.</div>
+        </div>
+        <div class="scenario-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="scenario-body" id="body-s04">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s04','clawbot')"><span class="tab-dot"></span> ClawBot SDK</button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s04','xdk')"><span class="tab-dot"></span> xdk SDK</button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s04','http')"><span class="tab-dot"></span> HTTP REST API</button>
+          </div>
+          <div class="tab-pane active" data-pane="s04-clawbot">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · Timeline Auto-Like — ClawBot SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s04-xdk">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · Timeline Auto-Like — xdk SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s04-http">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · Timeline Auto-Like — Python requests
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── S05 ───────────── -->
+    <div class="scenario-card" id="sc-s05">
+      <div class="scenario-header" onclick="toggleScenario('s05')">
+        <div class="scenario-num">S05</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s05_name">Batch Follow</div>
+          <div class="scenario-desc" data-i18n="ex.s05_desc">Follow a list of user IDs in bulk — handy for building a target audience or tracking competitors.</div>
+        </div>
+        <div class="scenario-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="scenario-body" id="body-s05">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s05','clawbot')"><span class="tab-dot"></span> ClawBot SDK</button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s05','xdk')"><span class="tab-dot"></span> xdk SDK</button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s05','http')"><span class="tab-dot"></span> HTTP REST API</button>
+          </div>
+          <div class="tab-pane active" data-pane="s05-clawbot">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · Batch Follow — ClawBot SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s05-xdk">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · Batch Follow — xdk SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s05-http">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · Batch Follow — Python requests
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── S06 ───────────── -->
+    <div class="scenario-card" id="sc-s06">
+      <div class="scenario-header" onclick="toggleScenario('s06')">
+        <div class="scenario-num">S06</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s06_name">Tweet Metrics Report</div>
+          <div class="scenario-desc" data-i18n="ex.s06_desc">Fetch engagement metrics (likes, retweets, replies) for a specific tweet and print or save a report.</div>
+        </div>
+        <div class="scenario-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="scenario-body" id="body-s06">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s06','clawbot')"><span class="tab-dot"></span> ClawBot SDK</button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s06','xdk')"><span class="tab-dot"></span> xdk SDK</button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s06','http')"><span class="tab-dot"></span> HTTP REST API</button>
+          </div>
+          <div class="tab-pane active" data-pane="s06-clawbot">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · Tweet Metrics Report — ClawBot SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s06-xdk">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · Tweet Metrics Report — xdk SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s06-http">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · Tweet Metrics Report — Python requests
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── S07 ───────────── -->
+    <div class="scenario-card" id="sc-s07">
+      <div class="scenario-header" onclick="toggleScenario('s07')">
+        <div class="scenario-num">S07</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s07_name">Mention Monitor + Feishu Alert</div>
+          <div class="scenario-desc" data-i18n="ex.s07_desc">Poll the mentions timeline and send a Feishu Webhook notification to your team when new mentions arrive.</div>
+        </div>
+        <div class="scenario-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="scenario-body" id="body-s07">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s07','clawbot')"><span class="tab-dot"></span> ClawBot SDK</button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s07','xdk')"><span class="tab-dot"></span> xdk SDK</button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s07','http')"><span class="tab-dot"></span> HTTP REST API</button>
+          </div>
+          <div class="tab-pane active" data-pane="s07-clawbot">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · Mention Monitor + Feishu Alert — ClawBot SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s07-xdk">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · Mention Monitor + Feishu Alert — xdk SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s07-http">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · Mention Monitor + Feishu Alert — Python requests
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────────── S08 ───────────── -->
+    <div class="scenario-card" id="sc-s08">
+      <div class="scenario-header" onclick="toggleScenario('s08')">
+        <div class="scenario-num">S08</div>
+        <div class="scenario-info">
+          <div class="scenario-name" data-i18n="ex.s08_name">Retweet Trending Topics</div>
+          <div class="scenario-desc" data-i18n="ex.s08_desc">Fetch current trending topics, find high-engagement tweets within a trend, and retweet them to ride the wave.</div>
+        </div>
+        <div class="scenario-chevron"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+      <div class="scenario-body" id="body-s08">
+        <div class="scenario-body-inner">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-sdk="clawbot" onclick="switchTab('s08','clawbot')"><span class="tab-dot"></span> ClawBot SDK</button>
+            <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s08','xdk')"><span class="tab-dot"></span> xdk SDK</button>
+            <button class="tab-btn" data-sdk="http" onclick="switchTab('s08','http')"><span class="tab-dot"></span> HTTP REST API</button>
+          </div>
+          <div class="tab-pane active" data-pane="s08-clawbot">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · Retweet Trending Topics — ClawBot SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s08-xdk">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · Retweet Trending Topics — xdk SDK
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="tab-pane" data-pane="s08-http">
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · Retweet Trending Topics — Python requests
+# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
+            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          </div>
+          <div class="download-row">
+            <span class="download-row-label">↓</span>
+            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /scenario-list -->
+</div><!-- /page-wrapper -->
+
+<footer>
+  <p>&copy; 2025 TweetPilot &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms</a> &nbsp;·&nbsp; <a href="/help.html" data-i18n="nav.help">Help</a></p>
+</footer>
+
+<script>
+  /* ── Accordion ── */
+  function toggleScenario(id) {
+    var card = document.getElementById('sc-' + id);
+    var body = document.getElementById('body-' + id);
+    var isOpen = card.classList.contains('open');
+
+    if (isOpen) {
+      card.classList.remove('open');
+      body.style.maxHeight = '0';
+    } else {
+      card.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  }
+
+  /* Re-calc max-height after window resize (optional safety) */
+  window.addEventListener('resize', function() {
+    document.querySelectorAll('.scenario-card.open').forEach(function(card) {
+      var id = card.id.replace('sc-', '');
+      var body = document.getElementById('body-' + id);
+      body.style.maxHeight = body.scrollHeight + 'px';
+    });
+  });
+
+  /* ── Tab switch ── */
+  function switchTab(scenarioId, sdk) {
+    var card = document.getElementById('sc-' + scenarioId);
+
+    /* update tab buttons */
+    card.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-sdk') === sdk);
+    });
+
+    /* update panes */
+    card.querySelectorAll('.tab-pane').forEach(function(pane) {
+      pane.classList.toggle('active', pane.getAttribute('data-pane') === scenarioId + '-' + sdk);
+    });
+
+    /* re-calc accordion height */
+    if (card.classList.contains('open')) {
+      var body = document.getElementById('body-' + scenarioId);
+      body.style.maxHeight = 'none'; /* allow shrink/grow */
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  }
+
+  /* ── Copy code ── */
+  function copyCode(btn) {
+    var pre = btn.previousElementSibling;
+    var text = pre.innerText || pre.textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      var orig = btn.textContent;
+      btn.textContent = '✓ Copied';
+      setTimeout(function() { btn.textContent = orig; }, 1800);
+    });
+  }
+</script>
+</body>
+</html>
