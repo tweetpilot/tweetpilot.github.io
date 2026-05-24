@@ -23,7 +23,7 @@ from xdk import Client
 
 # ── Config / 配置 ────────────────────────────────────────────────────
 LOCAL_BRIDGE = "http://127.0.0.1:20088"
-TWITTER_ID   = "YOUR_TWITTER_ID"  # ← OAuth account numeric ID / OAuth 账号数字 ID
+TWITTER_ID   = "1735224873365225472"  # ← OAuth account numeric ID / OAuth 账号数字 ID
 
 # EN: Path to store the last-seen tweet ID between runs.
 # 中文：存储上次已处理的推文 ID（用于增量检测）。

@@ -1769,14 +1769,20 @@ print('Replies:',lg.get('reply_count'))
             <button class="tab-btn" data-sdk="xdk" onclick="switchTab('s07','xdk')"><span class="tab-dot"></span> xdk SDK</button>
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s07','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
+          <div class="http-note" style="border-color:#34D399;background:rgba(52,211,153,0.07);">
+            <svg width="14" height="14" fill="none" stroke="#34D399" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+            <span><strong>Feishu prerequisite / 飞书前提：</strong> Feishu must be configured in TweetPilot settings before these scripts will work. The <code>/api/v1/feishu/send</code> endpoint is only accessible locally — it listens on <strong>127.0.0.1</strong> at the REST API port you set in TweetPilot's system settings (default&nbsp;<code>20088</code>). Remote or public IPs will be rejected.<br>
+            <span style="opacity:.75">飞书需在 TweetPilot 系统设置中完成配置后脚本才能使用。<code>/api/v1/feishu/send</code> 仅监听本机 <strong>127.0.0.1</strong> + 系统设置中配置的 REST API 端口（默认 <code>20088</code>），外部 IP 访问无效。</span></span>
+          </div>
           <div class="tab-pane active" data-pane="s07-clawbot">
             <div class="code-wrap">
               <pre class="code-block"><span class="cm">"""
 S07 · Mention Monitor + Feishu Alert — ClawBot SDK
-EN: Search recent @mentions via TweetClaw, send Feishu webhook for new ones.
+EN: Search recent @mentions via TweetClaw, send Feishu alert for new ones.
+    Uses TweetPilot's built-in Feishu channel — no Webhook URL needed.
     Stores last-seen tweet ID locally so only new mentions are reported.
-中文：通过 TweetClaw 搜索最新提及，将新提及通过飞书 Webhook 推送通知。
-     状态保存在本地文件中，每次只上报新提及。
+中文：通过 TweetClaw 搜索最新提及，通过 TweetPilot 内置飞书通道推送新提及。
+     无需配置飞书 Webhook，每次只上报新提及。
 
 pip install requests  (clawbot pre-installed via TweetPilot)
 """</span>
@@ -1785,9 +1791,9 @@ import sys, requests
 from pathlib import Path
 from clawbot import ClawBotClient
 
-SCREEN_NAME   = "your_handle"  <span class="cm"># ← Your Twitter handle (no @) / 你的用户名（不含 @）</span>
-FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN"  <span class="cm"># ← Feishu webhook URL</span>
-STATE_FILE    = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+SCREEN_NAME  = "your_handle"  <span class="cm"># ← Your Twitter handle (no @) / 你的用户名（不含 @）</span>
+STATE_FILE   = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
 
 
 def load_last_id():
@@ -1800,9 +1806,13 @@ def save_last_id(tid):
 
 def send_feishu(text, tweet_id, author):
     url = f"https://x.com/{author}/status/{tweet_id}"
-    requests.post(FEISHU_WEBHOOK, json={"msg_type": "text",
-        "content": {"text": f"🔔 New mention\n@{author}: {text[:200]}\n{url}"}},
-        timeout=10).raise_for_status()
+    msg = f"🔔 New mention\n@{author}: {text[:200]}\n{url}"
+    <span class="cm"># POST /api/v1/feishu/send — TweetPilot built-in Feishu channel, no Webhook needed</span>
+    r = requests.post(f"{LOCAL_BRIDGE}/api/v1/feishu/send",
+        json={"text": msg}, timeout=10)
+    r.raise_for_status()
+    if not r.json().get("ok"):
+        raise RuntimeError(f"Feishu send failed: {r.json()}")
 
 
 def main():
@@ -1851,11 +1861,12 @@ if __name__ == "__main__":
             <div class="code-wrap">
               <pre class="code-block"><span class="cm">"""
 S07 · Mention Monitor + Feishu Alert — xdk SDK
-EN: Poll recent mentions via Twitter API v2, send Feishu webhook for new ones.
+EN: Poll recent mentions via Twitter API v2, send Feishu alert for new ones.
+    Uses TweetPilot's built-in Feishu channel — no Webhook URL needed.
     Passes since_id so only mentions newer than last run are fetched.
     Requires OAuth account authorized in TweetPilot.
-中文：通过 Twitter API v2 轮询最新提及，将新提及通过飞书 Webhook 推送通知。
-     传入 since_id 只获取上次运行后的新提及。
+中文：通过 Twitter API v2 轮询最新提及，通过 TweetPilot 内置飞书通道推送新提及。
+     无需配置飞书 Webhook，传入 since_id 只获取上次运行后的新提及。
 
 pip install xdk requests
 """</span>
@@ -1864,14 +1875,14 @@ import sys, requests
 from pathlib import Path
 from xdk import Client
 
-TWITTER_ID    = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID / OAuth 账号数字 ID</span>
-FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN"  <span class="cm"># ← Feishu webhook URL</span>
-STATE_FILE    = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+TWITTER_ID   = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID / OAuth 账号数字 ID</span>
+STATE_FILE   = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
 
 
 def get_access_token(twitter_id):
     try:
-        resp = requests.post("http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+        resp = requests.post(f"{LOCAL_BRIDGE}/api/v1/x/oauth/access-token",
             json={"twitter_id": twitter_id}, timeout=10)
         resp.raise_for_status()
         return resp.json()["access_token"]
@@ -1890,9 +1901,13 @@ def save_last_id(tid):
 
 def send_feishu(text, tweet_id):
     url = f"https://x.com/i/web/status/{tweet_id}"
-    requests.post(FEISHU_WEBHOOK, json={"msg_type": "text",
-        "content": {"text": f"🔔 New mention\n{text[:200]}\n{url}"}},
-        timeout=10).raise_for_status()
+    msg = f"🔔 New mention\n{text[:200]}\n{url}"
+    <span class="cm"># POST /api/v1/feishu/send — TweetPilot built-in Feishu channel, no Webhook needed</span>
+    r = requests.post(f"{LOCAL_BRIDGE}/api/v1/feishu/send",
+        json={"text": msg}, timeout=10)
+    r.raise_for_status()
+    if not r.json().get("ok"):
+        raise RuntimeError(f"Feishu send failed: {r.json()}")
 
 
 def main():
@@ -1949,7 +1964,8 @@ if __name__ == "__main__":
             <div class="code-wrap">
               <pre class="code-block"><span class="cm">"""
 S07 · Mention Monitor + Feishu Alert — HTTP REST API (LocalBridge)
-EN: Search @mentions via LocalBridge, send Feishu webhook for new ones.
+EN: Search @mentions via LocalBridge, send Feishu alert for new ones.
+    Uses TweetPilot's built-in Feishu channel — no Webhook URL needed.
     Stores last-seen tweet ID locally so only new mentions are reported.
 pip install requests
 """</span>
@@ -1959,7 +1975,6 @@ from pathlib import Path
 
 LOCAL_BRIDGE  = "http://127.0.0.1:20088"
 SCREEN_NAME   = "your_handle"  <span class="cm"># ← Your Twitter handle (no @) / 你的用户名（不含 @）</span>
-FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN"  <span class="cm"># ← Feishu webhook URL</span>
 STATE_FILE    = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
 
 
@@ -1972,11 +1987,11 @@ def save_last_id(tid):
     STATE_FILE.write_text(tid)
 
 def search_mentions(query):
-    <span class="cm"># GET /api/v1/x/search?q=@handle&count=20
-    # Response: {"ok": true, "data": {"data": {...GraphQL...}}}</span>
+    <span class="cm"># GET /api/v1/x/search?query=@handle&count=20
+    # Response: {"success": true, "data": {"data": {...GraphQL...}}}</span>
     try:
         resp = requests.get(f"{LOCAL_BRIDGE}/api/v1/x/search",
-            params={"q": query, "count": 20}, timeout=15)
+            params={"query": query, "count": 20}, timeout=15)
         resp.raise_for_status()
     except requests.exceptions.ConnectionError:
         print("ERROR: TweetPilot not running"); sys.exit(1)
@@ -1995,7 +2010,7 @@ def search_mentions(query):
                 t   = r.get("tweet") or r
                 rid = t.get("rest_id") or r.get("rest_id")
                 sn  = (t.get("core", {}).get("user_results", {})
-                        .get("result", {}).get("legacy", {}).get("screen_name", "unknown"))
+                        .get("result", {}).get("core", {}).get("screen_name", "unknown"))
                 if rid:
                     tweets.append({"id": rid, "text": t.get("legacy", {}).get("full_text", ""),
                                    "author_screen_name": sn})
@@ -2005,9 +2020,13 @@ def search_mentions(query):
 
 def send_feishu(text, tweet_id, author):
     url = f"https://x.com/{author}/status/{tweet_id}"
-    requests.post(FEISHU_WEBHOOK, json={"msg_type": "text",
-        "content": {"text": f"🔔 New mention\n@{author}: {text[:200]}\n{url}"}},
-        timeout=10).raise_for_status()
+    msg = f"🔔 New mention\n@{author}: {text[:200]}\n{url}"
+    <span class="cm"># POST /api/v1/feishu/send — TweetPilot built-in Feishu channel, no Webhook needed</span>
+    r = requests.post(f"{LOCAL_BRIDGE}/api/v1/feishu/send",
+        json={"text": msg}, timeout=10)
+    r.raise_for_status()
+    if not r.json().get("ok"):
+        raise RuntimeError(f"Feishu send failed: {r.json()}")
 
 
 def main():
@@ -2040,12 +2059,12 @@ if __name__ == "__main__":
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
             <div class="code-wrap">
               <pre class="code-block"><span class="cm"># Search @mentions via LocalBridge / 搜索提及（替换 your_handle）</span>
-curl -s "http://127.0.0.1:20088/api/v1/x/search?q=%40your_handle&count=20"
+curl -s "http://127.0.0.1:20088/api/v1/x/search?query=%40your_handle&count=20"
 
-<span class="cm"># Send Feishu webhook alert / 发送飞书通知（替换 YOUR_TOKEN 和 MESSAGE）</span>
-curl -s -X POST "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN" \
+<span class="cm"># Send Feishu alert via TweetPilot built-in channel / 通过 TweetPilot 内置飞书通道发送通知</span>
+curl -s -X POST "http://127.0.0.1:20088/api/v1/feishu/send" \
   -H "Content-Type: application/json" \
-  -d '{"msg_type":"text","content":{"text":"New mention: MESSAGE"}}'</pre>
+  -d '{"text":"🔔 New mention: MESSAGE"}'</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
           </div>
