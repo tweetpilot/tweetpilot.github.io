@@ -2,12 +2,14 @@
 S07 · Mention Monitor + Feishu Alert — ClawBot SDK
 =====================================================
 EN: Search for recent mentions of your @handle via the TweetClaw browser
-    extension, then send a Feishu (Lark) webhook notification for each
-    new mention since the last run. Only new mentions are reported.
+    extension, then send a Feishu notification for each new mention since
+    the last run. Only new mentions are reported.
     Stores the latest seen tweet ID in a local state file.
+    Uses TweetPilot's built-in Feishu channel — no Webhook URL needed.
 中文：通过 TweetClaw 浏览器扩展搜索 @你的账号 的最新提及，
-     将上次运行后的新提及通过飞书 Webhook 推送通知。
+     将上次运行后的新提及通过 TweetPilot 内置飞书通道推送。
      每次只上报新提及，状态保存在本地文件中。
+     无需配置飞书 Webhook，TweetPilot 已内置飞书发送接口。
 
 Requirements / 依赖:
   pip install requests
@@ -15,19 +17,16 @@ Requirements / 依赖:
 """
 
 import sys
-import json
 import requests
 from pathlib import Path
 from clawbot import ClawBotClient
 
 # ── Config / 配置 ────────────────────────────────────────────────────
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+
 # EN: Your Twitter @handle (without the @).
 # 中文：你的 Twitter 用户名（不含 @）。
-SCREEN_NAME = "your_handle"  # ← Replace / 替换为你的 Twitter 用户名
-
-# EN: Feishu Webhook URL. Create in Feishu group → Settings → Bots → Add Bot → Custom Bot.
-# 中文：飞书 Webhook 地址，在飞书群聊 → 设置 → 机器人 → 添加机器人 → 自定义机器人 中创建。
-FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_TOKEN"
+SCREEN_NAME = "huhulws"  # ← Replace / 替换为你的 Twitter 用户名（不含 @）
 
 # EN: Path to store the last-seen tweet ID between runs.
 # 中文：存储上次已处理的推文 ID（用于增量检测）。
@@ -35,10 +34,6 @@ STATE_FILE = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
 
 
 def load_last_id() -> str | None:
-    """
-    EN: Load the last-seen tweet ID from state file.
-    中文：从状态文件读取上次已处理的推文 ID。
-    """
     try:
         return STATE_FILE.read_text().strip() or None
     except FileNotFoundError:
@@ -46,28 +41,28 @@ def load_last_id() -> str | None:
 
 
 def save_last_id(tweet_id: str) -> None:
-    """
-    EN: Persist the most recent tweet ID so the next run skips already-seen mentions.
-    中文：保存最新推文 ID，供下次运行时跳过已处理的提及。
-    """
     STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
     STATE_FILE.write_text(tweet_id)
 
 
 def send_feishu_alert(text: str, tweet_id: str, author: str) -> None:
     """
-    EN: Post a Feishu webhook message for a new mention.
-    中文：通过飞书 Webhook 发送新提及通知。
+    EN: Send a Feishu notification via TweetPilot LocalBridge POST /api/v1/feishu/send.
+        No external Webhook URL needed — TweetPilot handles the Feishu channel.
+    中文：通过 TweetPilot LocalBridge POST /api/v1/feishu/send 发送飞书通知。
+         无需外部 Webhook，TweetPilot 内置飞书发送接口。
     """
     url = f"https://x.com/{author}/status/{tweet_id}"
-    payload = {
-        "msg_type": "text",
-        "content": {
-            "text": f"🔔 New mention / 新提及\n@{author}: {text[:200]}\n{url}",
-        },
-    }
-    resp = requests.post(FEISHU_WEBHOOK, json=payload, timeout=10)
+    message = f"🔔 New mention / 新提及\n@{author}: {text[:200]}\n{url}"
+    resp = requests.post(
+        f"{LOCAL_BRIDGE}/api/v1/feishu/send",
+        json={"text": message},
+        timeout=10,
+    )
     resp.raise_for_status()
+    data = resp.json()
+    if not data.get("ok"):
+        raise RuntimeError(f"Feishu send failed: {data}")
 
 
 def main():
@@ -91,7 +86,7 @@ def main():
     # EN: search_tweets returns tweets that match the query, newest first.
     # 中文：search_tweets 返回匹配关键词的推文，最新在前。
     try:
-        tweets = client.x.read.search_tweets(
+        tweets = client.x.tweets.search_tweets(
             query=f"@{SCREEN_NAME}",
             count=20,
             instance_id=instance_id,

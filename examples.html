@@ -1820,7 +1820,7 @@ def main():
 
     try:
         <span class="cm"># search_tweets returns newest-first results for the query</span>
-        tweets = client.x.read.search_tweets(
+        tweets = client.x.tweets.search_tweets(
             query=f"@{SCREEN_NAME}", count=20, instance_id=instance_id)
     except Exception as e:
         print(f"ERROR: {e}"); sys.exit(1)

@@ -1,12 +1,14 @@
 """
 S07 · Mention Monitor + Feishu Alert — xdk SDK
 ================================================
-EN: Poll recent mentions via Twitter API v2 and send a Feishu (Lark) webhook
-    notification for each new mention since the last run.
+EN: Poll recent mentions via Twitter API v2 and send a Feishu notification
+    for each new mention since the last run.
     Only new mentions are reported. Stores the latest seen tweet ID locally.
+    Uses TweetPilot's built-in Feishu channel — no Webhook URL needed.
     TweetPilot provides the OAuth access token automatically.
-中文：通过 Twitter API v2 轮询最新提及，将新提及通过飞书 Webhook 推送通知。
+中文：通过 Twitter API v2 轮询最新提及，将新提及通过 TweetPilot 内置飞书通道推送。
      每次只上报新提及，状态保存在本地文件中。
+     无需配置飞书 Webhook，TweetPilot 已内置飞书发送接口。
      TweetPilot 自动提供 OAuth access token，需 x 开头的 OAuth 授权账号。
 
 Requirements / 依赖:
@@ -20,11 +22,8 @@ from pathlib import Path
 from xdk import Client
 
 # ── Config / 配置 ────────────────────────────────────────────────────
-TWITTER_ID = "YOUR_TWITTER_ID"  # ← OAuth account numeric ID / OAuth 账号数字 ID
-
-# EN: Feishu Webhook URL. Create in Feishu group → Settings → Bots → Add Bot → Custom Bot.
-# 中文：飞书 Webhook 地址，在飞书群聊 → 设置 → 机器人 → 添加机器人 → 自定义机器人 中创建。
-FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_TOKEN"
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+TWITTER_ID   = "YOUR_TWITTER_ID"  # ← OAuth account numeric ID / OAuth 账号数字 ID
 
 # EN: Path to store the last-seen tweet ID between runs.
 # 中文：存储上次已处理的推文 ID（用于增量检测）。
@@ -34,7 +33,7 @@ STATE_FILE = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
 def get_access_token(twitter_id: str) -> str:
     try:
         resp = requests.post(
-            "http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            f"{LOCAL_BRIDGE}/api/v1/x/oauth/access-token",
             json={"twitter_id": twitter_id},
             timeout=10,
         )
@@ -60,20 +59,24 @@ def save_last_id(tweet_id: str) -> None:
     STATE_FILE.write_text(tweet_id)
 
 
-def send_feishu_alert(text: str, tweet_id: str, author_id: str) -> None:
+def send_feishu_alert(text: str, tweet_id: str) -> None:
     """
-    EN: Post a Feishu webhook message for a new mention.
-    中文：通过飞书 Webhook 发送新提及通知。
+    EN: Send a Feishu notification via TweetPilot LocalBridge POST /api/v1/feishu/send.
+        No external Webhook URL needed — TweetPilot handles the Feishu channel.
+    中文：通过 TweetPilot LocalBridge POST /api/v1/feishu/send 发送飞书通知。
+         无需外部 Webhook，TweetPilot 内置飞书发送接口。
     """
     url = f"https://x.com/i/web/status/{tweet_id}"
-    payload = {
-        "msg_type": "text",
-        "content": {
-            "text": f"🔔 New mention / 新提及\n{text[:200]}\n{url}",
-        },
-    }
-    resp = requests.post(FEISHU_WEBHOOK, json=payload, timeout=10)
+    message = f"🔔 New mention / 新提及\n{text[:200]}\n{url}"
+    resp = requests.post(
+        f"{LOCAL_BRIDGE}/api/v1/feishu/send",
+        json={"text": message},
+        timeout=10,
+    )
     resp.raise_for_status()
+    data = resp.json()
+    if not data.get("ok"):
+        raise RuntimeError(f"Feishu send failed: {data}")
 
 
 def main():
@@ -91,7 +94,7 @@ def main():
 
     new_tweets = []
     try:
-        # EN: get_mentions returns paginated mention timeline, newest first.
+        # EN: get_mentions returns newest-first paginated mention timeline.
         #     Pass since_id to only fetch mentions newer than the last run.
         # 中文：get_mentions 返回分页的提及时间线，最新在前。
         #      传入 since_id 只获取上次运行后的新提及。
@@ -101,9 +104,8 @@ def main():
             since_id=last_id,
             tweet_fields=["text", "author_id"],
         ):
-            for tweet in (page.data or []):
-                new_tweets.append(tweet)
-            break  # EN: One page is enough per run. / 每次运行取一页即可。
+            new_tweets.extend(page.data or [])
+            break  # EN: One page per run is enough. / 每次运行取一页即可。
     except Exception as e:
         err_body = ""
         if hasattr(e, "response") and e.response is not None:
@@ -124,10 +126,9 @@ def main():
         # 中文：xdk get_mentions 返回 dict 列表，使用字典访问。
         text     = (t.get("text") if isinstance(t, dict) else getattr(t, "text", "") or "")
         tweet_id = (t.get("id")   if isinstance(t, dict) else t.id)
-        author_id = (t.get("author_id") if isinstance(t, dict) else getattr(t, "author_id", ""))
         print(f"  Alerting tweet {tweet_id}: {text[:80]!r}")
         try:
-            send_feishu_alert(text=text, tweet_id=tweet_id, author_id=author_id)
+            send_feishu_alert(text=text, tweet_id=tweet_id)
         except Exception as e:
             print(f"  Feishu alert failed: {e}")
 
