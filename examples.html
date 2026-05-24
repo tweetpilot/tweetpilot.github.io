@@ -2096,24 +2096,468 @@ curl -s -X POST "http://127.0.0.1:20088/api/v1/feishu/send" \
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s08','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
           <div class="tab-pane active" data-pane="s08-clawbot">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · Retweet Trending Topics — ClawBot SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S08 · Retweet Trending Topics — ClawBot SDK
+============================================
+EN: Search for high-engagement tweets on a given topic via TweetClaw,
+    sort by likes, then retweet the top N results.
+    No trending API needed — uses keyword search + engagement filtering.
+中文：通过 TweetClaw 搜索指定话题的高互动推文，
+     按点赞数排序后转推前 N 条。
+     无需 trending API，以关键词搜索 + 互动数过滤实现。
+
+Requirements / 依赖:
+  pip install requests
+  TweetPilot running + TweetClaw browser extension online
+"""</span>
+
+import sys
+import time
+from clawbot import ClawBotClient
+
+<span class="cm"># ── Config / 配置 ────────────────────────────────────────────────────</span>
+<span class="cm"># EN: Topic keyword or hashtag to search.
+# 中文：搜索关键词或 hashtag。</span>
+TOPIC = "#AI"  <span class="cm"># ← Replace / 替换为你想搜索的话题</span>
+
+<span class="cm"># EN: Only retweet tweets with at least this many likes.
+# 中文：仅转推点赞数不低于此值的推文。</span>
+MIN_LIKES = 100  <span class="cm"># ← Minimum likes threshold / 最低点赞数</span>
+
+<span class="cm"># EN: Maximum number of tweets to retweet per run.
+# 中文：每次最多转推条数。</span>
+TOP_N = 3  <span class="cm"># ← Max retweets per run / 每次最多转推数</span>
+
+<span class="cm"># EN: Seconds to wait between retweets (avoid rate limiting).
+# 中文：每次转推之间的等待秒数（避免频率限制）。</span>
+DELAY_SECONDS = 3
+
+
+def parse_search_raw(raw: dict) -&gt; list:
+    <span class="cm">"""
+    EN: Parse raw LocalBridge search response into a flat list of tweet dicts.
+        Each dict has: id, text, author_screen_name, likes.
+    中文：解析 LocalBridge 搜索原始响应，返回推文字典列表。
+         每条含 id、text、author_screen_name、likes。
+    """</span>
+    tweets = []
+    try:
+        instructions = (
+            raw.get("data", {})
+               .get("data", {})
+               .get("search_by_raw_query", {})
+               .get("search_timeline", {})
+               .get("timeline", {})
+               .get("instructions", [])
+        )
+        for instruction in instructions:
+            for entry in instruction.get("entries", []):
+                result = (
+                    entry.get("content", {})
+                         .get("itemContent", {})
+                         .get("tweet_results", {})
+                         .get("result", {})
+                )
+                if not result:
+                    continue
+                <span class="cm"># EN: Handle TweetWithVisibilityResults wrapper.
+                # 中文：兼容 TweetWithVisibilityResults 包装格式。</span>
+                tweet   = result.get("tweet") or result
+                rest_id = tweet.get("rest_id") or result.get("rest_id")
+                legacy  = tweet.get("legacy", {})
+                text    = legacy.get("full_text", "")
+                likes   = legacy.get("favorite_count", 0)
+                screen_name = (
+                    tweet.get("core", {})
+                         .get("user_results", {})
+                         .get("result", {})
+                         .get("core", {})
+                         .get("screen_name", "unknown")
+                )
+                if rest_id:
+                    tweets.append({
+                        "id": rest_id,
+                        "text": text,
+                        "author_screen_name": screen_name,
+                        "likes": likes,
+                    })
+    except Exception as e:
+        print(f"WARNING: Could not parse search results: {e}")
+    return tweets
+
+
+def main():
+    client = ClawBotClient()
+
+    <span class="cm"># EN: Auto-select first connected TweetClaw instance.
+    # 中文：自动选择第一个已连接的 TweetClaw 实例。</span>
+    instances = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        instance_id = instances[0].get("instanceId") or instances[0].get("id")
+
+    print(f"Searching tweets for topic {TOPIC!r}...")
+
+    try:
+        raw = client.x.tweets.transport.search_raw(
+            query=TOPIC,
+            count=20,
+            instance_id=instance_id,
+        )
+    except Exception as e:
+        print(f"ERROR: Search failed: {e}")
+        sys.exit(1)
+
+    tweets = parse_search_raw(raw)
+
+    if not tweets:
+        print("No tweets found / 未找到推文")
+        return
+
+    <span class="cm"># EN: Sort by likes descending, then apply MIN_LIKES filter.
+    # 中文：按点赞数降序排序，再过滤低于门槛的推文。</span>
+    sorted_tweets = sorted(tweets, key=lambda t: t["likes"], reverse=True)
+    top_tweets = [t for t in sorted_tweets if t["likes"] &gt;= MIN_LIKES][:TOP_N]
+
+    if not top_tweets:
+        print(f"No tweets with &gt;= {MIN_LIKES} likes / 没有点赞数达到 {MIN_LIKES} 的推文")
+        return
+
+    print(f"Retweeting top {len(top_tweets)} tweet(s) / 转推前 {len(top_tweets)} 条...")
+
+    for t in top_tweets:
+        print(f"  [{t['likes']} likes] @{t['author_screen_name']}: {t['text'][:80]!r}")
+        try:
+            client.x.actions.retweet(tweet_id=t["id"], instance_id=instance_id)
+            print(f"  ✓ Retweeted / 已转推 {t['id']}")
+        except Exception as e:
+            print(f"  Retweet failed: {e}")
+        time.sleep(DELAY_SECONDS)
+
+    print("Done / 完成")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s08-xdk">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · Retweet Trending Topics — xdk SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S08 · Retweet Trending Topics — xdk SDK
+=========================================
+EN: Search for high-engagement tweets on a given topic via Twitter API v2,
+    sort by public metrics, then retweet the top N results.
+    TweetPilot provides the OAuth access token automatically.
+中文：通过 Twitter API v2 搜索指定话题的高互动推文，
+     按互动数排序后转推前 N 条。
+     TweetPilot 自动提供 OAuth access token。
+
+Requirements / 依赖:
+  pip install xdk requests
+  TweetPilot running + OAuth account authorized in Account Settings
+"""</span>
+
+import sys
+import time
+import requests
+from xdk import Client
+
+<span class="cm"># ── Config / 配置 ────────────────────────────────────────────────────</span>
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+TWITTER_ID   = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID / OAuth 账号数字 ID</span>
+
+<span class="cm"># EN: Topic keyword or hashtag to search.
+# 中文：搜索关键词或 hashtag。</span>
+TOPIC = "#AI"  <span class="cm"># ← Replace / 替换为你想搜索的话题</span>
+
+<span class="cm"># EN: Only retweet tweets with at least this many likes.
+# 中文：仅转推点赞数不低于此值的推文。</span>
+MIN_LIKES = 100  <span class="cm"># ← Minimum likes threshold / 最低点赞数</span>
+
+<span class="cm"># EN: Maximum number of tweets to retweet per run.
+# 中文：每次最多转推条数。</span>
+TOP_N = 3  <span class="cm"># ← Max retweets per run / 每次最多转推数</span>
+
+<span class="cm"># EN: Seconds to wait between retweets (avoid rate limiting).
+# 中文：每次转推之间的等待秒数（避免频率限制）。</span>
+DELAY_SECONDS = 3
+
+
+def get_access_token(twitter_id: str) -&gt; str:
+    try:
+        resp = requests.post(
+            f"{LOCAL_BRIDGE}/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running / TweetPilot 未在运行")
+        sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}")
+        sys.exit(1)
+
+
+def get_likes(tweet) -&gt; int:
+    <span class="cm">"""Extract like count from tweet dict or object."""</span>
+    if isinstance(tweet, dict):
+        m = tweet.get("public_metrics") or {}
+        return m.get("like_count", 0)
+    m = getattr(tweet, "public_metrics", None) or {}
+    return m.get("like_count", 0) if isinstance(m, dict) else 0
+
+
+def main():
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID."); sys.exit(1)
+
+    <span class="cm"># EN: Must use access_token= (User OAuth 2.0), NOT bearer_token=.
+    # 中文：必须用 access_token= 传入，bearer_token= 是只读的 App token。</span>
+    client = Client(access_token=get_access_token(TWITTER_ID))
+
+    print(f"Searching tweets for topic {TOPIC!r}...")
+
+    tweets = []
+    try:
+        for page in client.posts.search_recent(
+            query=TOPIC,
+            max_results=20,
+            tweet_fields=["public_metrics", "text", "author_id"],
+        ):
+            tweets.extend(page.data or [])
+            break  <span class="cm"># EN: One page per run is enough. / 每次运行取一页即可。</span>
+    except Exception as e:
+        err_body = getattr(getattr(e, "response", None), "text", "") or str(e)
+        print(f"ERROR: Search failed: {err_body}")
+        sys.exit(1)
+
+    if not tweets:
+        print("No tweets found / 未找到推文")
+        return
+
+    <span class="cm"># EN: Sort by likes descending, then apply MIN_LIKES filter.
+    # 中文：按点赞数降序排序，再过滤低于门槛的推文。</span>
+    sorted_tweets = sorted(tweets, key=get_likes, reverse=True)
+    top_tweets = [t for t in sorted_tweets if get_likes(t) &gt;= MIN_LIKES][:TOP_N]
+
+    if not top_tweets:
+        print(f"No tweets with &gt;= {MIN_LIKES} likes / 没有点赞数达到 {MIN_LIKES} 的推文")
+        return
+
+    print(f"Retweeting top {len(top_tweets)} tweet(s) / 转推前 {len(top_tweets)} 条...")
+
+    for t in top_tweets:
+        tweet_id = t.get("id") if isinstance(t, dict) else t.id
+        text     = (t.get("text", "") if isinstance(t, dict) else getattr(t, "text", "") or "")[:80]
+        likes    = get_likes(t)
+        print(f"  [{likes} likes] {tweet_id}: {text!r}")
+        try:
+            <span class="cm"># EN: repost_post uses body with tweet_id.
+            # 中文：repost_post 需要 body 中包含 tweet_id。</span>
+            client.users.repost_post(
+                id=TWITTER_ID,
+                body={"tweet_id": tweet_id},
+            )
+            print(f"  ✓ Retweeted / 已转推 {tweet_id}")
+        except Exception as e:
+            err_body = getattr(getattr(e, "response", None), "text", "") or str(e)
+            print(f"  Retweet failed: {err_body}")
+        time.sleep(DELAY_SECONDS)
+
+    print("Done / 完成")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s08-http">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · Retweet Trending Topics — Python requests
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Calls <strong>LocalBridge REST API</strong> — browser extension acts as proxy, no OAuth token needed. To call Twitter's official API directly, see <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter docs</a>.</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S08 · Retweet Trending Topics — HTTP REST API (LocalBridge)
+=============================================================
+EN: Search for high-engagement tweets on a given topic via LocalBridge,
+    sort by likes, then retweet the top N results.
+    Uses the browser extension as proxy — no OAuth token needed.
+中文：通过 LocalBridge 搜索指定话题的高互动推文，
+     按点赞数排序后转推前 N 条。
+     以浏览器扩展作为代理，无需 OAuth token。
+
+Requirements / 依赖:
+  pip install requests
+  TweetPilot running + TweetClaw browser extension online
+"""</span>
+
+import sys
+import time
+import requests
+
+<span class="cm"># ── Config / 配置 ────────────────────────────────────────────────────</span>
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+
+<span class="cm"># EN: Topic keyword or hashtag to search.
+# 中文：搜索关键词或 hashtag。</span>
+TOPIC = "#AI"  <span class="cm"># ← Replace / 替换为你想搜索的话题</span>
+
+<span class="cm"># EN: Only retweet tweets with at least this many likes.
+# 中文：仅转推点赞数不低于此值的推文。</span>
+MIN_LIKES = 100  <span class="cm"># ← Minimum likes threshold / 最低点赞数</span>
+
+<span class="cm"># EN: Maximum number of tweets to retweet per run.
+# 中文：每次最多转推条数。</span>
+TOP_N = 3  <span class="cm"># ← Max retweets per run / 每次最多转推数</span>
+
+<span class="cm"># EN: Seconds to wait between retweets (avoid rate limiting).
+# 中文：每次转推之间的等待秒数（避免频率限制）。</span>
+DELAY_SECONDS = 3
+
+
+def search_tweets(query: str) -&gt; list:
+    <span class="cm">"""
+    EN: Search tweets via LocalBridge GET /api/v1/x/search.
+        Returns a list of tweet dicts with id, text, author_screen_name, and likes.
+    中文：通过 LocalBridge GET /api/v1/x/search 搜索推文。
+         返回含 id、text、author_screen_name、likes 的推文字典列表。
+    """</span>
+    try:
+        resp = requests.get(
+            f"{LOCAL_BRIDGE}/api/v1/x/search",
+            params={"query": query, "count": 20},
+            timeout=15,
+        )
+        resp.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running / TweetPilot 未在运行")
+        sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}")
+        sys.exit(1)
+
+    tweets = []
+    try:
+        <span class="cm"># EN: LocalBridge wraps response: {"success": true, "data": {"data": {...GraphQL...}}}
+        # 中文：LocalBridge 包装响应：{"success": true, "data": {"data": {...GraphQL...}}}</span>
+        instructions = (
+            resp.json()
+                .get("data", {})
+                .get("data", {})
+                .get("search_by_raw_query", {})
+                .get("search_timeline", {})
+                .get("timeline", {})
+                .get("instructions", [])
+        )
+        for instruction in instructions:
+            for entry in instruction.get("entries", []):
+                result = (
+                    entry.get("content", {})
+                         .get("itemContent", {})
+                         .get("tweet_results", {})
+                         .get("result", {})
+                )
+                if not result:
+                    continue
+                <span class="cm"># EN: Handle TweetWithVisibilityResults wrapper.
+                # 中文：兼容 TweetWithVisibilityResults 包装格式。</span>
+                tweet   = result.get("tweet") or result
+                rest_id = tweet.get("rest_id") or result.get("rest_id")
+                legacy  = tweet.get("legacy", {})
+                text    = legacy.get("full_text", "")
+                likes   = legacy.get("favorite_count", 0)
+                screen_name = (
+                    tweet.get("core", {})
+                         .get("user_results", {})
+                         .get("result", {})
+                         .get("core", {})
+                         .get("screen_name", "unknown")
+                )
+                if rest_id:
+                    tweets.append({
+                        "id": rest_id,
+                        "text": text,
+                        "author_screen_name": screen_name,
+                        "likes": likes,
+                    })
+    except Exception as e:
+        print(f"WARNING: Could not parse search results: {e}")
+    return tweets
+
+
+def retweet(tweet_id: str) -&gt; None:
+    <span class="cm">"""
+    EN: Retweet via LocalBridge POST /api/v1/x/retweets.
+    中文：通过 LocalBridge POST /api/v1/x/retweets 转推。
+    """</span>
+    resp = requests.post(
+        f"{LOCAL_BRIDGE}/api/v1/x/retweets",
+        json={"tweetId": tweet_id},
+        timeout=15,
+    )
+    resp.raise_for_status()
+
+
+def main():
+    print(f"Searching tweets for topic {TOPIC!r}...")
+
+    tweets = search_tweets(TOPIC)
+
+    if not tweets:
+        print("No tweets found / 未找到推文")
+        return
+
+    <span class="cm"># EN: Sort by likes descending, then apply MIN_LIKES filter.
+    # 中文：按点赞数降序排序，再过滤低于门槛的推文。</span>
+    sorted_tweets = sorted(tweets, key=lambda t: t["likes"], reverse=True)
+    top_tweets = [t for t in sorted_tweets if t["likes"] &gt;= MIN_LIKES][:TOP_N]
+
+    if not top_tweets:
+        print(f"No tweets with &gt;= {MIN_LIKES} likes / 没有点赞数达到 {MIN_LIKES} 的推文")
+        return
+
+    print(f"Retweeting top {len(top_tweets)} tweet(s) / 转推前 {len(top_tweets)} 条...")
+
+    for t in top_tweets:
+        print(f"  [{t['likes']} likes] @{t['author_screen_name']}: {t['text'][:80]!r}")
+        try:
+            retweet(t["id"])
+            print(f"  ✓ Retweeted / 已转推 {t['id']}")
+        except Exception as e:
+            print(f"  Retweet failed: {e}")
+        time.sleep(DELAY_SECONDS)
+
+    print("Done / 完成")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S08 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Search trending tweets via LocalBridge / 搜索热点推文（替换 %23AI 为你的话题，%23 = #）</span>
+curl -s "http://127.0.0.1:20088/api/v1/x/search?query=%23AI&count=20"
+
+<span class="cm"># Retweet a tweet via LocalBridge / 转推推文（替换 TWEET_ID）</span>
+curl -s -X POST "http://127.0.0.1:20088/api/v1/x/retweets" \
+  -H "Content-Type: application/json" \
+  -d '{"tweetId":"TWEET_ID"}'</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="download-row">
             <span class="download-row-label">↓</span>
-            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
-            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
-            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+            <a class="btn-dl clawbot" href="/examples/s08_retweet_trending/s08_retweet_trending_clawbot.py" download="s08_retweet_trending_clawbot.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s08_retweet_trending/s08_retweet_trending_xdk.py" download="s08_retweet_trending_xdk.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s08_retweet_trending/s08_retweet_trending_http_rest.py" download="s08_retweet_trending_http_rest.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
           </div>
         </div>
       </div>
