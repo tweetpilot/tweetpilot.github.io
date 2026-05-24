@@ -1337,24 +1337,178 @@ curl -s -X POST http://127.0.0.1:20088/api/v1/x/likes \
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s05','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
           <div class="tab-pane active" data-pane="s05-clawbot">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · Batch Follow — ClawBot SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S05 · Batch Follow — ClawBot SDK
+EN: Follow a list of user IDs in bulk via the TweetClaw browser extension.
+    Adds a delay between each follow to avoid rate-limiting.
+中文：通过 TweetClaw 浏览器扩展批量关注一组用户 ID，每次关注间隔等待。
+
+pip install requests  (clawbot pre-installed via TweetPilot)
+"""</span>
+
+import sys, time
+from clawbot import ClawBotClient
+
+TARGET_IDS = [
+    "44196397",   <span class="cm"># @elonmusk</span>
+    "783214",     <span class="cm"># @x</span>
+]
+DELAY_SECONDS = 5  <span class="cm"># ← seconds between each follow / 每次关注间隔秒数</span>
+
+
+def main():
+    client = ClawBotClient()
+    instances   = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        instance_id = instances[0].get("instanceId") or instances[0].get("id")
+
+    for i, user_id in enumerate(TARGET_IDS):
+        print(f"Following {user_id} ({i + 1}/{len(TARGET_IDS)})...")
+        try:
+            <span class="cm"># follow() → POST /api/v1/x/follows via LocalBridge</span>
+            result = client.x.actions.follow(user_id=user_id, instance_id=instance_id)
+            print(f"  Done / 完成: {result}")
+        except Exception as e:
+            print(f"  Failed / 失败: {e}"); sys.exit(1)
+        if i &lt; len(TARGET_IDS) - 1:
+            time.sleep(DELAY_SECONDS)
+
+    print(f"\nAll done / 全部完成: followed {len(TARGET_IDS)} users")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s05-xdk">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · Batch Follow — xdk SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S05 · Batch Follow — xdk SDK
+EN: Follow a list of user IDs in bulk via Twitter API v2.
+    Adds a delay between each follow to avoid rate-limiting.
+    Requires OAuth account authorized in TweetPilot.
+中文：通过 Twitter API v2 批量关注一组用户 ID，每次关注间隔等待。
+
+pip install xdk requests
+"""</span>
+
+import sys, time, requests
+from xdk import Client
+
+TWITTER_ID    = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID / OAuth 账号数字 ID</span>
+TARGET_IDS    = ["44196397", "783214"]  <span class="cm"># ← IDs to follow / 要关注的用户 ID 列表</span>
+DELAY_SECONDS = 5
+
+
+def get_access_token(twitter_id):
+    try:
+        resp = requests.post("http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10)
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}"); sys.exit(1)
+
+
+def main():
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID."); sys.exit(1)
+
+    <span class="cm"># Must use access_token= (User OAuth 2.0), NOT bearer_token= (read-only)</span>
+    client = Client(access_token=get_access_token(TWITTER_ID))
+
+    for i, target_id in enumerate(TARGET_IDS):
+        print(f"Following {target_id} ({i + 1}/{len(TARGET_IDS)})...")
+        try:
+            <span class="cm"># follow_user requires your own user ID + target user ID</span>
+            client.users.follow_user(id=TWITTER_ID, body={"target_user_id": target_id})
+            print(f"  Done / 完成: followed {target_id}")
+        except Exception as e:
+            body = e.response.text if hasattr(e, "response") and e.response else ""
+            print(f"  Failed / 失败: {body or e}"); sys.exit(1)
+        if i &lt; len(TARGET_IDS) - 1:
+            time.sleep(DELAY_SECONDS)
+
+    print(f"\nAll done / 全部完成: followed {len(TARGET_IDS)} users")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s05-http">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · Batch Follow — Python requests
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Calls <strong>LocalBridge REST API</strong> — browser extension acts as proxy, no OAuth token needed. To call Twitter's official API directly, see <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter docs</a>.</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S05 · Batch Follow — HTTP REST API (LocalBridge)
+EN: Follow a list of user IDs in bulk via LocalBridge.
+    Adds a delay between each follow to avoid rate-limiting.
+pip install requests
+"""</span>
+
+import sys, time, requests
+
+LOCAL_BRIDGE  = "http://127.0.0.1:20088"
+TARGET_IDS    = ["44196397", "783214"]  <span class="cm"># ← IDs to follow / 要关注的用户 ID 列表</span>
+DELAY_SECONDS = 5
+
+
+def follow_user(user_id):
+    <span class="cm"># POST /api/v1/x/follows — body: {"userId": "..."}</span>
+    try:
+        resp = requests.post(f"{LOCAL_BRIDGE}/api/v1/x/follows",
+            json={"userId": user_id}, timeout=15)
+        resp.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}"); sys.exit(1)
+    data = resp.json()
+    if not data.get("ok") and not data.get("success"):
+        raise RuntimeError(f"Follow failed: {data}")
+
+
+def main():
+    for i, user_id in enumerate(TARGET_IDS):
+        print(f"Following {user_id} ({i + 1}/{len(TARGET_IDS)})...")
+        try:
+            follow_user(user_id)
+            print(f"  Done / 完成: followed {user_id}")
+        except Exception as e:
+            print(f"  Failed / 失败: {e}"); sys.exit(1)
+        if i &lt; len(TARGET_IDS) - 1:
+            time.sleep(DELAY_SECONDS)
+
+    print(f"\nAll done / 全部完成: followed {len(TARGET_IDS)} users")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S05 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Follow a user via LocalBridge / 通过 LocalBridge 关注用户（替换 USER_ID）</span>
+curl -s -X POST http://127.0.0.1:20088/api/v1/x/follows \
+  -H "Content-Type: application/json" \
+  -d '{"userId": "USER_ID"}'</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="download-row">
             <span class="download-row-label">↓</span>
-            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
-            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
-            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+            <a class="btn-dl clawbot" href="/examples/s05_batch_follow/s05_batch_follow_clawbot.py" download="s05_batch_follow_clawbot.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s05_batch_follow/s05_batch_follow_xdk.py" download="s05_batch_follow_xdk.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s05_batch_follow/s05_batch_follow_http_rest.py" download="s05_batch_follow_http_rest.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
           </div>
         </div>
       </div>
@@ -1378,24 +1532,205 @@ curl -s -X POST http://127.0.0.1:20088/api/v1/x/likes \
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s06','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
           <div class="tab-pane active" data-pane="s06-clawbot">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · Tweet Metrics Report — ClawBot SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S06 · Tweet Metrics Report — ClawBot SDK
+EN: Fetch engagement metrics for a tweet via TweetClaw browser extension.
+    Metrics live in the raw GraphQL "legacy" field.
+中文：通过 TweetClaw 浏览器扩展获取指定推文的互动数据（点赞/转推/回复/书签）。
+
+pip install requests  (clawbot pre-installed via TweetPilot)
+"""</span>
+
+import sys
+from clawbot import ClawBotClient
+
+TWEET_ID = "1234567890123456789"  <span class="cm"># ← Replace with target tweet ID / 替换为目标推文 ID</span>
+
+
+def main():
+    client = ClawBotClient()
+    instances   = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        instance_id = instances[0].get("instanceId") or instances[0].get("id")
+
+    print(f"Fetching tweet {TWEET_ID}...")
+    try:
+        <span class="cm"># get_tweet() fetches full tweet object; metrics are in tweet.raw["legacy"]</span>
+        tweet = client.x.read.get_tweet(tweet_id=TWEET_ID, instance_id=instance_id)
+    except Exception as e:
+        print(f"ERROR: {e}"); sys.exit(1)
+
+    if not tweet or not tweet.id:
+        print("ERROR: Tweet not found / 未找到该推文"); sys.exit(1)
+
+    legacy = tweet.raw.get("legacy", {})
+    print(f"\n── Tweet Metrics Report / 推文互动报告 ──")
+    print(f"ID        : {tweet.id}")
+    print(f"Author    : @{tweet.author_screen_name}")
+    print(f"Text      : {(tweet.text or '')[:120]}")
+    print(f"Likes     : {legacy.get('favorite_count', 'N/A')}")
+    print(f"Retweets  : {legacy.get('retweet_count',  'N/A')}")
+    print(f"Replies   : {legacy.get('reply_count',    'N/A')}")
+    print(f"Quotes    : {legacy.get('quote_count',    'N/A')}")
+    print(f"Bookmarks : {legacy.get('bookmark_count', 'N/A')}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s06-xdk">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · Tweet Metrics Report — xdk SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S06 · Tweet Metrics Report — xdk SDK
+EN: Fetch engagement metrics via Twitter API v2 public_metrics field.
+    Requires OAuth account authorized in TweetPilot.
+中文：通过 Twitter API v2 public_metrics 字段获取推文互动数据。
+
+pip install xdk requests
+"""</span>
+
+import sys, requests
+from xdk import Client
+
+TWITTER_ID = "YOUR_TWITTER_ID"       <span class="cm"># ← OAuth account numeric ID / OAuth 账号数字 ID</span>
+TWEET_ID   = "1234567890123456789"   <span class="cm"># ← Replace with target tweet ID / 替换为目标推文 ID</span>
+
+
+def get_access_token(twitter_id):
+    try:
+        resp = requests.post("http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10)
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}"); sys.exit(1)
+
+
+def main():
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID."); sys.exit(1)
+
+    client = Client(access_token=get_access_token(TWITTER_ID))
+    print(f"Fetching tweet {TWEET_ID}...")
+    try:
+        <span class="cm"># get_by_id with public_metrics returns likes/retweets/replies/impressions</span>
+        resp = client.posts.get_by_id(id=TWEET_ID,
+            tweet_fields=["public_metrics", "text", "author_id"])
+    except Exception as e:
+        body = e.response.text if hasattr(e, "response") and e.response else ""
+        print(f"ERROR: {body or e}"); sys.exit(1)
+
+    tweet = resp.data if hasattr(resp, "data") else resp
+    if not tweet:
+        print("ERROR: Tweet not found"); sys.exit(1)
+
+    <span class="cm"># xdk may return a dict or an object — handle both</span>
+    text    = tweet.get("text", "") if isinstance(tweet, dict) else (tweet.text or "")
+    metrics = tweet.get("public_metrics", {}) if isinstance(tweet, dict) else (tweet.public_metrics or {})
+    m = metrics if isinstance(metrics, dict) else {}
+
+    print(f"\n── Tweet Metrics Report / 推文互动报告 ──")
+    print(f"ID          : {TWEET_ID}")
+    print(f"Text        : {text[:120]}")
+    print(f"Likes       : {m.get('like_count',       'N/A')}")
+    print(f"Retweets    : {m.get('retweet_count',    'N/A')}")
+    print(f"Replies     : {m.get('reply_count',      'N/A')}")
+    print(f"Quotes      : {m.get('quote_count',      'N/A')}")
+    print(f"Impressions : {m.get('impression_count', 'N/A')}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s06-http">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · Tweet Metrics Report — Python requests
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Calls <strong>LocalBridge REST API</strong> — browser extension acts as proxy, no OAuth token needed. To call Twitter's official API directly, see <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter docs</a>.</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S06 · Tweet Metrics Report — HTTP REST API (LocalBridge)
+EN: Fetch tweet engagement metrics via LocalBridge GET /api/v1/x/tweets.
+    Metrics live in the GraphQL response under the "legacy" key.
+pip install requests
+"""</span>
+
+import sys, requests
+
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+TWEET_ID     = "1234567890123456789"  <span class="cm"># ← Replace with target tweet ID / 替换为目标推文 ID</span>
+
+
+def get_tweet(tweet_id):
+    <span class="cm"># GET /api/v1/x/tweets?tweetId=&lt;id&gt;
+    # Response: {"ok": true, "data": {"data": {...GraphQL...}}}</span>
+    try:
+        resp = requests.get(f"{LOCAL_BRIDGE}/api/v1/x/tweets",
+            params={"tweetId": tweet_id}, timeout=15)
+        resp.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code}"); sys.exit(1)
+    return resp.json().get("data", {}).get("data", {})
+
+
+def main():
+    print(f"Fetching tweet {TWEET_ID}...")
+    data = get_tweet(TWEET_ID)
+    if not data:
+        print("ERROR: Tweet not found"); sys.exit(1)
+
+    tweet_result = data.get("tweetResult", {}).get("result", {})
+    tweet   = tweet_result.get("tweet") or tweet_result
+    legacy  = tweet.get("legacy", {})
+    user_lg = tweet.get("core", {}).get("user_results", {}).get("result", {}).get("legacy", {})
+
+    print(f"\n── Tweet Metrics Report / 推文互动报告 ──")
+    print(f"ID        : {TWEET_ID}")
+    print(f"Author    : @{user_lg.get('screen_name', 'unknown')}")
+    print(f"Text      : {legacy.get('full_text', '')[:120]}")
+    print(f"Likes     : {legacy.get('favorite_count', 'N/A')}")
+    print(f"Retweets  : {legacy.get('retweet_count',  'N/A')}")
+    print(f"Replies   : {legacy.get('reply_count',    'N/A')}")
+    print(f"Quotes    : {legacy.get('quote_count',    'N/A')}")
+    print(f"Bookmarks : {legacy.get('bookmark_count', 'N/A')}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S06 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Fetch tweet metrics via LocalBridge / 获取推文互动数据（替换 TWEET_ID）</span>
+curl -s "http://127.0.0.1:20088/api/v1/x/tweets?tweetId=TWEET_ID" | \
+  python3 -c "
+import json,sys
+d=json.load(sys.stdin).get('data',{}).get('data',{})
+r=d.get('tweetResult',{}).get('result',{})
+t=r.get('tweet') or r
+lg=t.get('legacy',{})
+print('Likes:',lg.get('favorite_count'))
+print('Retweets:',lg.get('retweet_count'))
+print('Replies:',lg.get('reply_count'))
+"</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="download-row">
             <span class="download-row-label">↓</span>
-            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
-            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
-            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+            <a class="btn-dl clawbot" href="/examples/s06_tweet_metrics/s06_tweet_metrics_clawbot.py" download="s06_tweet_metrics_clawbot.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s06_tweet_metrics/s06_tweet_metrics_xdk.py" download="s06_tweet_metrics_xdk.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s06_tweet_metrics/s06_tweet_metrics_http_rest.py" download="s06_tweet_metrics_http_rest.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
           </div>
         </div>
       </div>
@@ -1419,24 +1754,290 @@ curl -s -X POST http://127.0.0.1:20088/api/v1/x/likes \
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s07','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
           <div class="tab-pane active" data-pane="s07-clawbot">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · Mention Monitor + Feishu Alert — ClawBot SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S07 · Mention Monitor + Feishu Alert — ClawBot SDK
+EN: Search recent @mentions via TweetClaw, send Feishu webhook for new ones.
+    Stores last-seen tweet ID locally so only new mentions are reported.
+中文：通过 TweetClaw 搜索最新提及，将新提及通过飞书 Webhook 推送通知。
+     状态保存在本地文件中，每次只上报新提及。
+
+pip install requests  (clawbot pre-installed via TweetPilot)
+"""</span>
+
+import sys, requests
+from pathlib import Path
+from clawbot import ClawBotClient
+
+SCREEN_NAME   = "your_handle"  <span class="cm"># ← Your Twitter handle (no @) / 你的用户名（不含 @）</span>
+FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN"  <span class="cm"># ← Feishu webhook URL</span>
+STATE_FILE    = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
+
+
+def load_last_id():
+    try: return STATE_FILE.read_text().strip() or None
+    except FileNotFoundError: return None
+
+def save_last_id(tid):
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.write_text(tid)
+
+def send_feishu(text, tweet_id, author):
+    url = f"https://x.com/{author}/status/{tweet_id}"
+    requests.post(FEISHU_WEBHOOK, json={"msg_type": "text",
+        "content": {"text": f"🔔 New mention\n@{author}: {text[:200]}\n{url}"}},
+        timeout=10).raise_for_status()
+
+
+def main():
+    if SCREEN_NAME == "your_handle":
+        print("ERROR: Set SCREEN_NAME to your Twitter handle."); sys.exit(1)
+
+    client = ClawBotClient()
+    instances   = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        instance_id = instances[0].get("instanceId") or instances[0].get("id")
+
+    last_id = load_last_id()
+    print(f"Searching @{SCREEN_NAME} mentions (since_id={last_id or 'none'})...")
+
+    try:
+        <span class="cm"># search_tweets returns newest-first results for the query</span>
+        tweets = client.x.read.search_tweets(
+            query=f"@{SCREEN_NAME}", count=20, instance_id=instance_id)
+    except Exception as e:
+        print(f"ERROR: {e}"); sys.exit(1)
+
+    <span class="cm"># Keep only tweets newer than last seen ID</span>
+    new_tweets = [t for t in tweets if not last_id or t.id &gt; last_id]
+    if not new_tweets:
+        print("No new mentions / 无新提及"); return
+
+    print(f"Found {len(new_tweets)} new mention(s) / 发现 {len(new_tweets)} 条新提及")
+    for t in reversed(new_tweets):
+        author = getattr(t, "author_screen_name", "unknown") or "unknown"
+        text   = getattr(t, "text", "") or ""
+        print(f"  @{author}: {text[:80]!r}")
+        try: send_feishu(text, t.id, author)
+        except Exception as e: print(f"  Feishu failed: {e}")
+
+    save_last_id(new_tweets[0].id)
+    print(f"Done / 完成. Last ID: {new_tweets[0].id}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s07-xdk">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · Mention Monitor + Feishu Alert — xdk SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S07 · Mention Monitor + Feishu Alert — xdk SDK
+EN: Poll recent mentions via Twitter API v2, send Feishu webhook for new ones.
+    Passes since_id so only mentions newer than last run are fetched.
+    Requires OAuth account authorized in TweetPilot.
+中文：通过 Twitter API v2 轮询最新提及，将新提及通过飞书 Webhook 推送通知。
+     传入 since_id 只获取上次运行后的新提及。
+
+pip install xdk requests
+"""</span>
+
+import sys, requests
+from pathlib import Path
+from xdk import Client
+
+TWITTER_ID    = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID / OAuth 账号数字 ID</span>
+FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN"  <span class="cm"># ← Feishu webhook URL</span>
+STATE_FILE    = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
+
+
+def get_access_token(twitter_id):
+    try:
+        resp = requests.post("http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10)
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}"); sys.exit(1)
+
+def load_last_id():
+    try: return STATE_FILE.read_text().strip() or None
+    except FileNotFoundError: return None
+
+def save_last_id(tid):
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.write_text(tid)
+
+def send_feishu(text, tweet_id):
+    url = f"https://x.com/i/web/status/{tweet_id}"
+    requests.post(FEISHU_WEBHOOK, json={"msg_type": "text",
+        "content": {"text": f"🔔 New mention\n{text[:200]}\n{url}"}},
+        timeout=10).raise_for_status()
+
+
+def main():
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID."); sys.exit(1)
+
+    <span class="cm"># Must use access_token= (User OAuth 2.0), NOT bearer_token= (read-only)</span>
+    client = Client(access_token=get_access_token(TWITTER_ID))
+
+    last_id = load_last_id()
+    print(f"Fetching mentions for {TWITTER_ID} (since_id={last_id or 'none'})...")
+
+    new_tweets = []
+    try:
+        <span class="cm"># get_mentions returns newest-first paginated mention timeline
+        # Pass since_id to only fetch mentions newer than the last run</span>
+        for page in client.users.get_mentions(
+                id=TWITTER_ID, max_results=20, since_id=last_id,
+                tweet_fields=["text", "author_id"]):
+            new_tweets.extend(page.data or [])
+            break  <span class="cm"># one page per run is enough</span>
+    except Exception as e:
+        body = e.response.text if hasattr(e, "response") and e.response else ""
+        print(f"ERROR: {body or e}"); sys.exit(1)
+
+    if not new_tweets:
+        print("No new mentions / 无新提及"); return
+
+    print(f"Found {len(new_tweets)} new mention(s) / 发现 {len(new_tweets)} 条新提及")
+    for t in reversed(new_tweets):
+        <span class="cm"># xdk get_mentions returns dicts — use dict access</span>
+        text     = t.get("text", "") if isinstance(t, dict) else (t.text or "")
+        tweet_id = t.get("id")      if isinstance(t, dict) else t.id
+        print(f"  {tweet_id}: {text[:80]!r}")
+        try: send_feishu(text, tweet_id)
+        except Exception as e: print(f"  Feishu failed: {e}")
+
+    first = new_tweets[0]
+    newest_id = first.get("id") if isinstance(first, dict) else first.id
+    save_last_id(newest_id)
+    print(f"Done / 完成. Last ID: {newest_id}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="tab-pane" data-pane="s07-http">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · Mention Monitor + Feishu Alert — Python requests
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Calls <strong>LocalBridge REST API</strong> — browser extension acts as proxy, no OAuth token needed. To call Twitter's official API directly, see <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter docs</a>.</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S07 · Mention Monitor + Feishu Alert — HTTP REST API (LocalBridge)
+EN: Search @mentions via LocalBridge, send Feishu webhook for new ones.
+    Stores last-seen tweet ID locally so only new mentions are reported.
+pip install requests
+"""</span>
+
+import sys, requests
+from pathlib import Path
+
+LOCAL_BRIDGE  = "http://127.0.0.1:20088"
+SCREEN_NAME   = "your_handle"  <span class="cm"># ← Your Twitter handle (no @) / 你的用户名（不含 @）</span>
+FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN"  <span class="cm"># ← Feishu webhook URL</span>
+STATE_FILE    = Path.home() / ".tweetpilot" / "s07_last_mention_id.txt"
+
+
+def load_last_id():
+    try: return STATE_FILE.read_text().strip() or None
+    except FileNotFoundError: return None
+
+def save_last_id(tid):
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.write_text(tid)
+
+def search_mentions(query):
+    <span class="cm"># GET /api/v1/x/search?q=@handle&count=20
+    # Response: {"ok": true, "data": {"data": {...GraphQL...}}}</span>
+    try:
+        resp = requests.get(f"{LOCAL_BRIDGE}/api/v1/x/search",
+            params={"q": query, "count": 20}, timeout=15)
+        resp.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code}"); sys.exit(1)
+
+    tweets = []
+    try:
+        instructions = (resp.json().get("data", {}).get("data", {})
+            .get("search_by_raw_query", {}).get("search_timeline", {})
+            .get("timeline", {}).get("instructions", []))
+        for instr in instructions:
+            for entry in instr.get("entries", []):
+                r = entry.get("content", {}).get("itemContent", {}).get("tweet_results", {}).get("result", {})
+                if not r: continue
+                t   = r.get("tweet") or r
+                rid = t.get("rest_id") or r.get("rest_id")
+                sn  = (t.get("core", {}).get("user_results", {})
+                        .get("result", {}).get("legacy", {}).get("screen_name", "unknown"))
+                if rid:
+                    tweets.append({"id": rid, "text": t.get("legacy", {}).get("full_text", ""),
+                                   "author_screen_name": sn})
+    except Exception as e:
+        print(f"WARNING: parse error: {e}")
+    return tweets
+
+def send_feishu(text, tweet_id, author):
+    url = f"https://x.com/{author}/status/{tweet_id}"
+    requests.post(FEISHU_WEBHOOK, json={"msg_type": "text",
+        "content": {"text": f"🔔 New mention\n@{author}: {text[:200]}\n{url}"}},
+        timeout=10).raise_for_status()
+
+
+def main():
+    if SCREEN_NAME == "your_handle":
+        print("ERROR: Set SCREEN_NAME to your Twitter handle."); sys.exit(1)
+
+    last_id = load_last_id()
+    print(f"Searching @{SCREEN_NAME} mentions (since_id={last_id or 'none'})...")
+
+    tweets = search_mentions(f"@{SCREEN_NAME}")
+    new_tweets = [t for t in tweets if not last_id or t["id"] &gt; last_id]
+
+    if not new_tweets:
+        print("No new mentions / 无新提及"); return
+
+    print(f"Found {len(new_tweets)} new mention(s) / 发现 {len(new_tweets)} 条新提及")
+    for t in reversed(new_tweets):
+        print(f"  @{t['author_screen_name']}: {t['text'][:80]!r}")
+        try: send_feishu(t["text"], t["id"], t["author_screen_name"])
+        except Exception as e: print(f"  Feishu failed: {e}")
+
+    save_last_id(new_tweets[0]["id"])
+    print(f"Done / 完成. Last ID: {new_tweets[0]['id']}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S07 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Search @mentions via LocalBridge / 搜索提及（替换 your_handle）</span>
+curl -s "http://127.0.0.1:20088/api/v1/x/search?q=%40your_handle&count=20"
+
+<span class="cm"># Send Feishu webhook alert / 发送飞书通知（替换 YOUR_TOKEN 和 MESSAGE）</span>
+curl -s -X POST "https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"msg_type":"text","content":{"text":"New mention: MESSAGE"}}'</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
           <div class="download-row">
             <span class="download-row-label">↓</span>
-            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
-            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
-            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+            <a class="btn-dl clawbot" href="/examples/s07_mention_monitor/s07_mention_monitor_clawbot.py" download="s07_mention_monitor_clawbot.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s07_mention_monitor/s07_mention_monitor_xdk.py" download="s07_mention_monitor_xdk.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s07_mention_monitor/s07_mention_monitor_http_rest.py" download="s07_mention_monitor_http_rest.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
           </div>
         </div>
       </div>
