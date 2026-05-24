@@ -60,9 +60,13 @@ def get_likes(tweet) -> int:
     """Extract like count from tweet dict or object."""
     if isinstance(tweet, dict):
         m = tweet.get("public_metrics") or {}
+        return m.get("like_count", 0) if isinstance(m, dict) else getattr(m, "like_count", 0)
+    m = getattr(tweet, "public_metrics", None)
+    if m is None:
+        return 0
+    if isinstance(m, dict):
         return m.get("like_count", 0)
-    m = getattr(tweet, "public_metrics", None) or {}
-    return m.get("like_count", 0) if isinstance(m, dict) else 0
+    return getattr(m, "like_count", 0)
 
 
 def main():
