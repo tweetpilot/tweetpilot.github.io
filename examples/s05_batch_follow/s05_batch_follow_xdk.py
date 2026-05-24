@@ -20,13 +20,13 @@ import requests
 from xdk import Client
 
 # ── Config / 配置 ────────────────────────────────────────────────────
-TWITTER_ID = "YOUR_TWITTER_ID"  # ← OAuth account numeric ID / OAuth 账号数字 ID
+TWITTER_ID = "1735224873365225472"  # ← OAuth account numeric ID / OAuth 账号数字 ID
 
 # EN: List of numeric Twitter user IDs to follow.
 # 中文：要关注的 Twitter 用户数字 ID 列表。
 TARGET_IDS = [
     "44196397",   # @elonmusk
-    "783214",     # @x
+    "27259332",   # @jensenhuang (Jensen Huang)
 ]
 
 # EN: Seconds to wait between each follow request. Keep ≥ 3 to avoid rate limits.
