@@ -19,7 +19,7 @@ from clawbot import ClawBotClient
 # ── Config / 配置 ────────────────────────────────────────────────────
 # EN: Replace with the numeric tweet ID you want to inspect.
 # 中文：替换为你要查看的推文数字 ID。
-TWEET_ID = "1234567890123456789"  # ← Replace with target tweet ID / 替换为目标推文 ID
+TWEET_ID = "2058496416046297229"  # ← Replace with target tweet ID / 替换为目标推文 ID
 
 
 def main():
@@ -37,7 +37,7 @@ def main():
     # EN: get_tweet() fetches the full tweet object including legacy metrics.
     # 中文：get_tweet() 获取完整推文对象，含 legacy 字段里的互动数据。
     try:
-        tweet = client.x.read.get_tweet(tweet_id=TWEET_ID, instance_id=instance_id)
+        tweet = client.x.tweets.get_tweet(tweet_id=TWEET_ID, instance_id=instance_id)
     except Exception as e:
         print(f"ERROR: Could not fetch tweet: {e}")
         sys.exit(1)

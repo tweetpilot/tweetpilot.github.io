@@ -27,7 +27,7 @@ LOCAL_BRIDGE = "http://127.0.0.1:20088"
 
 # EN: Replace with the numeric tweet ID you want to inspect.
 # 中文：替换为你要查看的推文数字 ID。
-TWEET_ID = "1234567890123456789"  # ← Replace with target tweet ID / 替换为目标推文 ID
+TWEET_ID = "2058496416046297229"  # ← Replace with target tweet ID / 替换为目标推文 ID
 
 
 def get_tweet(tweet_id: str) -> dict:
@@ -63,18 +63,36 @@ def main():
         print("ERROR: Tweet not found / 未找到该推文")
         sys.exit(1)
 
-    # EN: Navigate GraphQL response to find the tweet legacy object.
-    # 中文：从 GraphQL 响应中提取推文 legacy 字段。
-    tweet_result = (
-        data.get("tweetResult", {})
-            .get("result", {})
+    # EN: Navigate GraphQL threaded_conversation response to find the focal tweet.
+    # 中文：从 GraphQL threaded_conversation 响应中提取目标推文。
+    instructions = (
+        data.get("threaded_conversation_with_injections_v2", {})
+            .get("instructions", [])
     )
-    # EN: Handle TweetWithVisibilityResults wrapper.
-    # 中文：兼容 TweetWithVisibilityResults 包装格式。
-    tweet   = tweet_result.get("tweet") or tweet_result
+    tweet = None
+    for instr in instructions:
+        for entry in instr.get("entries", []):
+            item = entry.get("content", {}).get("itemContent", {})
+            if item.get("itemType") == "TimelineTweet":
+                result = item.get("tweet_results", {}).get("result", {})
+                # EN: Handle TweetWithVisibilityResults wrapper.
+                # 中文：兼容 TweetWithVisibilityResults 包装格式。
+                tweet = result.get("tweet") or result
+                break
+        if tweet:
+            break
+
+    if not tweet:
+        print("ERROR: Could not parse tweet data / 无法解析推文数据")
+        sys.exit(1)
+
     legacy  = tweet.get("legacy", {})
     core    = tweet.get("core", {})
-    user_lg = core.get("user_results", {}).get("result", {}).get("legacy", {})
+    user_result = core.get("user_results", {}).get("result", {})
+    user_core   = user_result.get("core", {})
+    # EN: screen_name lives in user_result.core.screen_name (not legacy).
+    # 中文：screen_name 在 user_result.core.screen_name 中。
+    screen_name = user_core.get("screen_name") or user_result.get("legacy", {}).get("screen_name", "unknown")
 
     text      = legacy.get("full_text", "")
     likes     = legacy.get("favorite_count", "N/A")
@@ -82,7 +100,6 @@ def main():
     replies   = legacy.get("reply_count",    "N/A")
     quotes    = legacy.get("quote_count",    "N/A")
     bookmarks = legacy.get("bookmark_count", "N/A")
-    screen_name = user_lg.get("screen_name", "unknown")
 
     print(f"\n── Tweet Metrics Report / 推文互动报告 ──")
     print(f"ID        : {TWEET_ID}")

@@ -1558,7 +1558,7 @@ def main():
     print(f"Fetching tweet {TWEET_ID}...")
     try:
         <span class="cm"># get_tweet() fetches full tweet object; metrics are in tweet.raw["legacy"]</span>
-        tweet = client.x.read.get_tweet(tweet_id=TWEET_ID, instance_id=instance_id)
+        tweet = client.x.tweets.get_tweet(tweet_id=TWEET_ID, instance_id=instance_id)
     except Exception as e:
         print(f"ERROR: {e}"); sys.exit(1)
 
@@ -1671,7 +1671,7 @@ TWEET_ID     = "1234567890123456789"  <span class="cm"># ← Replace with target
 
 def get_tweet(tweet_id):
     <span class="cm"># GET /api/v1/x/tweets?tweetId=&lt;id&gt;
-    # Response: {"ok": true, "data": {"data": {...GraphQL...}}}</span>
+    # Response: {"success": true, "data": {"data": {"threaded_conversation_with_injections_v2": {...}}}}</span>
     try:
         resp = requests.get(f"{LOCAL_BRIDGE}/api/v1/x/tweets",
             params={"tweetId": tweet_id}, timeout=15)
@@ -1689,14 +1689,30 @@ def main():
     if not data:
         print("ERROR: Tweet not found"); sys.exit(1)
 
-    tweet_result = data.get("tweetResult", {}).get("result", {})
-    tweet   = tweet_result.get("tweet") or tweet_result
-    legacy  = tweet.get("legacy", {})
-    user_lg = tweet.get("core", {}).get("user_results", {}).get("result", {}).get("legacy", {})
+    <span class="cm"># Navigate threaded_conversation → instructions → first TimelineTweet entry</span>
+    instructions = (data.get("threaded_conversation_with_injections_v2", {})
+                        .get("instructions", []))
+    tweet = None
+    for instr in instructions:
+        for entry in instr.get("entries", []):
+            item = entry.get("content", {}).get("itemContent", {})
+            if item.get("itemType") == "TimelineTweet":
+                r = item.get("tweet_results", {}).get("result", {})
+                tweet = r.get("tweet") or r
+                break
+        if tweet: break
+
+    if not tweet:
+        print("ERROR: Could not parse tweet data"); sys.exit(1)
+
+    legacy      = tweet.get("legacy", {})
+    user_result = tweet.get("core", {}).get("user_results", {}).get("result", {})
+    screen_name = (user_result.get("core", {}).get("screen_name")
+                   or user_result.get("legacy", {}).get("screen_name", "unknown"))
 
     print(f"\n── Tweet Metrics Report / 推文互动报告 ──")
     print(f"ID        : {TWEET_ID}")
-    print(f"Author    : @{user_lg.get('screen_name', 'unknown')}")
+    print(f"Author    : @{screen_name}")
     print(f"Text      : {legacy.get('full_text', '')[:120]}")
     print(f"Likes     : {legacy.get('favorite_count', 'N/A')}")
     print(f"Retweets  : {legacy.get('retweet_count',  'N/A')}")

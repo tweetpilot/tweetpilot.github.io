@@ -19,11 +19,11 @@ import requests
 from xdk import Client
 
 # ── Config / 配置 ────────────────────────────────────────────────────
-TWITTER_ID = "YOUR_TWITTER_ID"  # ← OAuth account numeric ID / OAuth 账号数字 ID
+TWITTER_ID = "1735224873365225472"  # ← OAuth account numeric ID / OAuth 账号数字 ID
 
 # EN: Replace with the numeric tweet ID you want to inspect.
 # 中文：替换为你要查看的推文数字 ID。
-TWEET_ID = "1234567890123456789"  # ← Replace with target tweet ID / 替换为目标推文 ID
+TWEET_ID = "2058496416046297229"  # ← Replace with target tweet ID / 替换为目标推文 ID
 
 
 def get_access_token(twitter_id: str) -> str:

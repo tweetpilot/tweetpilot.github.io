@@ -30,7 +30,7 @@ LOCAL_BRIDGE = "http://127.0.0.1:20088"
 # 中文：要关注的 Twitter 用户数字 ID 列表。
 TARGET_IDS = [
     "44196397",   # @elonmusk
-    "783214",     # @x
+    "27259332",   # @jensenhuang (Jensen Huang)
 ]
 
 # EN: Seconds to wait between each follow request. Keep ≥ 3 to avoid rate limits.
