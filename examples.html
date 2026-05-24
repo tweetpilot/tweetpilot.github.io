@@ -413,7 +413,7 @@ LOCAL_BRIDGE = "http://127.0.0.1:20088"
 TWEET_TEXT   = "Daily update {date} — powered by TweetPilot"
 
 
-def post_tweet(text: str) -> dict:
+def post_tweet(text: str) -> str:
     <span class="cm"># POST /api/v1/x/tweets — LocalBridge proxies to Twitter via browser extension
     # LocalBridge 通过浏览器扩展代理发推，无需手动传 token</span>
     try:
@@ -423,7 +423,6 @@ def post_tweet(text: str) -> dict:
             timeout=15,
         )
         resp.raise_for_status()
-        return resp.json()
     except requests.exceptions.ConnectionError:
         print("ERROR: TweetPilot not running / TweetPilot 未在运行")
         sys.exit(1)
@@ -431,18 +430,26 @@ def post_tweet(text: str) -> dict:
         print(f"ERROR: {e.response.status_code} — {e.response.text}")
         sys.exit(1)
 
+    data = resp.json()
+
+    <span class="cm"># LocalBridge returns HTTP 200 even when Twitter rejects the tweet.
+    # Must check the response body for GraphQL-level errors (e.g. code 187 = duplicate).
+    # LocalBridge 即使推特拒绝也返回 HTTP 200，必须检查响应体中的 GraphQL 错误。</span>
+    errors = data.get("data", {}).get("errors")
+    if errors:
+        for err in errors:
+            print(f"ERROR: Twitter rejected — code {err.get('code')}: {err.get('message')}")
+        sys.exit(1)
+
+    try:
+        return data["data"]["data"]["create_tweet"]["tweet_results"]["result"]["rest_id"]
+    except (KeyError, TypeError):
+        return "unknown"
+
 
 def main():
-    text = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
-    data = post_tweet(text)
-
-    <span class="cm"># Parse tweet ID from LocalBridge's raw GraphQL response
-    # 从 LocalBridge 返回的原始 GraphQL 响应中解析推文 ID</span>
-    try:
-        tweet_id = data["data"]["create_tweet"]["tweet_results"]["result"]["rest_id"]
-    except (KeyError, TypeError):
-        tweet_id = str(data)
-
+    text     = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
+    tweet_id = post_tweet(text)
     print(f"Tweet sent / 发推成功: {text}")
     print(f"Tweet ID: {tweet_id}")
 
@@ -491,24 +498,271 @@ curl -s -X POST http://127.0.0.1:20088/api/v1/x/tweets \
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s02','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
           <div class="tab-pane active" data-pane="s02-clawbot">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · Tweet with Image — ClawBot SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S02 · Tweet with Image — ClawBot SDK
+======================================
+EN: Upload a local image and post it as a tweet via browser extension.
+    ClawBot handles chunked upload + tweet creation in one call.
+    Requires TweetClaw extension online in the browser.
+中文：通过浏览器扩展上传本地图片并发推。
+     ClawBot 封装了分块上传和发推的完整流程，一行调用即可完成。
+
+pip install requests  (clawbot pre-installed via TweetPilot)
+"""</span>
+
+import sys, os
+from clawbot import ClawBotClient
+
+IMAGE_PATH = "image.jpg"  <span class="cm"># ← Replace / 替换为你的图片路径</span>
+TWEET_TEXT = "🚀 TweetPilot v1 is live — the Social AI Agent built for X.\nAutomate posts, replies, likes & research while you stay focused.\nBuilt for creators, builders & teams → tweetpilot.ai"
+
+
+def main():
+    if not os.path.exists(IMAGE_PATH):
+        print(f"ERROR: Image not found: {IMAGE_PATH}")
+        sys.exit(1)
+
+    client = ClawBotClient()
+
+    <span class="cm"># Resolve instance_id for multi-extension environments
+    # 多扩展实例环境下，获取第一个可用的 instanceId</span>
+    instances   = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        instance_id = instances[0].get("instanceId") or instances[0].get("id")
+
+    <span class="cm"># post_tweet() uploads the image then creates the tweet in one call
+    # post_tweet() 内部自动完成上传 + 发推，无需手动处理 media_id</span>
+    result = client.media.post_tweet(
+        text=TWEET_TEXT,
+        file_paths=[IMAGE_PATH],
+        instance_id=instance_id,
+    )
+    print(f"Tweet sent / 发推成功: {TWEET_TEXT}")
+    print(f"Result: {result}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="tab-pane" data-pane="s02-xdk">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · Tweet with Image — xdk SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S02 · Tweet with Image — xdk SDK
+===================================
+EN: Upload image via Twitter media API and attach to a tweet.
+    TweetPilot provides the OAuth access token automatically.
+    Requires OAuth account authorized in TweetPilot (x-prefix accounts).
+    Note: media.upload() requires the 'media.write' OAuth scope.
+中文：通过 Twitter media API 上传图片并发推。
+     TweetPilot 自动提供 OAuth token，需 x 开头的 OAuth 授权账号。
+     注：media.upload() 需要 media.write OAuth scope。
+
+pip install xdk requests
+"""</span>
+
+import sys, os, base64
+import requests
+from xdk import Client
+
+TWITTER_ID = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID / OAuth 账号数字 ID</span>
+IMAGE_PATH = "image.jpg"        <span class="cm"># ← Replace / 替换为你的图片路径</span>
+TWEET_TEXT = "🚀 TweetPilot v1 is live — the Social AI Agent built for X.\nAutomate posts, replies, likes & research while you stay focused.\nBuilt for creators, builders & teams → tweetpilot.ai"
+
+
+def get_access_token(twitter_id):
+    try:
+        resp = requests.post(
+            "http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10,
+        )
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running / TweetPilot 未在运行")
+        sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}")
+        sys.exit(1)
+
+
+def main():
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID (OAuth accounts only).")
+        sys.exit(1)
+    if not os.path.exists(IMAGE_PATH):
+        print(f"ERROR: Image not found: {IMAGE_PATH}")
+        sys.exit(1)
+
+    <span class="cm"># Must use access_token= (User OAuth 2.0), NOT bearer_token= (read-only)
+    # 必须用 access_token= 传入，bearer_token= 是只读的 App token</span>
+    client = Client(access_token=get_access_token(TWITTER_ID))
+
+    <span class="cm"># Read image and base64-encode for Twitter media API (requires media.write scope)
+    # 读取图片并 base64 编码（需要 media.write scope）</span>
+    with open(IMAGE_PATH, "rb") as f:
+        media_b64 = base64.b64encode(f.read()).decode()
+
+    upload_result = client.media.upload(body={
+        "media": media_b64,
+        "media_category": "tweet_image",
+    })
+    media_id = (upload_result.data["id"] if isinstance(upload_result.data, dict)
+                else upload_result.data.id)
+
+    result = client.posts.create(body={
+        "text": TWEET_TEXT,
+        "media": {"media_ids": [media_id]},
+    })
+    tweet_id = result.data["id"] if isinstance(result.data, dict) else result.data.id
+    print(f"Tweet sent / 发推成功: {TWEET_TEXT[:50]}...")
+    print(f"Tweet ID: {tweet_id}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="tab-pane" data-pane="s02-http">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · Tweet with Image — Python requests
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Calls <strong>LocalBridge task API</strong> for image upload (browser extension proxy), then posts tweet. To use Twitter's official media API directly, see <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter docs</a>.</span>
+            </div>
+            <div class="http-note" style="font-size:12px;opacity:.75;margin-top:-6px;">
+              通过 LocalBridge task API 上传图片（浏览器扩展代理），再发推。如需直接调用推特官方媒体 API，请参考推特官方文档。
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S02 · Tweet with Image — HTTP REST API (LocalBridge)
+pip install requests
+"""</span>
+
+import sys, os, time, mimetypes
+import requests
+
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+IMAGE_PATH   = "image.jpg"  <span class="cm"># ← Replace / 替换为你的图片路径</span>
+TWEET_TEXT   = "Check this out — powered by TweetPilot"
+
+
+def get_instance_id():
+    resp = requests.get(f"{LOCAL_BRIDGE}/api/v1/x/instances", timeout=10)
+    resp.raise_for_status()
+    instances = resp.json()
+    if not instances:
+        print("ERROR: No TweetClaw instance connected"); sys.exit(1)
+    return instances[0]["instanceId"]
+
+
+def upload_image(path, instance_id):
+    <span class="cm"># Step 1: create task / 创建任务</span>
+    task_id = requests.post(f"{LOCAL_BRIDGE}/api/v1/tasks", json={
+        "clientName": "tweetClaw", "instanceId": instance_id,
+        "taskKind": "x.media_upload", "inputMode": "chunked_binary", "params": {},
+    }, timeout=10).json()["taskId"]
+
+    <span class="cm"># Step 2: upload file (single chunk for images &lt; 5 MB) / 上传文件</span>
+    with open(path, "rb") as f: data = f.read()
+    requests.put(f"{LOCAL_BRIDGE}/api/v1/tasks/{task_id}/input/0",
+        data=data, headers={"Content-Type": "application/octet-stream"}, timeout=30).raise_for_status()
+
+    <span class="cm"># Step 3: seal → start → poll → result</span>
+    ct = mimetypes.guess_type(path)[0] or "image/jpeg"
+    requests.post(f"{LOCAL_BRIDGE}/api/v1/tasks/{task_id}/seal",
+        json={"totalParts": 1, "totalBytes": len(data), "contentType": ct}, timeout=10).raise_for_status()
+    requests.post(f"{LOCAL_BRIDGE}/api/v1/tasks/{task_id}/start", timeout=10).raise_for_status()
+
+    deadline = time.time() + 60
+    while time.time() &lt; deadline:
+        st = requests.get(f"{LOCAL_BRIDGE}/api/v1/tasks/{task_id}", timeout=10).json()
+        if st["state"] == "completed": break
+        if st["state"] in ("failed","cancelled"):
+            print(f"ERROR: {st.get('errorMessage')}"); sys.exit(1)
+        time.sleep(2)
+
+    result = requests.get(f"{LOCAL_BRIDGE}/api/v1/tasks/{task_id}/result", timeout=10).json()
+    return result["mediaId"]
+
+
+def main():
+    if not os.path.exists(IMAGE_PATH):
+        print(f"ERROR: Image not found: {IMAGE_PATH}"); sys.exit(1)
+    try:
+        instance_id = get_instance_id()
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+
+    print(f"Uploading / 上传中: {IMAGE_PATH}")
+    media_id = upload_image(IMAGE_PATH, instance_id)
+    print(f"Upload done / 上传完成, media_id: {media_id}")
+
+    resp = requests.post(f"{LOCAL_BRIDGE}/api/v1/x/tweets",
+        json={"text": TWEET_TEXT, "media_ids": [media_id]}, timeout=15)
+    resp.raise_for_status()
+    data = resp.json()
+    errors = data.get("data", {}).get("errors")
+    if errors:
+        for e in errors: print(f"ERROR: code {e.get('code')}: {e.get('message')}")
+        sys.exit(1)
+    try:
+        tweet_id = data["data"]["data"]["create_tweet"]["tweet_results"]["result"]["rest_id"]
+    except (KeyError, TypeError):
+        tweet_id = "unknown"
+    print(f"Tweet sent / 发推成功: {TWEET_TEXT}")
+    print(f"Tweet ID: {tweet_id}")
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S02 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Step 1: Get instance ID / 获取实例 ID</span>
+INSTANCE=$(curl -s http://127.0.0.1:20088/api/v1/x/instances \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)[0]['instanceId'])")
+
+<span class="cm"># Step 2: Create upload task / 创建上传任务</span>
+TASK_ID=$(curl -s -X POST http://127.0.0.1:20088/api/v1/tasks \
+  -H "Content-Type: application/json" \
+  -d "{\"clientName\":\"tweetClaw\",\"instanceId\":\"$INSTANCE\",\"taskKind\":\"x.media_upload\",\"inputMode\":\"chunked_binary\",\"params\":{}}" \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['taskId'])")
+
+<span class="cm"># Step 3: Upload image / 上传图片</span>
+curl -s -X PUT http://127.0.0.1:20088/api/v1/tasks/$TASK_ID/input/0 \
+  -H "Content-Type: application/octet-stream" \
+  --data-binary @image.jpg
+
+<span class="cm"># Step 4: Seal + Start / 封装并启动任务</span>
+SIZE=$(wc -c &lt; image.jpg | tr -d ' ')
+curl -s -X POST http://127.0.0.1:20088/api/v1/tasks/$TASK_ID/seal \
+  -H "Content-Type: application/json" \
+  -d "{\"totalParts\":1,\"totalBytes\":$SIZE,\"contentType\":\"image/jpeg\"}"
+curl -s -X POST http://127.0.0.1:20088/api/v1/tasks/$TASK_ID/start
+
+<span class="cm"># Step 5: Get media_id from result / 从结果中提取 media_id</span>
+MEDIA_ID=$(curl -s http://127.0.0.1:20088/api/v1/tasks/$TASK_ID/result \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['mediaId'])")
+
+<span class="cm"># Step 6: Post tweet with image / 带图发推</span>
+curl -s -X POST http://127.0.0.1:20088/api/v1/x/tweets \
+  -H "Content-Type: application/json" \
+  -d "{\"text\":\"Check this out — powered by TweetPilot\",\"media_ids\":[\"$MEDIA_ID\"]}"</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="download-row">
             <span class="download-row-label">↓</span>
-            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
-            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
-            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+            <a class="btn-dl clawbot" href="/examples/s02_tweet_with_image/s02_tweet_with_image_clawbot.py" download="s02_tweet_with_image_clawbot.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s02_tweet_with_image/s02_tweet_with_image_xdk.py" download="s02_tweet_with_image_xdk.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s02_tweet_with_image/s02_tweet_with_image_http_rest.py" download="s02_tweet_with_image_http_rest.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
           </div>
         </div>
       </div>
@@ -532,24 +786,278 @@ curl -s -X POST http://127.0.0.1:20088/api/v1/x/tweets \
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s03','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
           <div class="tab-pane active" data-pane="s03-clawbot">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · Search &amp; Auto-Reply — ClawBot SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);">
+              <svg width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style="color:#FCD34D;"><strong>Rate-limit warning:</strong> Only the <strong>first matching tweet</strong> is replied to per run. Replying to many tweets at once risks spam detection or account suspension. Use TweetPilot's scheduler to run this every 30+ minutes.</span>
+            </div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);font-size:12px;opacity:.8;margin-top:-6px;">
+              ⚠️ 每次只回复第一条匹配推文。批量回复极易触发推特限流或封号。建议配合 TweetPilot 定时任务，每 30 分钟以上执行一次。
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S03 · Search & Auto-Reply — ClawBot SDK
+==========================================
+EN: Search tweets by keyword, reply ONLY to the first result.
+    ⚠️ Replying to many tweets at once risks rate-limiting or suspension.
+    Requires TweetClaw extension online in the browser.
+中文：按关键词搜索推文，只回复第一条。
+     ⚠️ 批量回复极易触发限流，建议每 30 分钟以上定时执行。
+
+pip install requests  (clawbot pre-installed via TweetPilot)
+"""</span>
+
+import sys
+from clawbot import ClawBotClient
+
+SEARCH_QUERY = "TweetPilot"  <span class="cm"># ← Keyword / 搜索关键词</span>
+REPLY_TEXT   = "Thanks for mentioning us! 🙌 — TweetPilot"
+
+
+def main():
+    client = ClawBotClient()
+    instances   = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        instance_id = instances[0].get("instanceId") or instances[0].get("id")
+
+    print(f'Searching: "{SEARCH_QUERY}"')
+    tweets = client.x.search.search_tweets(SEARCH_QUERY, count=5, instance_id=instance_id)
+
+    if not tweets:
+        print("No tweets found / 未找到相关推文"); return
+
+    <span class="cm"># ⚠️ Reply ONLY to the first tweet — never loop over all results
+    # ⚠️ 只回复第一条，不循环全部结果</span>
+    tweet = tweets[0]
+    print(f"Replying to {tweet.id}: {(tweet.text or '')[:60]!r}")
+    try:
+        result = client.x.actions.reply(tweet_id=tweet.id, text=REPLY_TEXT, instance_id=instance_id)
+        print(f"Done / 完成: {result}")
+    except Exception as e:
+        print(f"Failed / 失败: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="tab-pane" data-pane="s03-xdk">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · Search &amp; Auto-Reply — xdk SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);">
+              <svg width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style="color:#FCD34D;"><strong>Rate-limit warning:</strong> Only the <strong>first matching tweet</strong> is replied to per run. Schedule this every 30+ minutes.</span>
+            </div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);font-size:12px;opacity:.8;margin-top:-6px;">
+              ⚠️ 每次只回复第一条匹配推文，建议配合定时任务每 30 分钟以上执行一次。
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S03 · Search & Auto-Reply — xdk SDK
+=======================================
+EN: Search recent tweets via Twitter API v2, reply to the first replyable result.
+    Tries each result in order; skips retweets and reply-restricted tweets.
+    Requires OAuth account authorized in TweetPilot Account Settings.
+中文：通过 Twitter API v2 搜索推文，回复第一条可回复的推文。
+     按顺序尝试，自动跳过转发和有回复限制的推文。
+
+pip install xdk requests
+"""</span>
+
+import sys
+import requests
+from xdk import Client
+
+TWITTER_ID   = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID</span>
+SEARCH_QUERY = "TweetPilot"
+REPLY_TEXT   = "Thanks for mentioning us! 🙌 — TweetPilot"
+
+
+def get_access_token(twitter_id):
+    try:
+        resp = requests.post("http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10)
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}"); sys.exit(1)
+
+
+def main():
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID (OAuth only).")
+        sys.exit(1)
+
+    <span class="cm"># Must use access_token= (User OAuth 2.0), NOT bearer_token= (read-only)</span>
+    client = Client(access_token=get_access_token(TWITTER_ID))
+
+    print(f'Searching: "{SEARCH_QUERY}"')
+    first_page = next(iter(client.posts.search_recent(query=SEARCH_QUERY, max_results=10)), None)
+    tweets = (first_page.data or []) if first_page else []
+
+    if not tweets:
+        print("No tweets found / 未找到相关推文"); return
+
+    <span class="cm"># Try each tweet; skip RTs; on 403 (reply restricted) move to next.
+    # 逐条尝试；跳过转发；遇到 403（回复被限制）换下一条。</span>
+    replied = False
+    for t in tweets:
+        t_text   = (t.get("text") if isinstance(t, dict) else getattr(t, "text", "") or "")
+        tweet_id = (t.get("id")   if isinstance(t, dict) else t.id)
+        if t_text.startswith("RT @"):
+            continue
+        print(f"Trying {tweet_id}: {t_text[:60]!r}")
+        try:
+            result = client.posts.create(body={
+                "text":  REPLY_TEXT,
+                "reply": {"in_reply_to_tweet_id": tweet_id},
+            })
+            reply_id = (result.data["id"] if isinstance(result.data, dict) else result.data.id)
+            print(f"Done / 完成, reply ID: {reply_id}")
+            replied = True
+            break
+        except Exception as e:
+            err = getattr(getattr(e, "response", None), "text", str(e))
+            print(f"  Skipped: {err}")
+            continue
+
+    if not replied:
+        print("Failed / 失败: no replyable tweet found / 搜索结果中无可回复推文")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()</pre>
+        print(f"Failed / 失败: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()</pre>
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="tab-pane" data-pane="s03-http">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · Search &amp; Auto-Reply — Python requests
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Calls <strong>LocalBridge REST API</strong> — browser extension acts as proxy, no OAuth token needed. To call Twitter's official API directly, see <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter docs</a>.</span>
+            </div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);">
+              <svg width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style="color:#FCD34D;"><strong>Rate-limit warning:</strong> Only the <strong>first matching tweet</strong> is replied to per run. Schedule every 30+ minutes. / ⚠️ 每次只回复第一条，建议每 30 分钟以上定时执行一次。</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S03 · Search & Auto-Reply — HTTP REST API (LocalBridge)
+EN: Search tweets via LocalBridge, reply ONLY to the first result.
+    ⚠️ Replying to many tweets at once risks rate-limiting or suspension.
+pip install requests
+"""</span>
+
+import sys
+import requests
+
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+SEARCH_QUERY = "TweetPilot"  <span class="cm"># ← Keyword / 搜索关键词</span>
+REPLY_TEXT   = "Thanks for mentioning us! 🙌 — TweetPilot"
+
+
+def search_tweets(query, count):
+    try:
+        resp = requests.get(f"{LOCAL_BRIDGE}/api/v1/x/search",
+            params={"query": query, "count": count}, timeout=15)
+        resp.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code}"); sys.exit(1)
+
+    tweets = []
+    try:
+        instructions = (resp.json().get("data", {})
+            .get("data", {})
+            .get("search_by_raw_query", {}).get("search_timeline", {})
+            .get("timeline", {}).get("instructions", []))
+        for instr in instructions:
+            for entry in instr.get("entries", []):
+                r = entry.get("content", {}).get("itemContent", {}).get("tweet_results", {}).get("result", {})
+                if not r: continue
+                t = r.get("tweet") or r
+                rid = t.get("rest_id") or r.get("rest_id")
+                if rid:
+                    tweets.append({"id": rid, "text": t.get("legacy", {}).get("full_text", "")})
+    except Exception as e:
+        print(f"WARNING: parse error: {e}")
+    return tweets
+
+
+def reply_to_tweet(tweet_id, text):
+    resp = requests.post(f"{LOCAL_BRIDGE}/api/v1/x/replies",
+        json={"tweetId": tweet_id, "text": text}, timeout=15)
+    resp.raise_for_status()
+    data = resp.json()
+    errors = data.get("data", {}).get("errors")
+    if errors:
+        raise RuntimeError("; ".join(f"code {e.get('code')}: {e.get('message')}" for e in errors))
+    try:
+        return data["data"]["data"]["create_tweet"]["tweet_results"]["result"]["rest_id"]
+    except (KeyError, TypeError):
+        return "unknown"
+
+
+def main():
+    print(f'Searching: "{SEARCH_QUERY}"')
+    tweets = search_tweets(SEARCH_QUERY, count=10)
+    if not tweets:
+        print("No tweets found / 未找到相关推文"); sys.exit(1)
+
+    <span class="cm"># Try each tweet; skip RTs; on failure move to next.
+    # 逐条尝试；跳过转发；失败则换下一条。</span>
+    replied = False
+    for tweet in tweets:
+        if tweet["text"].startswith("RT @"):
+            continue
+        print(f"Trying tweet {tweet['id']}: {tweet['text'][:60]!r}")
+        try:
+            reply_id = reply_to_tweet(tweet["id"], REPLY_TEXT)
+            print(f"Done / 完成, reply ID: {reply_id}")
+            replied = True
+            break
+        except Exception as e:
+            print(f"  Skipped: {e}"); continue
+
+    if not replied:
+        print("Failed / 失败: no replyable tweet found / 搜索结果中无可回复推文")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S03 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Step 1: Search tweets / 搜索推文</span>
+curl -s "http://127.0.0.1:20088/api/v1/x/search?query=TweetPilot&count=5"
+
+<span class="cm"># Step 2: Reply to a tweet / 回复推文（替换 TWEET_ID）</span>
+curl -s -X POST http://127.0.0.1:20088/api/v1/x/replies \
+  -H "Content-Type: application/json" \
+  -d '{"tweetId": "TWEET_ID", "text": "Thanks for mentioning us! — TweetPilot"}'</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="download-row">
             <span class="download-row-label">↓</span>
-            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
-            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
-            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+            <a class="btn-dl clawbot" href="/examples/s03_search_and_reply/s03_search_and_reply_clawbot.py" download="s03_search_and_reply_clawbot.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s03_search_and_reply/s03_search_and_reply_xdk.py" download="s03_search_and_reply_xdk.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s03_search_and_reply/s03_search_and_reply_http_rest.py" download="s03_search_and_reply_http_rest.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
           </div>
         </div>
       </div>
@@ -573,24 +1081,239 @@ curl -s -X POST http://127.0.0.1:20088/api/v1/x/tweets \
             <button class="tab-btn" data-sdk="http" onclick="switchTab('s04','http')"><span class="tab-dot"></span> HTTP REST API</button>
           </div>
           <div class="tab-pane active" data-pane="s04-clawbot">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · Timeline Auto-Like — ClawBot SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);">
+              <svg width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style="color:#FCD34D;"><strong>Rate-limit warning:</strong> Only likes <strong>ONE matching tweet</strong> per run. Schedule every 30+ minutes. / ⚠️ 每次只点赞一条，建议每 30 分钟以上定时执行一次。</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S04 · Timeline Auto-Like — ClawBot SDK
+EN: Read home timeline, like ONLY the first tweet matching a keyword.
+    ⚠️ Only ONE like per run — schedule every 30+ min to avoid rate-limits.
+中文：读取主页时间线，只点赞第一条匹配关键词的推文。⚠️ 每次只点赞一条。
+
+pip install requests  (clawbot pre-installed via TweetPilot)
+"""</span>
+
+import sys
+from clawbot import ClawBotClient
+
+KEYWORD = "AI"  <span class="cm"># ← Keyword filter (case-insensitive), "" = like first tweet / 关键词（空=点赞第一条）</span>
+
+
+def main():
+    client = ClawBotClient()
+    instances   = client.x.status.get_instances()
+    instance_id = None
+    if isinstance(instances, list) and instances:
+        instance_id = instances[0].get("instanceId") or instances[0].get("id")
+
+    print("Fetching timeline / 获取时间线...")
+    tweets = client.x.timeline.list_timeline_tweets(instance_id=instance_id)
+    if not tweets:
+        print("No tweets in timeline / 时间线为空"); return
+
+    <span class="cm"># Find the first matching tweet — like ONLY that one
+    # 找到第一条匹配推文，只点赞这一条</span>
+    target = next(
+        (t for t in tweets if not KEYWORD or KEYWORD.lower() in (t.text or "").lower()),
+        None
+    )
+    if not target:
+        print(f'No tweet matched "{KEYWORD}" / 未找到包含关键词的推文'); return
+
+    print(f"Liking {target.id}: {(target.text or '')[:60]!r}")
+    try:
+        result = client.x.actions.like(tweet_id=target.id, instance_id=instance_id)
+        print(f"Done / 完成: {result}")
+    except Exception as e:
+        print(f"Failed / 失败: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="tab-pane" data-pane="s04-xdk">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · Timeline Auto-Like — xdk SDK
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);">
+              <svg width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style="color:#FCD34D;"><strong>Rate-limit warning:</strong> Only likes <strong>ONE matching tweet</strong> per run. Schedule every 30+ minutes. / ⚠️ 每次只点赞一条，建议每 30 分钟以上定时执行一次。</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S04 · Timeline Auto-Like — xdk SDK
+EN: Read home timeline via Twitter API v2, like ONLY the first matching tweet.
+    ⚠️ Only ONE like per run — schedule every 30+ min to avoid rate-limits.
+    Requires OAuth account authorized in TweetPilot (x-prefix accounts).
+中文：通过 Twitter API v2 读取主页时间线，只点赞第一条匹配推文。
+
+pip install xdk requests
+"""</span>
+
+import sys
+import requests
+from xdk import Client
+
+TWITTER_ID = "YOUR_TWITTER_ID"  <span class="cm"># ← OAuth account numeric ID</span>
+KEYWORD    = "AI"               <span class="cm"># ← Keyword filter, "" = like first tweet</span>
+
+
+def get_access_token(twitter_id):
+    try:
+        resp = requests.post("http://127.0.0.1:20088/api/v1/x/oauth/access-token",
+            json={"twitter_id": twitter_id}, timeout=10)
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code} — {e.response.text}"); sys.exit(1)
+
+
+def main():
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID (OAuth only).")
+        sys.exit(1)
+
+    <span class="cm"># Must use access_token= (User OAuth 2.0), NOT bearer_token= (read-only)
+    # 必须用 access_token= 传入，bearer_token= 是只读的 App token</span>
+    client = Client(access_token=get_access_token(TWITTER_ID))
+
+    print("Fetching timeline / 获取时间线...")
+    target = None
+    try:
+        for page in client.users.get_timeline(id=TWITTER_ID, max_results=20):
+            for tweet in (page.data or []):
+                if not KEYWORD or KEYWORD.lower() in (tweet.text or "").lower():
+                    target = tweet
+                    break
+            if target: break
+    except Exception as e:
+        print(f"ERROR: {e}"); sys.exit(1)
+
+    if not target:
+        print(f'No tweet matched "{KEYWORD}" / 未找到包含关键词的推文'); return
+
+    print(f"Liking {target.id}: {(target.text or '')[:60]!r}")
+    try:
+        client.users.like_post(id=TWITTER_ID, body={"tweet_id": target.id})
+        print(f"Done / 完成: liked tweet {target.id}")
+    except Exception as e:
+        print(f"Failed / 失败: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="tab-pane" data-pane="s04-http">
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · Timeline Auto-Like — Python requests
-# Script coming soon · 脚本开发中，即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Calls <strong>LocalBridge REST API</strong> — browser extension acts as proxy, no OAuth token needed. To call Twitter's official API directly, see <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter docs</a>.</span>
+            </div>
+            <div class="http-note" style="border-color:#F59E0B;background:rgba(245,158,11,0.07);">
+              <svg width="14" height="14" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style="color:#FCD34D;"><strong>Rate-limit warning:</strong> Only likes ONE matching tweet per run. Schedule every 30+ min. / ⚠️ 每次只点赞一条，建议每 30 分钟以上执行一次。</span>
+            </div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm">"""
+S04 · Timeline Auto-Like — HTTP REST API (LocalBridge)
+EN: Read home timeline via LocalBridge, like ONLY the first matching tweet.
+    ⚠️ Only ONE like per run — schedule every 30+ min to avoid rate-limits.
+pip install requests
+"""</span>
+
+import sys
+import requests
+
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+KEYWORD      = "AI"  <span class="cm"># ← Keyword filter, "" = like first tweet / 关键词（空=点赞第一条）</span>
+
+
+def get_timeline():
+    try:
+        resp = requests.get(f"{LOCAL_BRIDGE}/api/v1/x/timeline", timeout=15)
+        resp.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        print("ERROR: TweetPilot not running"); sys.exit(1)
+    except requests.exceptions.HTTPError as e:
+        print(f"ERROR: {e.response.status_code}"); sys.exit(1)
+
+    tweets = []
+    try:
+        instructions = (resp.json().get("data", {}).get("data", {}).get("home", {})
+            .get("home_timeline_urt", {}).get("instructions", []))
+        for instr in instructions:
+            for entry in instr.get("entries", []):
+                r = entry.get("content", {}).get("itemContent", {}).get("tweet_results", {}).get("result", {})
+                if not r: continue
+                t = r.get("tweet") or r
+                rid = t.get("rest_id") or r.get("rest_id")
+                if rid:
+                    tweets.append({"id": rid, "text": t.get("legacy", {}).get("full_text", "")})
+    except Exception as e:
+        print(f"WARNING: parse error: {e}")
+    return tweets
+
+
+def main():
+    print("Fetching timeline / 获取时间线...")
+    tweets = get_timeline()
+    if not tweets:
+        print("No tweets in timeline / 时间线为空"); return
+
+    <span class="cm"># Find the first matching tweet — like ONLY that one
+    # 找到第一条匹配推文，只点赞这一条</span>
+    target = next(
+        (t for t in tweets if not KEYWORD or KEYWORD.lower() in t["text"].lower()),
+        None
+    )
+    if not target:
+        print(f'No tweet matched "{KEYWORD}" / 未找到包含关键词的推文'); return
+
+    print(f"Liking {target['id']}: {target['text'][:60]!r}")
+    try:
+        resp = requests.post(f"{LOCAL_BRIDGE}/api/v1/x/likes",
+            json={"tweetId": target["id"]}, timeout=15)
+        resp.raise_for_status()
+        if resp.json().get("ok"):
+            print(f"Done / 完成: liked tweet {target['id']}")
+        else:
+            print(f"Failed / 失败: {resp.json()}")
+            sys.exit(1)
+    except Exception as e:
+        print(f"Failed / 失败: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
-            <div class="code-wrap"><pre class="code-block"><span class="cm"># S04 · curl equivalent / 即将上线</span></pre><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <div class="code-wrap">
+              <pre class="code-block"><span class="cm"># Step 1: Fetch timeline / 获取时间线</span>
+curl -s http://127.0.0.1:20088/api/v1/x/timeline
+
+<span class="cm"># Step 2: Like a tweet / 点赞推文（替换 TWEET_ID）</span>
+curl -s -X POST http://127.0.0.1:20088/api/v1/x/likes \
+  -H "Content-Type: application/json" \
+  -d '{"tweetId": "TWEET_ID"}'</pre>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
           </div>
+
           <div class="download-row">
             <span class="download-row-label">↓</span>
-            <a class="btn-dl clawbot coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
-            <a class="btn-dl xdk coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
-            <a class="btn-dl http coming" href="#"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
+            <a class="btn-dl clawbot" href="/examples/s04_timeline_auto_like/s04_timeline_auto_like_clawbot.py" download="s04_timeline_auto_like_clawbot.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> clawbot.py</a>
+            <a class="btn-dl xdk" href="/examples/s04_timeline_auto_like/s04_timeline_auto_like_xdk.py" download="s04_timeline_auto_like_xdk.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> xdk.py</a>
+            <a class="btn-dl http" href="/examples/s04_timeline_auto_like/s04_timeline_auto_like_http_rest.py" download="s04_timeline_auto_like_http_rest.py"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> http_rest.py</a>
           </div>
         </div>
       </div>
