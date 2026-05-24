@@ -1,29 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Exact same gradient as download-app-icon: #0891B2 → #7C3AED at 135deg -->
+    <!-- Same gradient as before: #0891B2 → #7C3AED at 135deg -->
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%"   stop-color="#0891B2"/>
       <stop offset="100%" stop-color="#7C3AED"/>
     </linearGradient>
   </defs>
 
-  <!-- Rounded square, radius proportional to border-radius:20px on 80px = 25% → 128px -->
+  <!-- Rounded square background -->
   <rect width="512" height="512" rx="115" ry="115" fill="url(#bg)"/>
 
   <!--
-    Twitter bird path from HTML: viewBox="0 0 24 24"
-    In HTML: 40x40 icon inside 80x80 box = 50% size
-    Here: scale 40/24 * (512*0.50)/40 = 512*0.50/24 ≈ 10.67x
-    Then center: translate(256 - 24*10.67/2, 256 - 24*10.67/2) = translate(128, 128)
+    Paper airplane icon from Heroicons (MIT License)
+    https://heroicons.com — "paper-airplane" solid
+    Original viewBox: 0 0 24 24
+    Scaled to fit 256x256 area centered in 512x512 canvas:
+    scale = 256/24 ≈ 10.667, translate = (128, 128)
   -->
-  <g transform="translate(128, 128) scale(10.67)">
+  <g transform="translate(128, 128) scale(10.667)">
     <path
-      d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
-      fill="none"
-      stroke="white"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"
+      fill="white"
     />
   </g>
 </svg>
