@@ -1,16 +1,23 @@
 """
-S01 · Scheduled Tweet — HTTP REST API
-========================================
-EN: Post a tweet using raw HTTP requests — no Twitter SDK needed.
-    Step 1: fetch OAuth token from TweetPilot's rust-bridge.
-    Step 2: call Twitter API v2 POST /2/tweets directly.
-中文：使用原始 HTTP 请求发推，不依赖任何 Twitter SDK。
-     第一步：从 TweetPilot rust-bridge 获取 OAuth token。
-     第二步：直接调用 Twitter API v2 POST /2/tweets。
+S01 · Scheduled Tweet — HTTP REST API (LocalBridge)
+=====================================================
+EN: Post a tweet by calling TweetPilot's LocalBridge REST API directly.
+    This approach uses the browser extension as a proxy — no OAuth token
+    needed. Requires TweetClaw extension online in the browser.
+中文：通过直接调用 TweetPilot LocalBridge REST API 发推。
+     此方式以浏览器扩展作为代理，无需 OAuth token。
+     需要 TweetClaw 扩展在浏览器中保持在线。
+
+Note / 说明:
+  This tab demonstrates LocalBridge (browser-extension) access via raw HTTP.
+  If you want to call Twitter's official API directly (without the extension),
+  refer to Twitter's official documentation: https://developer.x.com/en/docs/x-api
+  注：本示例演示通过裸 HTTP 调用 LocalBridge（浏览器扩展代理）。
+  如需直接调用推特官方 API，请参考推特官方文档，网上资料也很丰富。
 
 Requirements / 依赖:
   pip install requests
-  TweetPilot running + OAuth account authorized in Account Settings
+  TweetPilot running + TweetClaw browser extension online
 """
 
 import sys
@@ -18,29 +25,28 @@ import requests
 from datetime import datetime
 
 # ── Config / 配置 ────────────────────────────────────────────────────
-# EN: Replace with your Twitter numeric ID.
-# 中文：替换为你的 Twitter 数字 ID。
-TWITTER_ID = "YOUR_TWITTER_ID"
+# EN: LocalBridge listens on port 20088 by default.
+# 中文：LocalBridge 默认监听 20088 端口。
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
 
 TWEET_TEXT = "Daily update {date} — powered by TweetPilot"
 
-RUST_BRIDGE = "http://127.0.0.1:20088"
-TWITTER_V2  = "https://api.twitter.com/2"
 
-
-def get_access_token(twitter_id: str) -> str:
+def post_tweet(text: str) -> dict:
     """
-    EN: GET OAuth token from TweetPilot's rust-bridge (no SDK needed).
-    中文：从 TweetPilot rust-bridge 获取 OAuth token（无需 SDK）。
+    EN: POST /api/v1/x/tweets — send a tweet via LocalBridge.
+        The browser extension handles authentication transparently.
+    中文：调用 LocalBridge POST /api/v1/x/tweets 发推。
+         浏览器扩展会自动处理认证，无需手动传 token。
     """
     try:
         resp = requests.post(
-            f"{RUST_BRIDGE}/api/v1/x/oauth/access-token",
-            json={"twitter_id": twitter_id},
-            timeout=10,
+            f"{LOCAL_BRIDGE}/api/v1/x/tweets",
+            json={"text": text},
+            timeout=15,
         )
         resp.raise_for_status()
-        return resp.json()["access_token"]
+        return resp.json()
     except requests.exceptions.ConnectionError:
         print("ERROR: TweetPilot not running / TweetPilot 未在运行")
         sys.exit(1)
@@ -49,31 +55,17 @@ def get_access_token(twitter_id: str) -> str:
         sys.exit(1)
 
 
-def post_tweet(token: str, text: str) -> dict:
-    """
-    EN: POST /2/tweets — create a new tweet via Twitter API v2.
-    中文：调用 Twitter API v2 的 POST /2/tweets 接口发推。
-    """
-    resp = requests.post(
-        f"{TWITTER_V2}/tweets",
-        json={"text": text},
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        },
-        timeout=15,
-    )
-    resp.raise_for_status()
-    return resp.json()
-
-
 def main():
-    token = get_access_token(TWITTER_ID)
-    text  = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
+    text = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
+    data = post_tweet(text)
 
-    data = post_tweet(token, text)
+    # EN: Parse tweet ID from the raw GraphQL response returned by LocalBridge.
+    # 中文：从 LocalBridge 返回的原始 GraphQL 响应中解析推文 ID。
+    try:
+        tweet_id = data["data"]["create_tweet"]["tweet_results"]["result"]["rest_id"]
+    except (KeyError, TypeError):
+        tweet_id = str(data)
 
-    tweet_id = data.get("data", {}).get("id", "?")
     print(f"Tweet sent / 发推成功: {text}")
     print(f"Tweet ID: {tweet_id}")
 

@@ -23,7 +23,7 @@ from xdk import Client
 #     Find it in TweetPilot → Account Settings → Account ID.
 # 中文：替换为你的 Twitter 数字 ID。
 #      在 TweetPilot → 账号设置 → 账号 ID 中查看。
-TWITTER_ID = "YOUR_TWITTER_ID"
+TWITTER_ID = "YOUR_TWITTER_ID"  # ← Replace with your numeric Twitter ID / 替换为你的数字 Twitter ID
 
 TWEET_TEXT = "Daily update {date} — powered by TweetPilot"
 
@@ -50,9 +50,21 @@ def get_access_token(twitter_id: str) -> str:
 
 
 def main():
-    # EN: Initialize xdk Client with the token provided by TweetPilot.
-    # 中文：用 TweetPilot 提供的 token 初始化 xdk Client。
-    client = Client(bearer_token=get_access_token(TWITTER_ID))
+    # EN: Guard: make sure TWITTER_ID has been replaced before running.
+    # 中文：运行前先检查 TWITTER_ID 是否已被替换，避免向 rust-bridge 发送无效请求。
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Please set TWITTER_ID to your numeric Twitter account ID.")
+        print("错误：请将 TWITTER_ID 替换为你的数字 Twitter 账号 ID（仅限 OAuth 授权账号）。")
+        print("      在 TweetPilot → 账号设置 → 账号 ID 中查看（x 开头的账号）。")
+        sys.exit(1)
+
+    # EN: Initialize xdk Client.
+    #     MUST use access_token= (User OAuth 2.0), NOT bearer_token= (App-level, read-only).
+    #     Using bearer_token= will cause "Authentication required" on any write operation.
+    # 中文：初始化 xdk Client。
+    #      必须用 access_token= 传入（用户 OAuth 2.0），不能用 bearer_token=（App 级只读）。
+    #      用 bearer_token= 会导致发推等写操作报 Authentication required 错误。
+    client = Client(access_token=get_access_token(TWITTER_ID))
 
     text = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
 

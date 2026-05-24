@@ -145,6 +145,16 @@
       color: var(--color-text-dim); margin: 16px 0 8px;
     }
 
+    /* ── HTTP NOTE ── */
+    .http-note {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; line-height: 1.6; color: var(--color-text-muted);
+      background: rgba(96,165,250,0.07); border-left: 3px solid #60A5FA;
+      border-radius: 4px; padding: 10px 12px; margin-bottom: 12px;
+    }
+    .http-note svg { flex-shrink: 0; margin-top: 2px; color: #60A5FA; }
+    .http-note a { color: #60A5FA; text-decoration: underline; }
+
     /* ── PANE VISIBILITY ── */
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
@@ -350,7 +360,16 @@ def get_access_token(twitter_id: str) -> str:
 
 
 def main():
-    client = Client(bearer_token=get_access_token(TWITTER_ID))
+    <span class="cm"># Guard: TWITTER_ID must be replaced before running (OAuth accounts only)
+    # 运行前检查：TWITTER_ID 必须替换为真实 ID（仅支持 OAuth 授权账号）</span>
+    if TWITTER_ID == "YOUR_TWITTER_ID":
+        print("ERROR: Set TWITTER_ID to your numeric Twitter ID (OAuth accounts only).")
+        print("错误：请将 TWITTER_ID 替换为数字 ID，仅限 TweetPilot 中 x 开头的 OAuth 账号。")
+        sys.exit(1)
+
+    <span class="cm"># ⚠️ Must use access_token= (User OAuth 2.0), NOT bearer_token= (read-only App token)
+    # ⚠️ 必须用 access_token= 传入，bearer_token= 是只读的 App token，写操作会报错</span>
+    client = Client(access_token=get_access_token(TWITTER_ID))
     text   = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
     result = client.posts.create(body={"text": text})
 
@@ -366,14 +385,22 @@ if __name__ == "__main__":
 
           <!-- HTTP REST pane -->
           <div class="tab-pane" data-pane="s01-http">
+            <div class="http-note">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>This tab shows how to call <strong>TweetPilot LocalBridge</strong> via raw HTTP — the browser extension acts as proxy, no OAuth token needed. To call Twitter's official API directly, refer to <a href="https://developer.x.com/en/docs/x-api" target="_blank">Twitter's official docs</a>.</span>
+            </div>
+            <div class="http-note" style="font-size:12px;opacity:.75;margin-top:-6px;">
+              本 Tab 演示通过裸 HTTP 调用 TweetPilot LocalBridge（浏览器扩展代理），无需 OAuth token。如需直接调用推特官方 API，请参考推特官方文档，网上资料也很丰富，本页不再重复说明。
+            </div>
             <div class="code-wrap">
               <pre class="code-block"><span class="cm">"""
-S01 · Scheduled Tweet — HTTP REST API (Python)
-================================================
-EN: Raw HTTP approach — no Twitter SDK required.
-    Step 1: fetch token from TweetPilot rust-bridge.
-    Step 2: POST /2/tweets to Twitter API v2.
-中文：原始 HTTP 发推，无需 SDK。第一步获取 token，第二步调用 Twitter v2。
+S01 · Scheduled Tweet — HTTP REST API (LocalBridge)
+=====================================================
+EN: Call TweetPilot's LocalBridge REST API directly — no OAuth token needed.
+    The browser extension handles authentication transparently.
+    Requires TweetClaw extension online in the browser.
+中文：直接调用 TweetPilot LocalBridge REST API 发推，无需 OAuth token。
+     浏览器扩展自动处理认证，需 TweetClaw 扩展在线。
 
 pip install requests
 """</span>
@@ -382,39 +409,40 @@ import sys
 import requests
 from datetime import datetime
 
-TWITTER_ID  = "YOUR_TWITTER_ID"
-TWEET_TEXT  = "Daily update {date} — powered by TweetPilot"
-RUST_BRIDGE = "http://127.0.0.1:20088"
-TWITTER_V2  = "https://api.twitter.com/2"
+LOCAL_BRIDGE = "http://127.0.0.1:20088"
+TWEET_TEXT   = "Daily update {date} — powered by TweetPilot"
 
 
-def get_access_token(twitter_id: str) -> str:
+def post_tweet(text: str) -> dict:
+    <span class="cm"># POST /api/v1/x/tweets — LocalBridge proxies to Twitter via browser extension
+    # LocalBridge 通过浏览器扩展代理发推，无需手动传 token</span>
     try:
         resp = requests.post(
-            f"{RUST_BRIDGE}/api/v1/x/oauth/access-token",
-            json={"twitter_id": twitter_id}, timeout=10,
+            f"{LOCAL_BRIDGE}/api/v1/x/tweets",
+            json={"text": text},
+            timeout=15,
         )
         resp.raise_for_status()
-        return resp.json()["access_token"]
+        return resp.json()
     except requests.exceptions.ConnectionError:
         print("ERROR: TweetPilot not running / TweetPilot 未在运行")
         sys.exit(1)
     except requests.exceptions.HTTPError as e:
-        print(f"ERROR: {e.response.status_code}"); sys.exit(1)
+        print(f"ERROR: {e.response.status_code} — {e.response.text}")
+        sys.exit(1)
 
 
 def main():
-    token = get_access_token(TWITTER_ID)
-    text  = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
-    resp  = requests.post(
-        f"{TWITTER_V2}/tweets",
-        json={"text": text},
-        headers={"Authorization": f"Bearer {token}",
-                 "Content-Type": "application/json"},
-        timeout=15,
-    )
-    resp.raise_for_status()
-    tweet_id = resp.json()["data"]["id"]
+    text = TWEET_TEXT.format(date=datetime.now().strftime("%Y-%m-%d"))
+    data = post_tweet(text)
+
+    <span class="cm"># Parse tweet ID from LocalBridge's raw GraphQL response
+    # 从 LocalBridge 返回的原始 GraphQL 响应中解析推文 ID</span>
+    try:
+        tweet_id = data["data"]["create_tweet"]["tweet_results"]["result"]["rest_id"]
+    except (KeyError, TypeError):
+        tweet_id = str(data)
+
     print(f"Tweet sent / 发推成功: {text}")
     print(f"Tweet ID: {tweet_id}")
 
@@ -425,17 +453,9 @@ if __name__ == "__main__":
             </div>
             <div class="curl-label" data-i18n="ex.curl_label">Equivalent curl command</div>
             <div class="code-wrap">
-              <pre class="code-block"><span class="cm"># Step 1: Get OAuth token from TweetPilot rust-bridge
-# 第一步：从 TweetPilot rust-bridge 获取 OAuth token</span>
-TOKEN=$(curl -s -X POST http://127.0.0.1:20088/api/v1/x/oauth/access-token \
-  -H "Content-Type: application/json" \
-  -d '{"twitter_id": "YOUR_TWITTER_ID"}' \
-  | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])")
-
-<span class="cm"># Step 2: Post tweet via Twitter API v2
-# 第二步：通过 Twitter API v2 发推</span>
-curl -s -X POST https://api.twitter.com/2/tweets \
-  -H "Authorization: Bearer $TOKEN" \
+              <pre class="code-block"><span class="cm"># Post a tweet via TweetPilot LocalBridge — no token needed
+# 通过 TweetPilot LocalBridge 发推，无需 token</span>
+curl -s -X POST http://127.0.0.1:20088/api/v1/x/tweets \
   -H "Content-Type: application/json" \
   -d '{"text": "Daily update — powered by TweetPilot"}'</pre>
               <button class="copy-btn" onclick="copyCode(this)">Copy</button>
