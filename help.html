@@ -36,6 +36,8 @@
     .nav-links a:hover { color: var(--color-secondary); }
     .nav-cta { background: var(--color-cta); color: white; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 8px; text-decoration: none; transition: all 200ms; }
     .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .nav-account { color: var(--color-text-muted); font-size: 14px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--color-border); text-decoration: none; transition: all 200ms ease; }
+    .nav-account:hover { color: var(--color-text); border-color: var(--color-border-bright); background: var(--color-surface-hover); }
     .nav-lang-toggle { background: var(--color-surface); color: var(--color-text-muted); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; padding: 5px 12px; border-radius: 7px; border: 1px solid var(--color-border); cursor: pointer; transition: all 200ms ease; margin-left: 4px; }
     .nav-lang-toggle:hover { color: var(--color-secondary); border-color: var(--color-border-bright); }
 
@@ -294,6 +296,7 @@
     <li><a href="/help.html" class="active" data-i18n="nav.help">Help</a></li>
     <li><a href="/#download" data-i18n="nav.download">Download</a></li>
   </ul>
+  <a class="nav-account" href="https://account.tweetpilot.dessage.xyz/" target="_blank" rel="noopener" data-i18n="nav.my_account">My Account</a>
   <a class="nav-cta" href="/#download" data-i18n="nav.download_free">Download Free</a>
   <button id="lang-toggle" class="nav-lang-toggle" onclick="toggleLang()" type="button">中文</button>
 </nav>

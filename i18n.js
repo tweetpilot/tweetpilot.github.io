@@ -21,6 +21,7 @@
       'nav.help': 'Help',
       'nav.download': 'Download',
       'nav.download_free': 'Download Free',
+      'nav.my_account': 'My Account',
 
       // Hero
       'hero.badge': 'AI-Powered Twitter Automation · macOS &amp; Windows',
@@ -814,6 +815,7 @@
       'nav.help': '帮助',
       'nav.download': '下载',
       'nav.download_free': '免费下载',
+      'nav.my_account': '我的账户',
 
       // Hero
       'hero.badge': 'AI 驱动的 Twitter 自动化 · macOS &amp; Windows',

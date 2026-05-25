@@ -102,6 +102,8 @@
       border: none;
     }
     .nav-cta:hover { background: var(--color-cta-hover); transform: translateY(-1px); }
+    .nav-account { color: var(--color-text-muted); font-size: 14px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--color-border); text-decoration: none; transition: all 200ms ease; }
+    .nav-account:hover { color: var(--color-text); border-color: var(--color-border-bright); background: var(--color-surface-hover); }
     .nav-mobile-menu { display: none; }
     .nav-lang-toggle {
       background: var(--color-surface);
@@ -828,6 +830,7 @@
       <li><a href="/help.html" data-i18n="nav.help">Help</a></li>
       <li><a href="#download" data-i18n="nav.download">Download</a></li>
     </ul>
+    <a class="nav-account" href="https://account.tweetpilot.dessage.xyz/" target="_blank" rel="noopener" data-i18n="nav.my_account">My Account</a>
     <a class="nav-cta" href="#download" data-i18n="nav.download_free">Download Free</a>
     <button id="lang-toggle" class="nav-lang-toggle" onclick="toggleLang()" type="button">中文</button>
     <button class="nav-mobile-menu" aria-label="Menu" style="background:none;border:none;color:var(--color-text);cursor:pointer;">
