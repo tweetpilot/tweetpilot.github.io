@@ -118,6 +118,30 @@
     .plan-btn.ent-btn { background: rgba(124,58,237,0.15); color: #A78BFA; border: 1px solid rgba(124,58,237,0.3); }
     .plan-btn.ent-btn:hover { background: rgba(124,58,237,0.25); transform: translateY(-1px); }
 
+    /* Duration toggle */
+    .plan-duration-toggle { display: flex; gap: 6px; margin-bottom: 16px; }
+    .dur-btn {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 10px 6px; border-radius: 10px;
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      color: var(--color-text-muted); cursor: pointer; transition: all 200ms ease;
+      position: relative;
+    }
+    .dur-btn:hover { border-color: var(--color-border-bright); background: var(--color-surface-hover); }
+    .dur-btn.active {
+      border-color: rgba(8,145,178,0.4); background: rgba(8,145,178,0.1);
+      color: var(--color-text);
+    }
+    .dur-label { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; }
+    .dur-price { font-size: 18px; font-weight: 800; color: var(--color-text); }
+    .dur-period { font-size: 10px; opacity: 0.7; }
+    .dur-badge {
+      position: absolute; top: -6px; right: -4px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+      padding: 2px 6px; border-radius: 100px;
+      background: var(--color-cta); color: white;
+    }
+
     /* Contact Modal */
     .contact-modal-overlay {
       position: fixed; inset: 0; z-index: 1000;
@@ -294,15 +318,36 @@
       </a>
     </div>
 
-    <!-- Pro Annual -->
+    <!-- Pro -->
     <div class="plan-card featured">
       <span class="plan-badge pro" data-i18n="plan.pro_badge">Most Popular</span>
       <div class="plan-name" data-i18n="plan.pro_name">Professional</div>
-      <div class="plan-price">
-        <span class="plan-price-num pro-num">$300</span>
-        <span class="plan-price-period" data-i18n="plan.pro_period">/ year</span>
+
+      <!-- Duration toggle -->
+      <div class="plan-duration-toggle">
+        <button class="dur-btn" data-dur="monthly" onclick="setDuration('monthly')">
+          <span class="dur-label" data-i18n="plan.dur_monthly_label">Monthly</span>
+          <span class="dur-price">$30</span>
+          <span class="dur-period" data-i18n="plan.dur_monthly_period">/ mo</span>
+        </button>
+        <button class="dur-btn active" data-dur="quarterly" onclick="setDuration('quarterly')">
+          <span class="dur-label" data-i18n="plan.dur_quarterly_label">Quarterly</span>
+          <span class="dur-price">$79</span>
+          <span class="dur-period" data-i18n="plan.dur_quarterly_period">/ qtr</span>
+          <span class="dur-badge" data-i18n="plan.dur_best_value">Best value</span>
+        </button>
+        <button class="dur-btn" data-dur="yearly" onclick="setDuration('yearly')">
+          <span class="dur-label" data-i18n="plan.dur_yearly_label">Yearly</span>
+          <span class="dur-price">$300</span>
+          <span class="dur-period" data-i18n="plan.dur_yearly_period">/ yr</span>
+        </button>
       </div>
-      <div class="plan-price-sub" data-i18n="plan.pro_sub">1 license · up to 2 devices · 1 year</div>
+
+      <div class="plan-price" id="proDisplayPrice">
+        <span class="plan-price-num pro-num">$79</span>
+        <span class="plan-price-period" data-i18n="plan.pro_period_quarterly">/ quarter</span>
+      </div>
+      <div class="plan-price-sub" data-i18n="plan.pro_sub">1 license · up to 2 devices · 1 month free trial</div>
       <div class="plan-divider"></div>
       <ul class="plan-features">
         <li class="plan-feature">
@@ -331,12 +376,16 @@
         </li>
         <li class="plan-feature">
           <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span data-i18n="plan.feat_12months">License valid for 12 months</span>
+          <span data-i18n="plan.feat_duration">Pay by duration — monthly, quarterly or yearly</span>
+        </li>
+        <li class="plan-feature">
+          <svg class="feat-icon check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="plan.feat_trial">1 month free trial included</span>
         </li>
       </ul>
       <button class="plan-btn pro-btn" onclick="handleBuyLicense()" type="button">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <span data-i18n="plan.pro_btn">Buy License — $300/yr</span>
+        <span data-i18n="plan.pro_btn">Buy License</span>
       </button>
     </div>
 
@@ -473,6 +522,40 @@
 </footer>
 
 <script>
+  const DURATIONS = {
+    monthly:   { price: '$30',  period: '/ month',  periodKey: 'plan.pro_period_monthly' },
+    quarterly: { price: '$79',  period: '/ quarter', periodKey: 'plan.pro_period_quarterly' },
+    yearly:    { price: '$300', period: '/ year',   periodKey: 'plan.pro_period_yearly' },
+  };
+  let selectedDur = 'quarterly';
+
+  function setDuration(dur) {
+    selectedDur = dur;
+    document.querySelectorAll('.dur-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.dur === dur);
+    });
+    const cfg = DURATIONS[dur];
+    const display = document.getElementById('proDisplayPrice');
+    if (display) {
+      const num = display.querySelector('.plan-price-num');
+      const per = display.querySelector('.plan-price-period');
+      if (num) num.textContent = cfg.price;
+      if (per) {
+        per.textContent = cfg.period;
+        per.setAttribute('data-i18n', cfg.periodKey);
+        if (window.i18n) {
+          const translated = window.i18n.t(cfg.periodKey);
+          if (translated !== cfg.periodKey) per.textContent = translated;
+        }
+      }
+    }
+    const btnSpan = document.querySelector('.plan-btn.pro-btn span');
+    if (btnSpan) {
+      const label = window.i18n ? window.i18n.t('plan.pro_btn') : 'Buy License';
+      btnSpan.textContent = label + ' — ' + cfg.price;
+    }
+  }
+
   function handleBuyLicense() {
     window.open(PORTAL_URL, '_blank');
   }
@@ -509,6 +592,11 @@
   }
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeContactModal();
+  });
+
+  // Sync toggle state with i18n on load
+  document.addEventListener('DOMContentLoaded', function() {
+    setDuration(selectedDur);
   });
 </script>
 </body>

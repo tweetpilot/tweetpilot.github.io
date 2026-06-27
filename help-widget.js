@@ -107,7 +107,7 @@
       'upg.feat2': '✓ AI remote conversation agents',
       'upg.feat3': '✓ Priority support',
       'upg.feat4': '✓ 2 devices per license',
-      'upg.price': '$300/year',
+      'upg.price': 'from $30/month',
       'upg.btn': 'Buy Pro License',
     },
     zh: {
@@ -207,7 +207,7 @@
       'upg.feat2': '✓ AI 远程对话代理',
       'upg.feat3': '✓ 优先支持',
       'upg.feat4': '✓ 每个许可证 2 台设备',
-      'upg.price': '$300/年',
+      'upg.price': '$30/月起',
       'upg.btn': '购买 Pro 许可证',
     }
   };
