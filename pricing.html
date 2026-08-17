@@ -385,7 +385,7 @@
       </ul>
       <button class="plan-btn pro-btn" onclick="handleBuyLicense()" type="button">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <span data-i18n="plan.pro_btn">Buy License</span>
+        <span data-i18n="plan.pro_btn">Buy</span>
       </button>
     </div>
 
@@ -444,7 +444,7 @@
         <div class="faq-a" data-i18n="faq.a2">Each Professional license supports up to 2 devices simultaneously. If you need more devices, you can purchase additional licenses.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" data-i18n="faq.q3">What happens when my annual license expires?</div>
+        <div class="faq-q" data-i18n="faq.q3">What happens when my paid access expires?</div>
         <div class="faq-a" data-i18n="faq.a3">When your license expires, your account reverts to the free plan. All your data, workspaces, and scripts remain intact — you just lose access to scheduled tasks and the AI conversation agent until you renew.</div>
       </div>
       <div class="faq-item">
@@ -453,7 +453,7 @@
       </div>
       <div class="faq-item">
         <div class="faq-q" data-i18n="faq.q5">Do you offer refunds?</div>
-        <div class="faq-a" data-i18n-html="faq.a5">Yes. We offer a 7-day refund for annual licenses if you are not satisfied. See our <a href="/refund.html" style="color:var(--color-secondary);">Refund Policy</a> for details.</div>
+        <div class="faq-a" data-i18n-html="faq.a5">Yes. We offer a 7-day refund on your purchase if you are not satisfied. See our <a href="/refund.html" style="color:var(--color-secondary);">Refund Policy</a> for details.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q" data-i18n="faq.q6">Is my data stored on your servers?</div>
@@ -551,7 +551,7 @@
     }
     const btnSpan = document.querySelector('.plan-btn.pro-btn span');
     if (btnSpan) {
-      const label = window.i18n ? window.i18n.t('plan.pro_btn') : 'Buy License';
+      const label = window.i18n ? window.i18n.t('plan.pro_btn') : 'Buy';
       btnSpan.textContent = label + ' — ' + cfg.price;
     }
   }
