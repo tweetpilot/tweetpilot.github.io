@@ -271,8 +271,11 @@
 
   /* ─── Build HTML ──────────────────────────────────────────────── */
   function buildDrawerHTML() {
+    var isZh = (localStorage.getItem('tp_lang') || 'en') === 'zh';
+    var closeTitle = isZh ? '关闭' : 'Close';
     var html = '<div class="help-drawer-header">';
     html += '<input type="text" class="help-search" placeholder="' + ht('help.search_placeholder') + '" />';
+    html += '<button class="help-drawer-close-btn" onclick="window.closeHelpDrawer()" title="' + closeTitle + '" aria-label="Close">&times;</button>';
     html += '</div>';
     html += '<div class="help-drawer-body">';
 
@@ -413,11 +416,15 @@
 
   function toggleDrawer() {
     var drawer = document.getElementById('help-drawer');
+    var btn = document.getElementById('help-widget-btn');
+    if (!drawer) return;
     drawer.classList.toggle('open');
     if (drawer.classList.contains('open')) {
       document.body.style.overflow = 'hidden';
+      if (btn) btn.innerHTML = '&times;';
     } else {
       document.body.style.overflow = '';
+      if (btn) btn.innerHTML = '?';
     }
   }
 
@@ -467,6 +474,13 @@
     document.getElementById('help-upgrade-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+
+  window.closeHelpDrawer = function() {
+    var drawer = document.getElementById('help-drawer');
+    if (drawer && drawer.classList.contains('open')) {
+      toggleDrawer();
+    }
+  };
 
   window.closeHelpAdvancedModal = function() {
     document.getElementById('help-advanced-modal').classList.remove('open');
