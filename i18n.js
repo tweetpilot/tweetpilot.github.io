@@ -24,7 +24,7 @@
 
       // Hero
       'hero.badge': '7×24 AI Operations Agent · Twitter/X, Instagram, Douyin & Xiaohongshu',
-      'hero.h1_line1': 'Your Social Media Matrix,',
+      'hero.h1_line1': 'Your Social Media Matrix',
       'hero.h1_gradient': '7×24 AI-Automated',
       'hero.sub': 'TweetPilot is a desktop AI Agent for Twitter/X, Instagram, Douyin (Enterprise), and Xiaohongshu (Enterprise). Automate multi-platform publishing, content sync, analytics, and 7×24 task scheduling from your machine.',
       'hero.btn_download': 'Download Free',
@@ -58,7 +58,7 @@
 
       // Features
       'features.label': 'Capabilities',
-      'features.title': 'Everything You Need for<br />Multi-Platform Automation',
+      'features.title': 'Everything<br />You Need for Multi-Platform Automation',
       'features.desc': 'A full-featured desktop workspace built with 6 core modules and Tool Plaza plugins for total control and high scalability.',
       'feat1.title': 'Multi-Platform Account Matrix',
       'feat1.desc': 'Manage Twitter/X, Instagram, Douyin (Enterprise), and Xiaohongshu (Enterprise) in one central dashboard with real-time status monitoring.',
@@ -831,7 +831,7 @@
 
       // Hero
       'hero.badge': '7×24 AI 智能运维 Agent · 支持 Twitter/X、Instagram、抖音、小红书',
-      'hero.h1_line1': '你的社交媒体矩阵，',
+      'hero.h1_line1': '你的社交媒体矩阵',
       'hero.h1_gradient': '全天候 AI 自动化',
       'hero.sub': 'TweetPilot 是一款桌面级 AI 智能运维 Agent，支持 Twitter/X、Instagram、抖音（企业版专属）及小红书（企业版专属）。通过浏览器扩展桥接与 AI 工作区，自动化发布、内容同步、数据分析与定时任务调度。',
       'hero.btn_download': '免费下载',
@@ -865,7 +865,7 @@
 
       // Features
       'features.label': '功能能力',
-      'features.title': '全方位重塑社交媒体<br />运营效率与矩阵管理',
+      'features.title': '全方位重塑社交媒体运营效率与矩阵管理',
       'features.desc': '融合六大桌面核心模块与工具广场插件，为企业与个人运营者打造高自由度的 AI 工作空间。',
       'feat1.title': '多平台多账号矩阵',
       'feat1.desc': '一站式管理 Twitter/X、Instagram、抖音（企业版）与小红书（企业版）账号。即时感知在线状态，支持 Managed 数据库与 Unmanaged 隔离存储。',
@@ -1665,6 +1665,7 @@
     lang = lang === 'en' ? 'zh' : 'en';
     localStorage.setItem('tp_lang', lang);
     applyTranslations();
+    window.dispatchEvent(new Event('tp_lang_changed'));
   };
 
   /* Expose t() so inline scripts (e.g. copyEmail) can use it */
