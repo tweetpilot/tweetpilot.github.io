@@ -163,7 +163,7 @@
       'plan.feat_email_support': 'Email support',
       'plan.feat_duration': 'Pay by duration — monthly, quarterly or yearly',
       'plan.feat_trial': '1 month free trial included',
-      'plan.pro_btn': 'Buy',
+      'plan.pro_btn': 'Download Free',
 
       // Plan — Enterprise
       'plan.ent_badge': 'Enterprise',
@@ -235,6 +235,7 @@
       'help.sidebar_label': 'Documentation',
       'help.nav_quickstart': 'Quick Start',
       'help.nav_ai': 'AI Agent',
+      'help.nav_plaza': 'Tool Plaza',
       'help.nav_tweetclaw': 'TweetClaw',
       'help.nav_accounts': 'Accounts',
       'help.nav_scheduler': 'Scheduler',
@@ -358,6 +359,70 @@
       'help.ai_compat_title': 'OpenAI-Compatible Providers (DeepSeek, Groq, etc.)',
       'help.ai_compat_desc': 'DeepSeek and Groq are built-in as <strong>OpenAI Compatible</strong> type. For any other provider that exposes an OpenAI-compatible API, use the <strong>Custom</strong> type — set the Base URL to their endpoint and enter your API key. The model field is always free text, so enter the exact model identifier the provider requires.',
       'help.ai_deepseek_note': '<strong>Note:</strong> DeepSeek offers two API interface modes — <strong>OpenAI-compatible</strong> and <strong>Anthropic-compatible</strong>. The base URL and model identifiers differ between the two modes. Visit the <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">DeepSeek API Docs</a> to find the correct endpoint URL and model names for each mode.',
+
+      // Tool Plaza
+      'help.plaza_badge': 'Plugins & Workflows',
+      'help.plaza_title': 'Tool Plaza & Automation Plugins',
+      'help.plaza_intro': 'Tool Plaza is TweetPilot\'s modular plugin center for ready-to-run automation tools and custom workflows. Manage official built-in tools like Post Butler, Immediate Publish, and Multi-Platform Sync, or create your own AI Prompt Plugins.',
+
+      'help.plaza_modules_title': 'Core Modules in Tool Plaza',
+      'help.plaza_mod1_name': 'Post Butler (发布管家)',
+      'help.plaza_mod1_tag': 'Auto-Reply & Monitoring',
+      'help.plaza_mod1_desc': 'Monitor tweet/post replies automatically. Use AI personas, custom system prompts, keyword triggers, and blacklist filters to handle community interactions 7×24.',
+      
+      'help.plaza_mod2_name': 'Immediate Publish (立即发布)',
+      'help.plaza_mod2_tag': 'Multi-Platform Composer',
+      'help.plaza_mod2_desc': 'Compose rich posts with images and MP4 videos. Preview formatting and publish to Twitter/X, Instagram, Douyin, and Xiaohongshu simultaneously.',
+      
+      'help.plaza_mod3_name': 'Multi-Platform Sync (文章跨平台同步)',
+      'help.plaza_mod3_tag': 'Matrix Distribution',
+      'help.plaza_mod3_desc': 'One-click Markdown length and layout adaptation. Automatically format and publish articles across 4 major social networks with real-time status tracking.',
+      
+      'help.plaza_mod4_name': 'Prompt Tools & Templates (自定义 Prompt 工具)',
+      'help.plaza_mod4_tag': 'Custom AI Plugins',
+      'help.plaza_mod4_desc': 'Build parameterized AI prompt plugins with dynamic variables (e.g. {{topic}}, {{tone}}). Execute in 1 click or bind to recurring task schedules.',
+
+      'help.plaza_butler_title': '1. Post Butler (发布管家 & 评论自动回复) Setup Guide',
+      'help.plaza_butler_s1_title': 'Select Workspace & Target Post/Account',
+      'help.plaza_butler_s1_desc': 'Open Tool Plaza → <strong>Post Butler</strong>. Select the workspace and account context. You can monitor all recent posts or specify a specific Tweet/Post ID.',
+      'help.plaza_butler_s2_title': 'Configure AI Reply Persona & Tone',
+      'help.plaza_butler_s2_desc': 'Choose an AI persona tone: <strong>Professional</strong> (objective, polite), <strong>Casual</strong> (friendly, conversational), <strong>Humorous</strong> (engaging, witty), or <strong>Custom Prompt</strong> to define specialized brand guidelines.',
+      'help.plaza_butler_s3_title': 'Set Trigger Keywords & Blacklist Rules',
+      'help.plaza_butler_s3_desc': 'Configure matching rules: <strong>Include Keywords</strong> (only reply to comments containing specific words e.g. "pricing", "how to"), and <strong>Blacklist Words</strong> (ignore spam or toxic comments).',
+      'help.plaza_butler_s4_title': 'Set Schedule & Anti-Spam Frequency',
+      'help.plaza_butler_s4_desc': 'Configure the execution cycle (e.g. check every 15 minutes), max replies per run (e.g. 5 replies), and minimum delay between replies to ensure natural human-like pacing.',
+      'help.plaza_butler_s5_title': 'Review Interaction Logs & Analytics',
+      'help.plaza_butler_s5_desc': 'All auto-generated replies, confidence scores, and timestamps are logged in the Butler detail panel. You can pause, adjust, or retry at any time.',
+
+      'help.plaza_publish_title': '2. Immediate Publish (立即发布) Guide',
+      'help.plaza_publish_s1_title': 'Compose Post & Add Media',
+      'help.plaza_publish_s1_desc': 'Enter text, hashtags, and links. Drag and drop media files (PNG/JPG/WEBP images, MP4/MOV videos up to platform limits).',
+      'help.plaza_publish_s2_title': 'Select Target Channels & Preview',
+      'help.plaza_publish_s2_desc': 'Toggle target platforms: <strong>Twitter/X</strong>, <strong>Instagram</strong>, <strong>Douyin</strong>, <strong>Xiaohongshu</strong>. View real-time character counters and card previews.',
+      'help.plaza_publish_s3_title': 'Instant Publish or Save Draft',
+      'help.plaza_publish_s3_desc': 'Click <strong>Publish Now</strong> for immediate dispatch, or save as a workspace draft to be referenced by scheduled tasks.',
+
+      'help.plaza_sync_title': '3. Multi-Platform Content Sync (文章跨平台同步) Guide',
+      'help.plaza_sync_s1_title': 'Import Markdown / Long-Form Draft',
+      'help.plaza_sync_s1_desc': 'Paste or write long-form content. TweetPilot analyzes structure, extracts key bullet points, and segments text for short-form channels.',
+      'help.plaza_sync_s2_title': 'Format Auto-Adaptation',
+      'help.plaza_sync_s2_desc': 'TweetPilot automatically formats content to comply with platform-specific rules (Twitter character splits, Xiaohongshu tag conventions, Douyin title length).',
+      'help.plaza_sync_s3_title': 'Matrix Status & Retry',
+      'help.plaza_sync_s3_desc': 'Monitor progress in real-time. If a platform encounters network timeout or session expiry, click <strong>Retry</strong> to re-dispatch without duplicating successful channels.',
+
+      'help.plaza_prompt_title': '4. Creating Custom Prompt Tools (自定义 Prompt 插件)',
+      'help.plaza_prompt_s1_title': 'Open Tool Creator',
+      'help.plaza_prompt_s1_desc': 'In Tool Plaza, click <strong>+ Create Tool</strong> → Select <strong>Prompt Tool</strong>.',
+      'help.plaza_prompt_s2_title': 'Define Parameters & Variables',
+      'help.plaza_prompt_s2_desc': 'Add input fields (text, select, number). Define variable names such as <code>{{topic}}</code>, <code>{{style}}</code>, <code>{{count}}</code>.',
+      'help.plaza_prompt_s3_title': 'Write Prompt Template',
+      'help.plaza_prompt_s3_desc': 'Write system instructions and user prompt templates embedding your variables. Example: <em>"Generate 3 viral Twitter hooks about {{topic}} with a {{style}} tone."</em>',
+      'help.plaza_prompt_s4_title': 'Run in Chat or Schedule',
+      'help.plaza_prompt_s4_desc': 'Once saved, the tool appears in your Tool Plaza. Click to run interactively with a form dialog, invoke via AI Chat, or link to a Task Scheduler cron job.',
+
+      'help.plaza_tips_title': 'Pro Tips for Tool Plaza',
+      'help.plaza_tip1': '<strong>Pair with Data Blocks:</strong> In Post Butler and Prompt Tools, you can inject structured Data Blocks (product FAQ, persona profiles) as reference context for hyper-consistent AI outputs.',
+      'help.plaza_tip2': '<strong>Anti-Rate-Limiting:</strong> When scheduling Post Butler or multi-account sync, set staggered intervals (15~30 minutes) to keep activity patterns natural and avoid platform throttles.',
 
       // TweetClaw
       'help.tc_badge': 'LocalBridge · Browser Route',
@@ -970,7 +1035,7 @@
       'plan.feat_email_support': '邮件支持',
       'plan.feat_duration': '按时长付费 — 可按月、按季、按年',
       'plan.feat_trial': '含 1 个月免费试用',
-      'plan.pro_btn': '购买',
+      'plan.pro_btn': '免费下载',
 
       // Plan — Enterprise
       'plan.ent_badge': '企业版',
@@ -1042,6 +1107,7 @@
       'help.sidebar_label': '文档',
       'help.nav_quickstart': '快速入门',
       'help.nav_ai': 'AI Agent',
+      'help.nav_plaza': '工具广场',
       'help.nav_tweetclaw': 'TweetClaw',
       'help.nav_accounts': '账号管理',
       'help.nav_scheduler': '任务调度',
@@ -1166,6 +1232,70 @@
       'help.ai_compat_title': 'OpenAI 兼容提供商（DeepSeek、Groq 等）',
       'help.ai_compat_desc': 'DeepSeek 和 Groq 已作为 <strong>OpenAI Compatible</strong> 类型内置。对于任何其他提供 OpenAI 兼容接口的服务，使用 <strong>Custom</strong> 类型——将 Base URL 设置为该服务的端点地址并填写 API 密钥。模型字段始终为自由文本，填写该提供商要求的确切模型标识符即可。',
       'help.ai_deepseek_note': '<strong>注意：</strong>DeepSeek 提供两种 API 接口模式——<strong>OpenAI 兼容模式</strong>和 <strong>Anthropic 兼容模式</strong>。两种模式的 Base URL 和模型标识符不同。请访问 <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">DeepSeek API 文档</a>查看每种模式的正确接口地址和模型名称。',
+
+      // 工具广场
+      'help.plaza_badge': '插件与工作流',
+      'help.plaza_title': '工具广场与能力插件',
+      'help.plaza_intro': '工具广场（Tool Plaza）是 TweetPilot 的模块化能力中心，集成了开箱即用的官方自动化工具与自定义 AI Prompt 插件。您可以管理发布管家、立即发布、文章跨平台同步等核心工具，也可根据业务需求自由打造专属 AI 插件。',
+
+      'help.plaza_modules_title': '工具广场核心能力模块',
+      'help.plaza_mod1_name': '发布管家 (Post Butler)',
+      'help.plaza_mod1_tag': '自动回复与监控',
+      'help.plaza_mod1_desc': '全天候自动监控推文/帖子评论区。支持配置 AI 人设风格、自定义系统提示词、关键词过滤与防刷冷却机制，7×24 小时无人值守回复粉丝互动。',
+      
+      'help.plaza_mod2_name': '立即发布 (Immediate Publish)',
+      'help.plaza_mod2_tag': '跨平台极速编辑器',
+      'help.plaza_mod2_desc': '支持多图、MP4 视频媒体排版与字数实时统计。支持一键快速同步发布至 Twitter/X、Instagram、抖音（企业版）、小红书（企业版）。',
+      
+      'help.plaza_mod3_name': '文章跨平台同步 (Content Sync)',
+      'help.plaza_mod3_tag': '矩阵分发调度',
+      'help.plaza_mod3_desc': 'Markdown 长文一键自动适配各平台字数限制与排版规则。多平台矩阵同步分发，实时呈现各渠道发布状态与失败重试。',
+      
+      'help.plaza_mod4_name': '自定义 Prompt 插件 (Prompt Tools)',
+      'help.plaza_mod4_tag': '低代码 AI 插件',
+      'help.plaza_mod4_desc': '支持创建参数化 AI 插件，自定义输入变量（如 {{topic}}、{{tone}}）与提示词模版。可一键在对话中调用或绑定至定时任务执行。',
+
+      'help.plaza_butler_title': '1. 发布管家（Post Butler & 评论自动回复）使用指引',
+      'help.plaza_butler_s1_title': '选择工作空间与目标推文/账号',
+      'help.plaza_butler_s1_desc': '进入「工具广场」→ 点击「发布管家」。选择对应的所属工作空间与运营账号，可选择监控最新全部推文或指定单条推文/帖子 ID。',
+      'help.plaza_butler_s2_title': '配置 AI 回复语气与人设',
+      'help.plaza_butler_s2_desc': '选择预设 AI 语气：<strong>专业严谨</strong>（客观礼貌）、<strong>亲和随性</strong>（自然口语化）、<strong>幽默风趣</strong>（生动互动），或选择<strong>自定义 Prompt</strong> 输入专属品牌客服人设与规范。',
+      'help.plaza_butler_s3_title': '设置触发关键词与黑名单规则',
+      'help.plaza_butler_s3_desc': '灵活配置过滤条件：<strong>触发关键词</strong>（仅回复包含特定词汇如“价格”、“如何购买”、“求教程”的评论），以及<strong>过滤黑名单</strong>（自动忽略广告、谩骂或敏感词汇）。',
+      'help.plaza_butler_s4_title': '设定轮询调度与防刷频率',
+      'help.plaza_butler_s4_desc': '设置执行周期（如每 15 分钟巡检一次）、单次最大回复数量（如 5 条）及回复间随机延迟，确保账号行为拟真自然，避免触发社交平台风控。',
+      'help.plaza_butler_s5_title': '查看互动日志与状态明细',
+      'help.plaza_butler_s5_desc': '所有 AI 生成的回复内容、置信度与执行时间戳均沉淀在管家详情面板中，支持随时暂停、手动测试或一键重新触发。',
+
+      'help.plaza_publish_title': '2. 立即发布（Immediate Publish）使用指引',
+      'help.plaza_publish_s1_title': '撰写正文与添加媒体素材',
+      'help.plaza_publish_s1_desc': '输入文案、话题标签（Hashtags）与链接。支持拖拽上传图片（PNG/JPG/WEBP）或 MP4 视频，系统自动校验各平台媒体规格。',
+      'help.plaza_publish_s2_title': '勾选目标发布渠道并实时预览',
+      'help.plaza_publish_s2_desc': '灵活勾选：<strong>Twitter/X</strong>、<strong>Instagram</strong>、<strong>抖音</strong>、<strong>小红书</strong>，右侧实时显示各平台的卡片排版预览与字数余量。',
+      'help.plaza_publish_s3_title': '一键发布或存为工作空间草稿',
+      'help.plaza_publish_s3_desc': '点击「立即发布」执行跨平台同步推送，或保存为草稿以便后续由定时调度器或 AI 智能体调取。',
+
+      'help.plaza_sync_title': '3. 文章跨平台同步（Content Sync）使用指引',
+      'help.plaza_sync_s1_title': '导入 Markdown 或长文本稿件',
+      'help.plaza_sync_s1_desc': '粘贴或导入长文内容。TweetPilot 会智能分析文章结构，提取核心观点并根据渠道特点自动拆解分段。',
+      'help.plaza_sync_s2_title': '跨渠道格式与排版自适应',
+      'help.plaza_sync_s2_desc': '系统自动将长文按平台规范转换（Twitter/X 自动生成推文串 Thread，小红书自动提取 Emoji 与标签，抖音生成适配标题）。',
+      'help.plaza_sync_s3_title': '矩阵状态看板与失败独立重试',
+      'help.plaza_sync_s3_desc': '集中查看各矩阵账号的分发进度。若某单一渠道因网络波动未完成，可点击「独立重试」，不会重复发送已成功的平台。',
+
+      'help.plaza_prompt_title': '4. 创建自定义 Prompt 插件（Prompt Tools）指引',
+      'help.plaza_prompt_s1_title': '打开插件创建器',
+      'help.plaza_prompt_s1_desc': '在工具广场中点击「+ 新建工具」→ 选择「Prompt 自定义插件」。',
+      'help.plaza_prompt_s2_title': '定义参数字段与动态变量',
+      'help.plaza_prompt_s2_desc': '添加输入参数项（单行文本、下拉选择、数值等），定义变量名如 <code>{{topic}}</code>、<code>{{style}}</code>、<code>{{count}}</code>。',
+      'help.plaza_prompt_s3_title': '编写提示词模版',
+      'help.plaza_prompt_s3_desc': '在模版中嵌入变量，例如：<em>“请针对主题【{{topic}}】，以【{{style}}】风格撰写 3 条高互动推文 Hook。”</em>',
+      'help.plaza_prompt_s4_title': '在对话中调用或绑定定时任务',
+      'help.plaza_prompt_s4_desc': '保存后工具将展示在工具广场中，支持弹窗表单直接运行、在 AI 对话中通过斜杠指令触发，或作为脚本绑定到定时调度器。',
+
+      'help.plaza_tips_title': '工具广场进阶技巧',
+      'help.plaza_tip1': '<strong>联动数据积木：</strong> 在发布管家与 Prompt 插件中，可一键挂载「数据积木」（如产品知识库、FAQ、品牌人设），让 AI 回复更加精准可控。',
+      'help.plaza_tip2': '<strong>防频控策略：</strong> 建议将发布管家的巡检间隔设置为 15~30 分钟，并开启随机间隔延迟，保持拟人化交互频率。',
 
       // TweetClaw
       'help.tc_badge': 'LocalBridge · 浏览器路由',

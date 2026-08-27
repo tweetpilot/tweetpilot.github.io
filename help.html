@@ -55,12 +55,23 @@
     .nav-lang-toggle:hover { color: var(--color-primary); background: var(--color-surface-hover); }
 
     /* LAYOUT */
-    .help-layout { position: relative; z-index: 1; display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; padding-top: 64px; }
+    .help-layout {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 240px 1fr;
+      min-height: 100vh; padding-top: 64px;
+      max-width: 1100px; margin: 0 auto;
+      padding-left: 40px; padding-right: 40px;
+    }
 
     /* SIDEBAR */
-    .help-sidebar { position: sticky; top: 64px; height: calc(100vh - 64px); display: flex; flex-direction: column; overflow: hidden; padding: 0; border-right: 1px solid var(--color-border); background: rgba(21, 25, 52, 0.5); }
-    .sidebar-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-dim); margin-bottom: 12px; padding-left: 8px; flex-shrink: 0; padding-top: 32px; padding-left: 24px; }
-    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; padding: 0 16px 8px 24px; min-height: 0; }
+    .help-sidebar {
+      position: sticky; top: 64px; height: calc(100vh - 64px);
+      display: flex; flex-direction: column; overflow: hidden;
+      padding: 0; border-right: 1px solid var(--color-border);
+      background: transparent;
+    }
+    .sidebar-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-dim); margin-bottom: 12px; flex-shrink: 0; padding-top: 32px; padding-left: 8px; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; padding: 0 16px 8px 0; min-height: 0; }
     .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; cursor: pointer; transition: all 180ms ease; text-decoration: none; border: none; background: none; width: 100%; text-align: left; }
     .sidebar-item:hover { background: rgba(8,145,178,0.08); }
     .sidebar-item.active { background: rgba(8,145,178,0.12); border: 1px solid rgba(8,145,178,0.2); }
@@ -71,14 +82,14 @@
     .sidebar-item:hover .sidebar-item-text { color: var(--color-text); }
 
     .sidebar-divider { height: 1px; background: var(--color-border); margin: 8px 0; flex-shrink: 0; }
-    .sidebar-contact { flex-shrink: 0; margin: 0 16px 20px 16px; padding: 12px; background: var(--color-bg-3); border-radius: 10px; border: 1px solid var(--color-border); }
+    .sidebar-contact { flex-shrink: 0; margin: 0 16px 20px 0; padding: 12px; background: var(--color-bg-3); border-radius: 10px; border: 1px solid var(--color-border); }
     .sidebar-contact-title { font-size: 11px; font-weight: 700; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
     .sidebar-contact a { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-text-muted); text-decoration: none; padding: 5px 0; transition: color 180ms; }
     .sidebar-contact a:hover { color: var(--color-primary); }
 
     /* CONTENT AREA */
-    .help-content { padding: 48px 60px 80px; overflow-y: auto; }
-    .help-section > * { max-width: 740px; }
+    .help-content { padding: 40px 0 80px 48px; overflow-y: auto; }
+    .help-section > * { max-width: 100%; }
     .help-section .compare-table { max-width: 100%; }
     .help-section .plan-grid { max-width: 100%; }
 
@@ -271,7 +282,7 @@
 
     /* FOOTER */
     footer { border-top: 1px solid var(--color-border); padding: 40px; position: relative; z-index: 1; }
-    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
     .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 15px; }
     .footer-copy { font-size: 13px; color: var(--color-text-dim); margin-left: 8px; }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
@@ -281,12 +292,13 @@
     /* MOBILE */
     @media (max-width: 768px) {
       nav { padding: 0 20px; } .nav-links { display: none; }
-      .help-layout { grid-template-columns: 1fr; padding-top: 64px; }
-      .help-sidebar { position: static; height: auto; padding: 24px 20px 0; border-right: none; border-bottom: 1px solid var(--color-border); }
-      .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+      .help-layout { grid-template-columns: 1fr; padding-top: 64px; padding-left: 20px; padding-right: 20px; }
+      .help-sidebar { position: static; height: auto; padding: 24px 0 0; border-right: none; border-bottom: 1px solid var(--color-border); }
+      .sidebar-nav { flex-direction: row; flex-wrap: wrap; gap: 8px; padding: 0 0 12px 0; }
       .sidebar-item { padding: 7px 12px; }
       .sidebar-item-icon { display: none; }
-      .help-content { padding: 32px 20px 60px; }
+      .sidebar-contact { margin: 12px 0 20px 0; }
+      .help-content { padding: 32px 0 60px; }
       footer { padding: 32px 20px; } .footer-inner { flex-direction: column; align-items: flex-start; }
       .upgrade-banner { flex-direction: column; align-items: flex-start; }
     }
@@ -329,6 +341,10 @@
       <button class="sidebar-item" data-target="ai-config" onclick="showSection('ai-config')">
         <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg></div>
         <span class="sidebar-item-text" data-i18n-html="help.nav_ai">AI Agent</span>
+      </button>
+      <button class="sidebar-item" data-target="tool-plaza" onclick="showSection('tool-plaza')">
+        <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></div>
+        <span class="sidebar-item-text" data-i18n-html="help.nav_plaza">Tool Plaza</span>
       </button>
       <button class="sidebar-item" data-target="tweetclaw" onclick="showSection('tweetclaw')">
         <div class="sidebar-item-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg></div>
@@ -729,6 +745,190 @@
       <p style="margin-top:10px;font-size:13px;color:var(--color-text-dim);line-height:1.6;" data-i18n-html="help.ai_deepseek_note">
         <strong>Note:</strong> DeepSeek offers two API interface modes — <strong>OpenAI-compatible</strong> and <strong>Anthropic-compatible</strong>. The base URL and model identifiers differ between the two modes. Visit the <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">DeepSeek API Docs</a> to find the correct endpoint URL and model names for each mode.
       </p>
+    </section>
+
+    <!-- ─── TOOL PLAZA ─── -->
+    <section class="help-section" id="section-tool-plaza">
+      <span class="section-badge" data-i18n-html="help.plaza_badge">Plugins &amp; Workflows</span>
+      <h1 class="section-title" data-i18n-html="help.plaza_title">Tool Plaza &amp; Automation Plugins</h1>
+      <p class="section-intro" data-i18n-html="help.plaza_intro">Tool Plaza is TweetPilot's modular plugin center for ready-to-run automation tools and custom workflows. Manage official built-in tools like Post Butler, Immediate Publish, and Multi-Platform Sync, or create your own AI Prompt Plugins.</p>
+
+      <!-- 4 Core Modules Cards -->
+      <h3 class="content-h3" data-i18n-html="help.plaza_modules_title">Core Modules in Tool Plaza</h3>
+      <div class="info-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 32px;">
+        <div class="info-card">
+          <div class="info-card-label" style="display:flex;align-items:center;justify-content:space-between;">
+            <span data-i18n-html="help.plaza_mod1_name">Post Butler (发布管家)</span>
+            <span style="font-size:10px;font-weight:700;color:#22D3EE;background:rgba(8,145,178,0.12);padding:2px 6px;border-radius:4px;" data-i18n-html="help.plaza_mod1_tag">Auto-Reply &amp; Monitoring</span>
+          </div>
+          <div class="info-card-value" style="margin-top:8px;font-size:13px;color:var(--color-text-muted);" data-i18n-html="help.plaza_mod1_desc">Monitor tweet/post replies automatically. Use AI personas, custom system prompts, keyword triggers, and blacklist filters to handle community interactions 7×24.</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-label" style="display:flex;align-items:center;justify-content:space-between;">
+            <span data-i18n-html="help.plaza_mod2_name">Immediate Publish (立即发布)</span>
+            <span style="font-size:10px;font-weight:700;color:#34D399;background:rgba(5,150,105,0.12);padding:2px 6px;border-radius:4px;" data-i18n-html="help.plaza_mod2_tag">Multi-Platform Composer</span>
+          </div>
+          <div class="info-card-value" style="margin-top:8px;font-size:13px;color:var(--color-text-muted);" data-i18n-html="help.plaza_mod2_desc">Compose rich posts with images and MP4 videos. Preview formatting and publish to Twitter/X, Instagram, Douyin, and Xiaohongshu simultaneously.</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-label" style="display:flex;align-items:center;justify-content:space-between;">
+            <span data-i18n-html="help.plaza_mod3_name">Multi-Platform Sync (文章跨平台同步)</span>
+            <span style="font-size:10px;font-weight:700;color:#A78BFA;background:rgba(124,58,237,0.12);padding:2px 6px;border-radius:4px;" data-i18n-html="help.plaza_mod3_tag">Matrix Distribution</span>
+          </div>
+          <div class="info-card-value" style="margin-top:8px;font-size:13px;color:var(--color-text-muted);" data-i18n-html="help.plaza_mod3_desc">One-click Markdown length and layout adaptation. Automatically format and publish articles across 4 major social networks with real-time status tracking.</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-label" style="display:flex;align-items:center;justify-content:space-between;">
+            <span data-i18n-html="help.plaza_mod4_name">Prompt Tools &amp; Templates (自定义 Prompt 工具)</span>
+            <span style="font-size:10px;font-weight:700;color:#F59E0B;background:rgba(245,158,11,0.12);padding:2px 6px;border-radius:4px;" data-i18n-html="help.plaza_mod4_tag">Custom AI Plugins</span>
+          </div>
+          <div class="info-card-value" style="margin-top:8px;font-size:13px;color:var(--color-text-muted);" data-i18n-html="help.plaza_mod4_desc">Build parameterized AI prompt plugins with dynamic variables (e.g. {{topic}}, {{tone}}). Execute in 1 click or bind to recurring task schedules.</div>
+        </div>
+      </div>
+
+      <!-- 1. Post Butler -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.plaza_butler_title">1. Post Butler (发布管家 &amp; 评论自动回复) Setup Guide</h3>
+      <div class="steps-block">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_butler_s1_title">Select Workspace &amp; Target Post/Account</div>
+            <div class="step-desc" data-i18n-html="help.plaza_butler_s1_desc">Open Tool Plaza → <strong>Post Butler</strong>. Select the workspace and account context. You can monitor all recent posts or specify a specific Tweet/Post ID.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_butler_s2_title">Configure AI Reply Persona &amp; Tone</div>
+            <div class="step-desc" data-i18n-html="help.plaza_butler_s2_desc">Choose an AI persona tone: <strong>Professional</strong> (objective, polite), <strong>Casual</strong> (friendly, conversational), <strong>Humorous</strong> (engaging, witty), or <strong>Custom Prompt</strong> to define specialized brand guidelines.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_butler_s3_title">Set Trigger Keywords &amp; Blacklist Rules</div>
+            <div class="step-desc" data-i18n-html="help.plaza_butler_s3_desc">Configure matching rules: <strong>Include Keywords</strong> (only reply to comments containing specific words e.g. "pricing", "how to"), and <strong>Blacklist Words</strong> (ignore spam or toxic comments).</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_butler_s4_title">Set Schedule &amp; Anti-Spam Frequency</div>
+            <div class="step-desc" data-i18n-html="help.plaza_butler_s4_desc">Configure the execution cycle (e.g. check every 15 minutes), max replies per run (e.g. 5 replies), and minimum delay between replies to ensure natural human-like pacing.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_butler_s5_title">Review Interaction Logs &amp; Analytics</div>
+            <div class="step-desc" data-i18n-html="help.plaza_butler_s5_desc">All auto-generated replies, confidence scores, and timestamps are logged in the Butler detail panel. You can pause, adjust, or retry at any time.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Immediate Publish -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.plaza_publish_title">2. Immediate Publish (立即发布) Guide</h3>
+      <div class="steps-block">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_publish_s1_title">Compose Post &amp; Add Media</div>
+            <div class="step-desc" data-i18n-html="help.plaza_publish_s1_desc">Enter text, hashtags, and links. Drag and drop media files (PNG/JPG/WEBP images, MP4/MOV videos up to platform limits).</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_publish_s2_title">Select Target Channels &amp; Preview</div>
+            <div class="step-desc" data-i18n-html="help.plaza_publish_s2_desc">Toggle target platforms: <strong>Twitter/X</strong>, <strong>Instagram</strong>, <strong>Douyin</strong>, <strong>Xiaohongshu</strong>. View real-time character counters and card previews.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_publish_s3_title">Instant Publish or Save Draft</div>
+            <div class="step-desc" data-i18n-html="help.plaza_publish_s3_desc">Click <strong>Publish Now</strong> for immediate dispatch, or save as a workspace draft to be referenced by scheduled tasks.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Multi-Platform Sync -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.plaza_sync_title">3. Multi-Platform Content Sync (文章跨平台同步) Guide</h3>
+      <div class="steps-block">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_sync_s1_title">Import Markdown / Long-Form Draft</div>
+            <div class="step-desc" data-i18n-html="help.plaza_sync_s1_desc">Paste or write long-form content. TweetPilot analyzes structure, extracts key bullet points, and segments text for short-form channels.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_sync_s2_title">Format Auto-Adaptation</div>
+            <div class="step-desc" data-i18n-html="help.plaza_sync_s2_desc">TweetPilot automatically formats content to comply with platform-specific rules (Twitter character splits, Xiaohongshu tag conventions, Douyin title length).</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_sync_s3_title">Matrix Status &amp; Retry</div>
+            <div class="step-desc" data-i18n-html="help.plaza_sync_s3_desc">Monitor progress in real-time. If a platform encounters network timeout or session expiry, click <strong>Retry</strong> to re-dispatch without duplicating successful channels.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Custom Prompt Tools -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.plaza_prompt_title">4. Creating Custom Prompt Tools (自定义 Prompt 插件)</h3>
+      <div class="steps-block">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_prompt_s1_title">Open Tool Creator</div>
+            <div class="step-desc" data-i18n-html="help.plaza_prompt_s1_desc">In Tool Plaza, click <strong>+ Create Tool</strong> → Select <strong>Prompt Tool</strong>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_prompt_s2_title">Define Parameters &amp; Variables</div>
+            <div class="step-desc" data-i18n-html="help.plaza_prompt_s2_desc">Add input fields (text, select, number). Define variable names such as <code>{{topic}}</code>, <code>{{style}}</code>, <code>{{count}}</code>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_prompt_s3_title">Write Prompt Template</div>
+            <div class="step-desc" data-i18n-html="help.plaza_prompt_s3_desc">Write system instructions and user prompt templates embedding your variables. Example: <em>"Generate 3 viral Twitter hooks about {{topic}} with a {{style}} tone."</em></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-heading" data-i18n-html="help.plaza_prompt_s4_title">Run in Chat or Schedule</div>
+            <div class="step-desc" data-i18n-html="help.plaza_prompt_s4_desc">Once saved, the tool appears in your Tool Plaza. Click to run interactively with a form dialog, invoke via AI Chat, or link to a Task Scheduler cron job.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro Tips -->
+      <div class="content-divider"></div>
+      <h3 class="content-h3" data-i18n-html="help.plaza_tips_title">Pro Tips for Tool Plaza</h3>
+      <div class="tip-box" style="margin-bottom:14px;">
+        <div class="tip-icon">💡</div>
+        <div class="tip-text" data-i18n-html="help.plaza_tip1"><strong>Pair with Data Blocks:</strong> In Post Butler and Prompt Tools, you can inject structured Data Blocks (product FAQ, persona profiles) as reference context for hyper-consistent AI outputs.</div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-icon">🛡️</div>
+        <div class="tip-text" data-i18n-html="help.plaza_tip2"><strong>Anti-Rate-Limiting:</strong> When scheduling Post Butler or multi-account sync, set staggered intervals (15~30 minutes) to keep activity patterns natural and avoid platform throttles.</div>
+      </div>
     </section>
 
     <!-- ─── TWEETCLAW ─── -->
