@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Help Center — TweetPilot</title>
-  <script src="/i18n.js?v=1.1"></script>
-  <script src="/help-widget.js?v=1.1"></script>
+  <script src="/i18n.js?v=1.3"></script>
+  <script src="/help-widget.js?v=1.3"></script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -41,8 +41,9 @@
     .nav-links a { color: var(--color-text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 200ms; }
     .nav-links a:hover { color: var(--color-primary); }
     .nav-cta {
+      display: inline-flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #38BDF8 0%, #2F84FE 50%, #7C3AED 100%);
-      color: white; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 8px; text-decoration: none;
+      color: white; font-size: 14px; font-weight: 600; padding: 0 20px; height: 36px; border-radius: 8px; text-decoration: none;
       transition: all 200ms ease; box-shadow: 0 4px 16px rgba(47, 132, 254, 0.35);
     }
     .nav-cta:hover {
@@ -51,7 +52,7 @@
     .nav-account { color: var(--color-text-muted); font-size: 14px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--color-border); text-decoration: none; transition: all 200ms ease; }
     .nav-account:hover { color: var(--color-text); background: var(--color-surface-hover); }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-lang-toggle { background: var(--color-surface); color: var(--color-text-muted); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; padding: 5px 12px; border-radius: 7px; border: 1px solid var(--color-border); cursor: pointer; transition: all 200ms ease; }
+    .nav-lang-toggle { display: inline-flex; align-items: center; justify-content: center; background: var(--color-surface); color: var(--color-text-muted); font-size: 13px; font-weight: 700; letter-spacing: 0.05em; padding: 0 14px; height: 36px; border-radius: 8px; border: 1px solid var(--color-border); cursor: pointer; transition: all 200ms ease; }
     .nav-lang-toggle:hover { color: var(--color-primary); background: var(--color-surface-hover); }
 
     /* LAYOUT */
@@ -88,7 +89,7 @@
     .sidebar-contact a:hover { color: var(--color-primary); }
 
     /* CONTENT AREA */
-    .help-content { padding: 40px 0 80px 48px; overflow-y: auto; }
+    .help-content { padding: 24px 24px 80px; overflow-y: auto; }
     .help-section > * { max-width: 100%; }
     .help-section .compare-table { max-width: 100%; }
     .help-section .plan-grid { max-width: 100%; }
@@ -105,7 +106,7 @@
     .steps-block { margin-bottom: 40px; }
     .steps-title { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-dim); margin-bottom: 16px; }
     .step { display: flex; gap: 16px; margin-bottom: 20px; }
-    .step-num { width: 32px; height: 32px; border-radius: 8px; background: rgba(8,145,178,0.12); border: 1px solid rgba(8,145,178,0.25); color: var(--color-secondary); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .step-num { width: 32px; height: 32px; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: #94A3B8; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
     .step-body { flex: 1; }
     .step-heading { font-size: 15px; font-weight: 600; color: var(--color-text); margin-bottom: 4px; }
     .step-desc { font-size: 14px; color: var(--color-text-muted); line-height: 1.7; }
@@ -122,8 +123,20 @@
     .substep-text a { color: var(--color-secondary); text-decoration: none; }
     .substep-text a:hover { text-decoration: underline; }
     .substep-img { display: block; margin-top: 10px; border-radius: 8px; border: 1px solid rgba(8,145,178,0.2); max-width: 320px; width: 100%; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
-    .substep-alt { margin-top: 8px; padding: 8px 12px; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.18); border-radius: 8px; font-size: 13px; color: var(--color-text-muted); line-height: 1.6; }
+    .substep-alt {
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: rgba(47, 132, 254, 0.08);
+      border: 1px solid rgba(47, 132, 254, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
     .substep-alt strong { color: var(--color-text); }
+    .substep-alt a { color: var(--color-secondary); text-decoration: none; }
+    .substep-alt a:hover { text-decoration: underline; }
+    .substep-alt code { background: rgba(0, 0, 0, 0.25); padding: 2px 6px; border-radius: 4px; color: #A5F3FC; font-size: 12px; }
 
     /* INFO CARDS */
     .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 36px; }
@@ -143,8 +156,24 @@
     .tip-text a { color: var(--color-secondary); text-decoration: none; }
 
     /* CODE BLOCK */
-    .code-block { background: #050c1a; border: 1px solid rgba(8,145,178,0.15); border-radius: 10px; padding: 16px 20px; margin-bottom: 28px; overflow-x: auto; }
-    .code-block code { font-family: 'Courier New', monospace; font-size: 13px; color: #a8d8ea; line-height: 1.7; white-space: pre; }
+    .code-block {
+      background: var(--color-bg-2);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      overflow-x: hidden;
+    }
+    .code-block code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      color: #A5F3FC;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      display: block;
+    }
     .code-label { font-size: 11px; color: var(--color-text-dim); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
 
     /* ARCH FLOW */
@@ -166,20 +195,91 @@
     .content-h3::before { content: ''; width: 3px; height: 16px; background: var(--color-secondary); border-radius: 2px; display: inline-block; }
 
     /* TABLE */
-    .compare-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; font-size: 14px; }
-    .compare-table th { text-align: left; padding: 10px 16px; background: var(--color-bg-3); color: var(--color-text-dim); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--color-border); }
-    .compare-table td { padding: 12px 16px; color: var(--color-text-muted); border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+    .compare-table-wrap {
+      background: var(--color-bg-2);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      background: var(--color-bg-2);
+    }
+    .compare-table th {
+      text-align: left;
+      padding: 12px 18px;
+      background: var(--color-bg-3);
+      color: var(--color-text-dim);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--color-border);
+      white-space: normal;
+      word-break: break-all;
+      overflow-wrap: anywhere;
+    }
+    .compare-table td {
+      padding: 12px 18px;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      line-height: 1.6;
+    }
+    .compare-table td code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      color: #A5F3FC;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: normal;
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      display: inline;
+    }
     .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(255, 255, 255, 0.015); }
     .compare-table td strong { color: var(--color-text); font-weight: 600; }
     .check { color: #34D399; font-weight: 700; }
     .cross { color: #F87171; font-weight: 700; }
 
     /* UPGRADE BANNER */
-    .upgrade-banner { background: linear-gradient(135deg, rgba(5,150,105,0.1) 0%, rgba(8,145,178,0.06) 100%); border: 1px solid rgba(5,150,105,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .upgrade-banner {
+      background: linear-gradient(135deg, rgba(47, 132, 254, 0.08) 0%, rgba(56, 189, 248, 0.04) 100%);
+      border: 1px solid rgba(47, 132, 254, 0.25);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
     .upgrade-banner-text h3 { font-size: 16px; font-weight: 700; color: var(--color-text); margin-bottom: 4px; }
     .upgrade-banner-text p { font-size: 14px; color: var(--color-text-muted); }
-    .upgrade-banner-btn { background: var(--color-cta); color: white; font-size: 14px; font-weight: 600; padding: 10px 22px; border-radius: 8px; text-decoration: none; transition: all 200ms; white-space: nowrap; flex-shrink: 0; }
-    .upgrade-banner-btn:hover { background: var(--color-cta-hover); }
+    .upgrade-banner-btn {
+      background: linear-gradient(135deg, #38BDF8 0%, #2F84FE 50%, #7C3AED 100%);
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 200ms ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(47, 132, 254, 0.35);
+    }
+    .upgrade-banner-btn:hover {
+      background: linear-gradient(135deg, #0284C7 0%, #1D4ED8 50%, #6D28D9 100%);
+    }
 
     /* FEISHU QR thumbnail (contact section) */
     .feishu-thumb { display: flex; align-items: center; gap: 10px; background: rgba(8,145,178,0.06); border: 1px solid rgba(8,145,178,0.2); border-radius: 10px; padding: 8px 12px; cursor: pointer; transition: all 200ms ease; width: 100%; max-width: 320px; }
@@ -193,9 +293,14 @@
     /* AGENT CARDS */
     .agent-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
     .agent-card { border-radius: 14px; border: 1px solid var(--color-border); background: var(--color-bg-3); overflow: hidden; }
-    .agent-card-accent { height: 3px; }
     .agent-card-body { padding: 20px 24px 0; display: flex; gap: 18px; }
-    .agent-num { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+    .agent-num {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 800; flex-shrink: 0; margin-top: 1px;
+      background: rgba(255, 255, 255, 0.05); color: #94A3B8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
     .agent-card-content { flex: 1; min-width: 0; }
     .agent-card-name { font-size: 16px; font-weight: 700; color: var(--color-text); margin-bottom: 5px; }
     .agent-role-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 9px; border-radius: 100px; margin-bottom: 12px; }
@@ -204,27 +309,27 @@
     .agent-chip-plain { font-family: 'Inter', sans-serif; }
     .agent-card-desc { font-size: 13.5px; color: var(--color-text-muted); line-height: 1.65; padding-bottom: 16px; }
     .agent-card-desc code { font-family: monospace; font-size: 12px; background: rgba(8,145,178,0.1); color: var(--color-secondary); padding: 1px 5px; border-radius: 4px; }
-    .agent-usecase { display: flex; align-items: baseline; gap: 10px; padding: 11px 24px; background: rgba(255,255,255,0.025); border-top: 1px solid var(--color-border); font-size: 13px; color: var(--color-text-muted); }
-    .agent-usecase-label { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; padding: 2px 7px; border-radius: 4px; }
-    /* Blue */
-    .agent-card-blue .agent-card-accent { background: linear-gradient(90deg,#0891B2,#22D3EE); }
-    .agent-card-blue .agent-num { background: rgba(8,145,178,0.15); color: #22D3EE; }
-    .agent-card-blue .agent-role-tag { background: rgba(8,145,178,0.12); color: #22D3EE; }
-    .agent-card-blue .agent-chip { background: rgba(8,145,178,0.08); border: 1px solid rgba(8,145,178,0.2); color: #22D3EE; }
-    .agent-card-blue .agent-usecase-label { background: rgba(8,145,178,0.12); color: #22D3EE; }
-    /* Purple */
-    .agent-card-purple .agent-card-accent { background: linear-gradient(90deg,#7C3AED,#A78BFA); }
-    .agent-card-purple .agent-num { background: rgba(124,58,237,0.15); color: #A78BFA; }
-    .agent-card-purple .agent-role-tag { background: rgba(124,58,237,0.12); color: #A78BFA; }
-    .agent-card-purple .agent-chip { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); color: #A78BFA; }
-    .agent-card-purple .agent-chip.agent-chip-plain { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); color: #A78BFA; }
-    .agent-card-purple .agent-usecase-label { background: rgba(124,58,237,0.12); color: #A78BFA; }
-    /* Green */
-    .agent-card-green .agent-card-accent { background: linear-gradient(90deg,#059669,#34D399); }
-    .agent-card-green .agent-num { background: rgba(5,150,105,0.15); color: #34D399; }
-    .agent-card-green .agent-role-tag { background: rgba(5,150,105,0.12); color: #34D399; }
-    .agent-card-green .agent-chip { background: rgba(5,150,105,0.08); border: 1px solid rgba(5,150,105,0.2); color: #34D399; }
-    .agent-card-green .agent-usecase-label { background: rgba(5,150,105,0.12); color: #34D399; }
+    /* Grayscale levels with different lightness */
+    /* Level 1 - Bright Gray */
+    .agent-card-gray1 .agent-role-tag { background: rgba(255,255,255,0.12); color: #F1F5F9; }
+    .agent-card-gray1 .agent-chip { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #E2E8F0; }
+    .agent-card-gray1 .agent-usecase-label { background: rgba(255,255,255,0.12); color: #F1F5F9; }
+
+    /* Level 2 - Medium-Bright Gray */
+    .agent-card-gray2 .agent-role-tag { background: rgba(255,255,255,0.09); color: #CBD5E1; }
+    .agent-card-gray2 .agent-chip { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.13); color: #CBD5E1; }
+    .agent-card-gray2 .agent-chip.agent-chip-plain { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.13); color: #CBD5E1; }
+    .agent-card-gray2 .agent-usecase-label { background: rgba(255,255,255,0.09); color: #CBD5E1; }
+
+    /* Level 3 - Medium Gray */
+    .agent-card-gray3 .agent-role-tag { background: rgba(255,255,255,0.06); color: #94A3B8; }
+    .agent-card-gray3 .agent-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); color: #94A3B8; }
+    .agent-card-gray3 .agent-usecase-label { background: rgba(255,255,255,0.06); color: #94A3B8; }
+
+    /* Level 4 - Subtle/Dim Gray */
+    .agent-card-gray4 .agent-role-tag { background: rgba(255,255,255,0.04); color: #64748B; }
+    .agent-card-gray4 .agent-chip { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); color: #64748B; }
+    .agent-card-gray4 .agent-usecase-label { background: rgba(255,255,255,0.04); color: #64748B; }
 
     /* CLAURST BOX */
     .claurst-box { border: 1px solid rgba(8,145,178,0.25); border-radius: 14px; background: rgba(8,145,178,0.04); padding: 20px 24px; margin-bottom: 28px; }
@@ -264,8 +369,14 @@
     .plan-row-cross { color: #4A7A8A; font-weight: 700; font-size: 15px; }
     .plan-free-label { color: var(--color-text-dim); }
     .plan-cta { display: block; text-align: center; margin: 16px 22px 20px; padding: 11px; border-radius: 9px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 200ms; }
-    .plan-cta-pro { background: var(--color-cta); color: white; }
-    .plan-cta-pro:hover { background: var(--color-cta-hover); }
+    .plan-cta-pro {
+      background: linear-gradient(135deg, #38BDF8 0%, #2F84FE 50%, #7C3AED 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(47, 132, 254, 0.35);
+    }
+    .plan-cta-pro:hover {
+      background: linear-gradient(135deg, #0284C7 0%, #1D4ED8 50%, #6D28D9 100%);
+    }
     .plan-cta-free { background: rgba(255,255,255,0.05); color: var(--color-text-muted); border: 1px solid var(--color-border); cursor: default; }
     @media (max-width: 640px) { .plan-grid { grid-template-columns: 1fr; } }
 
@@ -555,10 +666,9 @@
       <div class="agent-grid">
 
         <!-- Agent 1 -->
-        <div class="agent-card agent-card-blue">
-          <div class="agent-card-accent"></div>
+        <div class="agent-card agent-card-gray1">
           <div class="agent-card-body">
-            <div class="agent-num">①</div>
+            <div class="agent-num">1</div>
             <div class="agent-card-content">
               <div class="agent-card-name" data-i18n-html="help.ai_agent1_name">TweetPilot Agent</div>
               <div class="agent-role-tag" data-i18n-html="help.ai_agent1_role">Interactive Chat · Main Workspace</div>
@@ -578,10 +688,9 @@
         </div>
 
         <!-- Agent 2 -->
-        <div class="agent-card agent-card-purple">
-          <div class="agent-card-accent"></div>
+        <div class="agent-card agent-card-gray2">
           <div class="agent-card-body">
-            <div class="agent-num">②</div>
+            <div class="agent-num">2</div>
             <div class="agent-card-content">
               <div class="agent-card-name" data-i18n-html="help.ai_agent2_name">Task AI Agent</div>
               <div class="agent-role-tag" data-i18n-html="help.ai_agent2_role">Autonomous Operation · 7×24 Scheduled</div>
@@ -601,10 +710,9 @@
         </div>
 
         <!-- Agent 3 -->
-        <div class="agent-card agent-card-green">
-          <div class="agent-card-accent"></div>
+        <div class="agent-card agent-card-gray3">
           <div class="agent-card-body">
-            <div class="agent-num">③</div>
+            <div class="agent-num">3</div>
             <div class="agent-card-content">
               <div class="agent-card-name" data-i18n-html="help.ai_agent3_name">Data Block Agent</div>
               <div class="agent-role-tag" data-i18n-html="help.ai_agent3_role">Data Visualization · Custom Blocks</div>
@@ -623,24 +731,23 @@
         </div>
 
         <!-- Agent 4: Feishu -->
-        <div class="agent-card" style="border-color:rgba(245,158,11,0.25);background:var(--color-bg-3);">
-          <div class="agent-card-accent" style="background:linear-gradient(90deg,#D97706,#FCD34D);"></div>
+        <div class="agent-card agent-card-gray4">
           <div class="agent-card-body">
-            <div class="agent-num" style="background:rgba(217,119,6,0.15);color:#FCD34D;">④</div>
+            <div class="agent-num">4</div>
             <div class="agent-card-content">
               <div class="agent-card-name" data-i18n-html="help.ai_agent4_name">Feishu AI Assistant</div>
-              <div class="agent-role-tag" style="background:rgba(217,119,6,0.12);color:#FCD34D;" data-i18n-html="help.ai_agent4_role">Remote Control · Feishu Private Message</div>
+              <div class="agent-role-tag" data-i18n-html="help.ai_agent4_role">Remote Control · Feishu Private Message</div>
               <div class="agent-chips">
-                <span class="agent-chip" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;">ClawBot</span>
-                <span class="agent-chip" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;">xdk</span>
-                <span class="agent-chip agent-chip-plain" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;" data-i18n-html="help.ai_chip_mobile_access">Mobile access</span>
-                <span class="agent-chip agent-chip-plain" style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);color:#FCD34D;" data-i18n-html="help.ai_chip_file_boundary">Workspace boundary</span>
+                <span class="agent-chip">ClawBot</span>
+                <span class="agent-chip">xdk</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_mobile_access">Mobile access</span>
+                <span class="agent-chip agent-chip-plain" data-i18n-html="help.ai_chip_file_boundary">Workspace boundary</span>
               </div>
               <div class="agent-card-desc" data-i18n-html="help.ai_agent4_desc">The Feishu AI Assistant lets you interact with TweetPilot remotely through <strong>Feishu private messages</strong> — from your phone or any device. It carries the same Twitter access capabilities as the TweetPilot Agent (ClawBot + xdk) but operates under strict workspace boundaries: file access is limited to the workspace directory, it will not initiate network calls on its own, and it only executes operations you explicitly authorize. When you send a file or image, it waits for your next instruction before acting.</div>
             </div>
           </div>
-          <div class="agent-usecase" style="border-top:1px solid rgba(255,255,255,0.06);">
-            <span class="agent-usecase-label" style="background:rgba(217,119,6,0.12);color:#FCD34D;" data-i18n-html="help.ai_usecase_label">Use case</span>
+          <div class="agent-usecase">
+            <span class="agent-usecase-label" data-i18n-html="help.ai_usecase_label">Use case</span>
             <span data-i18n-html="help.ai_agent4_usecase">Step away from your Mac — send commands via Feishu on your phone: "check follower growth today", "draft a reply to the top mention", "run the weekly report script".</span>
           </div>
         </div>
@@ -651,7 +758,7 @@
       <div class="content-divider"></div>
       <h3 class="content-h3" data-i18n-html="help.ai_providers_title">Supported Provider Types</h3>
       <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:20px;" data-i18n-html="help.ai_provider_intro">All four agents use the same active AI provider. Configure multiple providers and switch the active one at any time — the switch takes effect immediately across all agents.</p>
-      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th data-i18n-html="help.ai_col_type">Type</th>
@@ -1007,7 +1114,7 @@
         </div>
       </div>
 
-      <div class="compare-table-wrap" style="margin-bottom:36px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th data-i18n-html="help.tc_cmp_feature">Feature</th>
@@ -1073,7 +1180,7 @@
       <h3 class="content-h3" data-i18n-html="help.tc_rest_title">LocalBridge REST API Reference</h3>
       <p style="font-size:14px;color:var(--color-text-muted);margin-bottom:20px;line-height:1.7;" data-i18n-html="help.tc_rest_intro">All endpoints are served at <code>http://127.0.0.1:20088</code> — accessible only from the local machine. Scripts use <code>requests</code> (Python) or any HTTP client. No authentication header is needed.</p>
 
-      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th style="width:38%" data-i18n-html="help.tc_rest_col_endpoint">Endpoint</th>
@@ -1212,7 +1319,7 @@ for t in top:
 
       <!-- CAPABILITY COMPARISON -->
       <h3 class="content-h3" data-i18n-html="help.acc_cap_title">Capability Comparison</h3>
-      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th data-i18n-html="help.acc_cap_feature">Capability</th>
@@ -1260,7 +1367,7 @@ for t in top:
       <!-- STATUS INDICATORS -->
       <div class="content-divider"></div>
       <h3 class="content-h3" data-i18n-html="help.acc_status_title">Account Status Indicators</h3>
-      <div class="compare-table-wrap" style="margin-bottom:24px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th data-i18n-html="help.acc_status_col_status">Status</th>
@@ -1314,7 +1421,7 @@ for t in top:
 
       <!-- COMBINATION EXAMPLES -->
       <h3 class="content-h3" data-i18n-html="help.sched_combo_title">What You Can Build — Real Examples</h3>
-      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th data-i18n-html="help.sched_combo_col_combo">Combination</th>
@@ -1419,7 +1526,7 @@ for t in top:
       <!-- TASK MANAGEMENT -->
       <div class="content-divider"></div>
       <h3 class="content-h3" data-i18n-html="help.sched_mgmt_title">Managing Tasks</h3>
-      <div class="compare-table-wrap" style="margin-bottom:24px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th data-i18n-html="help.sched_mgmt_col_action">Action</th>
@@ -1451,7 +1558,7 @@ for t in top:
       <h3 class="content-h3" data-i18n-html="help.rep_builtin_title">Built-in Data Blocks</h3>
       <p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:20px;" data-i18n-html="help.rep_builtin_intro">Built-in blocks are tied to your <strong>managed accounts</strong>. Use the account switcher at the top of each block to view data for different accounts. Only accounts marked as <strong>Managed</strong> appear here — the longer TweetPilot runs, the richer the historical data becomes.</p>
 
-      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th data-i18n-html="help.rep_col_block">Block</th>
@@ -1587,7 +1694,7 @@ print("✅ Stats written to custom_blocks.db")</code>
 
       <!-- WHEN TO USE WHICH -->
       <h3 class="content-h3" data-i18n-html="help.xapi_when_title">LocalBridge vs X API — When to Use Which</h3>
-      <div class="compare-table-wrap" style="margin-bottom:28px;overflow-x:auto;">
+      <div class="compare-table-wrap">
         <table class="compare-table">
           <thead><tr>
             <th style="width:32%" data-i18n-html="help.xapi_when_col_scenario">Scenario</th>
@@ -1999,8 +2106,8 @@ print(resp.json())  # {"ok": true}</code>
 
       <!-- FEATURE COMPARISON -->
       <h3 class="content-h3" data-i18n-html="help.upg_compare_title">Feature Comparison</h3>
-      <div class="compare-table-wrap" style="overflow-x:auto;margin-bottom:8px;">
-        <table class="compare-table" style="min-width:520px;">
+      <div class="compare-table-wrap">
+        <table class="compare-table">
           <thead>
             <tr>
               <th data-i18n-html="help.upg_col_feature">Feature</th>

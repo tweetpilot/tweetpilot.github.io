@@ -404,7 +404,7 @@
     // Inject CSS
     var style = document.createElement('link');
     style.rel = 'stylesheet';
-    style.href = '/help-widget.css';
+    style.href = '/help-widget.css?v=1.3';
     document.head.appendChild(style);
 
     // Inject floating button

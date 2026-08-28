@@ -132,6 +132,8 @@
 .help-section {
   border-bottom: 1px solid var(--color-border);
   transition: background 200ms;
+  padding: 24px;
+  border-radius: 12px;
 }
 
 .help-section:hover {
