@@ -15,6 +15,7 @@
       'help.search_placeholder': 'Search help topics...',
       'help.quick_start': '🚀 Quick Start (5 Steps)',
       'help.ai_config': '⚙️ AI Model Configuration',
+      'help.plaza': '🧩 Tool Plaza & Plugins',
       'help.tweetclaw': '🔌 TweetClaw Extension',
       'help.accounts': '👥 Account Management',
       'help.scheduler': '⏰ Scheduled Tasks',
@@ -38,6 +39,13 @@
       'ai.step3': 'Enter your API Key',
       'ai.step4': 'Select model and test connection',
       'ai.tip': 'Get API keys: <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">OpenAI</a> · <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic</a> · <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">DeepSeek</a>',
+
+      // Tool Plaza
+      'plaza.step1': 'Open "Tool Plaza" from the left sidebar',
+      'plaza.step2': 'Choose Post Butler (auto-reply) or Immediate Publish',
+      'plaza.step3': 'Sync articles across X, Instagram, Douyin, and Xiaohongshu',
+      'plaza.step4': 'Create custom AI Prompt Tools with dynamic variables',
+      'plaza.tip': 'Link Data Blocks to Post Butler for hyper-accurate brand replies.',
 
       // TweetClaw
       'tc.step1': 'Install TweetClaw from <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">Chrome Web Store</a>',
@@ -113,9 +121,10 @@
     zh: {
       'help.btn_title': '帮助与文档',
       'help.search_placeholder': '搜索帮助主题...',
-      'help.quick_start': '🚀 快速入门（5步上手）',
+      'help.quick_start': '🚀 快速开始（5 步）',
       'help.ai_config': '⚙️ AI 模型配置',
-      'help.tweetclaw': '🔌 TweetClaw 插件',
+      'help.plaza': '🧩 工具广场与能力插件',
+      'help.tweetclaw': '🔌 TweetClaw 扩展',
       'help.accounts': '👥 账号管理',
       'help.scheduler': '⏰ 定时任务',
       'help.reports': '📊 自定义报表',
@@ -138,6 +147,13 @@
       'ai.step3': '输入你的 API Key',
       'ai.step4': '选择模型并测试连接',
       'ai.tip': '获取 API 密钥：<a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">OpenAI</a> · <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Anthropic</a> · <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">DeepSeek</a>',
+
+      // Tool Plaza
+      'plaza.step1': '从左侧边栏打开「工具广场」',
+      'plaza.step2': '配置发布管家（评论自动监控与智能回复）或立即发布',
+      'plaza.step3': '一键同步文章到 X、Instagram、抖音与小红书',
+      'plaza.step4': '创建带动态参数变量的自定义 AI Prompt 插件',
+      'plaza.tip': '将数据积木挂载到发布管家，让 AI 回复更符合品牌知识库。',
 
       // TweetClaw
       'tc.step1': '从 <a href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">Chrome 应用商店</a> 安装 TweetClaw',
@@ -229,6 +245,12 @@
       titleKey: 'help.ai_config',
       steps: ['ai.step1', 'ai.step2', 'ai.step3', 'ai.step4'],
       tip: 'ai.tip'
+    },
+    {
+      id: 'tool-plaza',
+      titleKey: 'help.plaza',
+      steps: ['plaza.step1', 'plaza.step2', 'plaza.step3', 'plaza.step4'],
+      tip: 'plaza.tip'
     },
     {
       id: 'tweetclaw',
