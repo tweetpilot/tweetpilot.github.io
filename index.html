@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-title-key="index.title">
 <head>
   <meta charset="UTF-8" />
@@ -130,7 +130,7 @@
 
     /* ── Hero ── */
     .hero {
-      position: relative; z-index: 1;
+      position: relative; z-index: 20;
       padding: 160px 40px 48px;
       text-align: center;
       max-width: 1100px; margin: 0 auto;
@@ -192,6 +192,231 @@
       transition: all 200ms ease;
     }
     .btn-secondary:hover { background: var(--color-surface-hover); }
+
+    /* ── Split Dropdown Button ── */
+    .split-btn-group {
+      position: relative;
+      z-index: 50;
+      display: inline-flex;
+      align-items: stretch;
+      border-radius: 10px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      transition: all 200ms ease;
+    }
+    .split-btn-group.active, .split-btn-group:focus-within {
+      z-index: 100;
+    }
+    .split-btn-group:hover {
+      background: var(--color-surface-hover);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .btn-secondary.btn-split-main {
+      border: none;
+      border-radius: 10px 0 0 10px;
+      padding-right: 18px;
+      background: transparent;
+    }
+    .btn-split-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      border: none;
+      border-left: 1px solid var(--color-border);
+      background: transparent;
+      color: var(--color-text);
+      cursor: pointer;
+      border-radius: 0 10px 10px 0;
+      transition: background 150ms ease;
+    }
+    .btn-split-toggle:hover, .btn-split-toggle.active {
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .split-caret {
+      transition: transform 200ms ease;
+    }
+    .btn-split-toggle.active .split-caret {
+      transform: rotate(180deg);
+    }
+    .split-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 6px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .split-dropdown-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .split-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: background 150ms ease;
+      text-align: left;
+    }
+    .split-dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .split-item-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      color: var(--color-text);
+      flex-shrink: 0;
+    }
+    .split-item-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+    .split-item-sub {
+      font-size: 12px;
+      color: var(--color-text-dim);
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+
+    /* ── Info Circle Button & Zip Tutorial Modal ── */
+    .info-circle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      cursor: pointer;
+      transition: all 200ms ease;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .info-circle-btn svg {
+      opacity: 0.55;
+      transition: opacity 200ms ease;
+    }
+    .info-circle-btn:hover {
+      background: var(--color-surface-hover);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: var(--color-text);
+    }
+    .info-circle-btn:hover svg {
+      opacity: 1;
+    }
+    .tut-modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 250ms ease;
+      padding: 20px;
+    }
+    .tut-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .tut-modal {
+      position: relative;
+      background: var(--color-bg);
+      border: none;
+      border-radius: 20px;
+      padding: 36px 36px 30px;
+      max-width: 760px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
+      transform: scale(0.94) translateY(14px); transition: transform 250ms ease;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      text-align: left;
+    }
+    .tut-modal-overlay.open .tut-modal { transform: scale(1) translateY(0); }
+    .tut-modal-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 22px; padding-right: 28px;
+    }
+    .tut-modal-header-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(56, 189, 248, 0.12); color: #38BDF8;
+      flex-shrink: 0;
+    }
+    .tut-modal-title {
+      font-size: 19px; font-weight: 700; color: var(--color-text); line-height: 1.3;
+    }
+    .tut-steps-list {
+      display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px;
+    }
+    .tut-step-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: none;
+      border-radius: 12px; padding: 16px 20px;
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .tut-step-num {
+      display: flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--color-text-dim); font-size: 11px; font-weight: 600; flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .tut-step-body h4 {
+      font-size: 15px; font-weight: 600; color: var(--color-text); margin-bottom: 5px;
+    }
+    .tut-step-body p {
+      font-size: 13px; color: var(--color-text-dim); line-height: 1.6; margin: 3px 0;
+    }
+    .tut-note-box {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(245, 158, 11, 0.08);
+      border: none;
+      border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #FBBF24;
+      line-height: 1.5;
+    }
+    .tut-ai-prompt-box {
+      margin-top: 16px; padding: 16px 20px; border-radius: 12px;
+      background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .tut-ai-prompt-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px;
+    }
+    .tut-ai-prompt-title-wrap { display: flex; align-items: center; gap: 8px; }
+    .tut-ai-icon { color: #38BDF8; flex-shrink: 0; }
+    .tut-ai-prompt-title { font-size: 14px; font-weight: 600; color: var(--color-text); }
+    .tut-ai-prompt-desc { font-size: 12px; color: var(--color-text-dim); margin-bottom: 10px; line-height: 1.5; }
+    .tut-ai-prompt-content {
+      font-size: 12.5px; font-family: inherit; color: var(--color-text);
+      background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px; padding: 12px 14px; white-space: pre-wrap; word-break: break-word; line-height: 1.6; user-select: text;
+    }
+    .tut-ai-copy-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+      border-radius: 8px; font-size: 12px; font-weight: 600;
+      background: #38BDF8; color: #0F172A; border: none; cursor: pointer;
+      transition: all 150ms ease; flex-shrink: 0;
+    }
+    .tut-ai-copy-btn:hover { background: #0EA5E9; transform: translateY(-1px); }
+    .tut-ai-copy-btn.copied { background: #10B981; color: #FFFFFF; }
     .hero-meta {
       display: flex; align-items: center; justify-content: center;
       gap: 24px; color: var(--color-text-dim); font-size: 13px;
@@ -361,6 +586,7 @@
 
     /* ── Section Common ── */
     section { position: relative; z-index: 1; }
+    section.hero-sec { position: relative; z-index: 30; }
     .section-inner {
       max-width: 1100px; margin: 0 auto; padding: 0 40px;
     }
@@ -1178,7 +1404,7 @@
   </nav>
 
   <!-- Hero -->
-  <section>
+  <section class="hero-sec">
     <div class="hero">
       <div class="hero-badge">
         <div class="hero-badge-dot"></div>
@@ -1198,14 +1424,41 @@
           </svg>
           <span data-i18n="hero.btn_download">Download Free</span>
         </a>
-        <a class="btn-secondary" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>
-            <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
-            <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+        <div class="split-btn-group">
+          <a class="btn-secondary btn-split-main" href="https://chromewebstore.google.com/detail/tweetclaw/nolgcgfoebklpejfgebinnakamjamkna" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>
+              <line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+            </svg>
+            <span data-i18n="hero.btn_extension">Get TweetClaw Extension</span>
+          </a>
+          <button class="btn-split-toggle" type="button" aria-label="More download options" onclick="toggleExtDropdown(event)">
+            <svg class="split-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="split-dropdown-menu" id="ext-dropdown-menu">
+            <a class="split-dropdown-item" href="tweetclaw.zip" download="tweetclaw.zip">
+              <div class="split-item-icon">
+                <svg viewBox="0 0 1024 1024" width="20" height="20" fill="currentColor">
+                  <path d="M905.185809 178.844158C898.576738 172.685485 891.19337 165.824412 883.21687 158.436127 860.422682 137.322863 837.434925 116.207791 815.697647 96.487895 813.243072 94.261877 813.243072 94.261877 810.786411 92.037081 781.783552 65.781062 757.590948 44.376502 739.713617 29.293612 729.254178 20.469111 721.020606 13.860686 714.970549 9.501727 710.955023 6.608611 707.690543 4.524745 704.47155 2.998714 700.417679 1.07689 696.638044-0.094029 691.307277 0.005928 677.045677 0.273349 665.6 11.769337 665.6 26.182727L665.6 77.352844 665.6 128.522961 665.6 230.863194 665.6 256.448252 691.2 256.448252 896 256.448252 870.4 230.863194 870.4 998.414942 896 972.829884 230.381436 972.829884C187.90385 972.829884 153.6 938.623723 153.6 896.20663L153.6 26.182727 128 51.767786 588.8 51.767786C602.93849 51.767786 614.4 40.312965 614.4 26.182727 614.4 12.05249 602.93849 0.597669 588.8 0.597669L128 0.597669 102.4 0.597669 102.4 26.182727 102.4 896.20663C102.4 966.91021 159.652833 1024 230.381436 1024L896 1024 921.6 1024 921.6 998.414942 921.6 230.863194 921.6 205.278135 896 205.278135 691.2 205.278135 716.8 230.863194 716.8 128.522961 716.8 77.352844 716.8 26.182727C716.8 39.813762 705.748075 50.91427 692.267725 51.167041 687.705707 51.252584 685.069822 50.435995 682.52845 49.231204 682.259458 49.103682 683.344977 49.796618 685.029451 51.010252 689.779394 54.432502 697.145822 60.34494 706.686383 68.394196 724.009052 83.009121 747.816448 104.072869 776.413589 129.961594 778.850014 132.168064 778.850014 132.168064 781.285216 134.376514 802.876774 153.964212 825.739479 174.96442 848.413564 195.966437 856.350957 203.3185 863.697005 210.144893 870.269888 216.269843 874.209847 219.941299 877.019309 222.565641 878.499674 223.951409 888.81866 233.610931 905.019017 233.081212 914.684179 222.768247 924.349344 212.455283 923.819315 196.264383 913.500326 186.604861 911.981323 185.182945 909.155025 182.542876 905.185809 178.844158ZM102.4 461.128719 0 461.128719 0 896.074709 512 896.074709 1024 896.074709 1024 461.128719 153.6 461.128719 153.6 460.531049 102.4 460.531049 102.4 461.128719ZM282 778.8 437.6 778.8 437.6 819.2 220.8 819.2 220.8 786.4 371.4 568.8 221.8 568.8 221.8 528 432.8 528 432.8 560 282 778.8ZM534.4 819.2 484 819.2 484 528 534.4 528 534.4 819.2ZM647.2 711 647.2 819.2 596.6 819.2 596.6 528 708 528C740.533495 528 766.366571 536.466581 785.5 553.4 804.633429 570.333419 814.2 592.733195 814.2 620.6 814.2 649.133476 804.833427 671.333254 786.1 687.2 767.366573 703.066746 741.133502 711 707.4 711L647.2 711ZM647.2 670.4 708 670.4C726.00009 670.4 739.733286 666.166709 749.2 657.7 758.666714 649.233291 763.4 637.000079 763.4 621 763.4 605.266588 758.600047 592.700047 749 583.3 739.399951 573.899953 726.200083 569.066669 709.4 568.8L647.2 568.8 647.2 670.4Z" fill="currentColor"></path>
+                </svg>
+              </div>
+              <div class="split-item-text">
+                <div class="split-item-title" data-i18n="hero.btn_ext_zip">Download Offline ZIP Package</div>
+                <div class="split-item-sub" data-i18n="hero.btn_ext_zip_sub">Unpacked manual installation (.zip)</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <button class="info-circle-btn" type="button" onclick="openZipTutorialModal()" title="查看离线安装教程" aria-label="查看离线安装教程">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          <span data-i18n="hero.btn_extension">Get TweetClaw Extension</span>
-        </a>
+        </button>
       </div>
       <div class="hero-meta">
         <div class="hero-meta-item">
@@ -2046,9 +2299,171 @@
       if (e.target === document.getElementById('contactModalOverlay')) closeContactModal();
     }
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeContactModal();
+      if (e.key === 'Escape') {
+        closeContactModal();
+        closeZipTutorialModal();
+      }
+    });
+    function openZipTutorialModal() {
+      document.getElementById('zipTutorialOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeZipTutorialModal() {
+      document.getElementById('zipTutorialOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function handleZipOverlayClick(e) {
+      if (e.target === document.getElementById('zipTutorialOverlay')) closeZipTutorialModal();
+    }
+    function copyZipAiPrompt() {
+      var promptEl = document.getElementById('zipAiPromptText');
+      var btnTextEl = document.getElementById('zipAiCopyBtnText');
+      var btnEl = document.getElementById('zipAiCopyBtn');
+      if (!promptEl || !btnEl) return;
+      var textToCopy = promptEl.textContent || promptEl.innerText;
+      function setSuccessState() {
+        if (btnEl) btnEl.classList.add('copied');
+        if (btnTextEl) {
+          var currentLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : 'zh';
+          btnTextEl.textContent = (currentLang === 'en') ? 'Copied!' : '已复制！';
+        }
+        setTimeout(function() {
+          if (btnEl) btnEl.classList.remove('copied');
+          if (btnTextEl) {
+            var currentLang = (typeof currentLanguage !== 'undefined') ? currentLanguage : 'zh';
+            btnTextEl.textContent = (currentLang === 'en') ? 'Copy AI Prompt' : '复制 AI 提示词';
+          }
+        }, 2000);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(setSuccessState).catch(function() {
+          fallbackCopy(textToCopy);
+        });
+      } else {
+        fallbackCopy(textToCopy);
+      }
+      function fallbackCopy(text) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          setSuccessState();
+        } catch (e) {
+          console.error('Copy failed', e);
+        }
+        document.body.removeChild(textarea);
+      }
+    }
+    function toggleExtDropdown(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var menu = document.getElementById('ext-dropdown-menu');
+      var btn = e.currentTarget;
+      var group = btn.closest('.split-btn-group');
+      if (menu) {
+        var isOpen = menu.classList.toggle('active');
+        btn.classList.toggle('active', isOpen);
+        if (group) group.classList.toggle('active', isOpen);
+      }
+    }
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('ext-dropdown-menu');
+      var btn = document.querySelector('.btn-split-toggle');
+      var group = document.querySelector('.split-btn-group');
+      if (menu && menu.classList.contains('active')) {
+        if (!e.target.closest('.split-btn-group')) {
+          menu.classList.remove('active');
+          if (btn) btn.classList.remove('active');
+          if (group) group.classList.remove('active');
+        }
+      }
     });
   </script>
+
+  <!-- ZIP Extension Offline Tutorial Modal -->
+  <div class="tut-modal-overlay" id="zipTutorialOverlay" onclick="handleZipOverlayClick(event)">
+    <div class="tut-modal" role="dialog" aria-modal="true">
+      <button class="contact-modal-x" onclick="closeZipTutorialModal()" aria-label="Close">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="tut-modal-header">
+        <h3 class="tut-modal-title" data-i18n="tutorial.title">浏览器插件离线安装教程（Zip 压缩包方式）</h3>
+      </div>
+      <div class="tut-steps-list">
+        <div class="tut-step-card">
+          <div class="tut-step-num">1</div>
+          <div class="tut-step-body">
+            <h4 data-i18n="tutorial.step1_title">第一步：下载并解压插件压缩包</h4>
+            <p data-i18n="tutorial.step1_1">点击“下载离线 Zip 压缩包”保存 .zip 文件到本地。</p>
+            <p data-i18n="tutorial.step1_2">在 .zip 文件上点击右键，选择“解压到当前文件夹”或“全部解压缩”，得到解压文件夹。</p>
+          </div>
+        </div>
+        <div class="tut-step-card">
+          <div class="tut-step-num">2</div>
+          <div class="tut-step-body">
+            <h4 data-i18n="tutorial.step2_title">第二步：开启浏览器的“开发者模式”</h4>
+            <p data-i18n="tutorial.step2_1">打开 Chrome 浏览器，点击右上角菜单图标（⋮）→ 选择“扩展程序” → 点击“管理扩展程序”（或在地址栏输入 chrome://extensions 并回车）。</p>
+            <p data-i18n="tutorial.step2_2">在扩展程序页面右上角，找到并开启“开发者模式”开关。</p>
+          </div>
+        </div>
+        <div class="tut-step-card">
+          <div class="tut-step-num">3</div>
+          <div class="tut-step-body">
+            <h4 data-i18n="tutorial.step3_title">第三步：加载解压后的插件</h4>
+            <p data-i18n="tutorial.step3_1">点击左上角的“加载已解压的扩展程序”按钮。</p>
+            <p data-i18n="tutorial.step3_2">选择第一步解压出来的文件夹，点击“选择文件夹”完成加载。</p>
+          </div>
+        </div>
+        <div class="tut-step-card">
+          <div class="tut-step-num">4</div>
+          <div class="tut-step-body">
+            <h4 data-i18n="tutorial.step4_title">第四步：固定插件图标</h4>
+            <p data-i18n="tutorial.step4_1">点击 Chrome 右上角“拼图”图标，找到 TweetClaw 旁边的固定大头针图标固定到工具栏。</p>
+          </div>
+        </div>
+      </div>
+      <div class="tut-note-box">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span data-i18n="tutorial.note">注：解压文件夹为插件运行必需文件，安装完成后请勿删除或移动该文件夹。</span>
+      </div>
+      <div class="tut-ai-prompt-box">
+        <div class="tut-ai-prompt-header">
+          <div class="tut-ai-prompt-title-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tut-ai-icon">
+              <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+              <path d="M12 12L2.5 7.5"/>
+              <path d="M12 12v9.5"/>
+              <path d="M12 12l9.5-4.5"/>
+            </svg>
+            <span class="tut-ai-prompt-title" data-i18n="tutorial.ai_prompt_title">AI 提示词（快捷问 AI）</span>
+          </div>
+          <button class="tut-ai-copy-btn" id="zipAiCopyBtn" type="button" onclick="copyZipAiPrompt()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="zipAiCopyBtnText" data-i18n="tutorial.ai_prompt_copy">复制 AI 提示词</span>
+          </button>
+        </div>
+        <p class="tut-ai-prompt-desc" data-i18n="tutorial.ai_prompt_desc">可以将以下完整提示词直接复制给 ChatGPT、Claude、DeepSeek 或 Kimi 等 AI 助手，获取定制化的安装指导：</p>
+        <div class="tut-ai-prompt-content" id="zipAiPromptText" data-i18n="tutorial.ai_prompt_text">我已经下载了 TweetClaw 浏览器插件的离线安装包（tweetclaw.zip 压缩包）。
+请告诉我详细的解压和安装步骤：
+1. 如何在我的操作系统（Windows / macOS）中解压这个 zip 压缩包？
+2. 如何在 Chrome / Edge / Brave 等浏览器中开启“开发者模式”？
+3. 如何加载解压后的插件文件夹并完成安装？
+4. 安装完成后需要注意什么（比如解压后的文件夹是否能删除或移动）？
+请根据我的具体操作系统和浏览器，提供一步一步的操作指导。</div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
